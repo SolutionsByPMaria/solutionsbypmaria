@@ -1,0 +1,978 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Solutions by P Maria – Link Hub</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400;1,700&family=Inter:wght@400;500;600;700&display=swap');
+
+        :root {
+            --navy: #1B3A6B;
+            --navy-dark: #0f2347;
+            --navy-mid: #1e4080;
+            --gold: #C9A84C;
+            --gold-light: #F0D98B;
+            --white: #FFFFFF;
+            --off-white: #FDFBF7;
+            --gray: #6b7280;
+            --dark: #111827;
+            --font-display: 'Playfair Display', Georgia, serif;
+            --font-body: 'Inter', -apple-system, sans-serif;
+        }
+
+        *, *::before, *::after {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            font-family: var(--font-body);
+            background: var(--navy);
+            background:
+                radial-gradient(1px 1px at 12px 12px, rgba(201,168,76,0.06) 1px, transparent 0),
+                radial-gradient(1px 1px at 36px 36px, rgba(201,168,76,0.04) 1px, transparent 0),
+                radial-gradient(ellipse at 50% 40%, var(--navy-mid) 0%, var(--navy) 50%, var(--navy-dark) 100%);
+            background-size: 24px 24px, 24px 24px, 100% 100%;
+            min-height: 100vh;
+            overflow-x: hidden;
+            position: relative;
+        }
+
+        /* ─── Floating particles ─── */
+        .particle {
+            position: fixed;
+            border-radius: 50%;
+            background: var(--gold);
+            pointer-events: none;
+            z-index: 0;
+        }
+
+        @keyframes floatUp1 { 0%,100%{ transform: translateY(0) translateX(0); } 25%{ transform: translateY(-30px) translateX(8px); } 50%{ transform: translateY(-55px) translateX(-5px); } 75%{ transform: translateY(-25px) translateX(10px); } }
+        @keyframes floatUp2 { 0%,100%{ transform: translateY(0) translateX(0); } 33%{ transform: translateY(-40px) translateX(-12px); } 66%{ transform: translateY(-20px) translateX(6px); } }
+        @keyframes floatUp3 { 0%,100%{ transform: translateY(0) translateX(0); } 20%{ transform: translateY(-50px) translateX(15px); } 60%{ transform: translateY(-30px) translateX(-10px); } 80%{ transform: translateY(-60px) translateX(5px); } }
+
+        /* ─── Wrapper ─── */
+        .wrapper-hub {
+            max-width: 480px;
+            margin: 0 auto;
+            padding: 48px 20px 80px;
+            position: relative;
+            z-index: 1;
+        }
+
+        /* ─── Pulse glow on logo ─── */
+        @keyframes pulseGlow {
+            0% { filter: drop-shadow(0 0 0 rgba(201,168,76,0.4)) drop-shadow(0 4px 16px rgba(201,168,76,0.35)); }
+            50% { filter: drop-shadow(0 0 16px rgba(201,168,76,0.25)) drop-shadow(0 4px 16px rgba(201,168,76,0.35)); }
+            100% { filter: drop-shadow(0 0 0 rgba(201,168,76,0.4)) drop-shadow(0 4px 16px rgba(201,168,76,0.35)); }
+        }
+
+        .logo-img {
+            display: block;
+            margin: 0 auto 20px;
+            width: 130px;
+            height: auto;
+            object-fit: contain;
+            animation: pulseGlow 2.5s ease-in-out infinite;
+            border-radius: 12px;
+        }
+
+        .profile-name {
+            font-family: var(--font-display);
+            color: var(--white);
+            font-size: 1.8rem;
+            font-weight: 700;
+            text-align: center;
+            margin-bottom: 4px;
+        }
+
+        .profile-tagline {
+            font-family: var(--font-body);
+            color: var(--gold);
+            font-size: 0.85rem;
+            text-align: center;
+            letter-spacing: 0.8px;
+            margin-bottom: 6px;
+        }
+
+        .profile-location {
+            font-family: var(--font-body);
+            color: rgba(255,255,255,0.7);
+            font-size: 0.8rem;
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        .profile-bio {
+            font-family: var(--font-body);
+            color: rgba(255,255,255,0.85);
+            font-size: 0.9rem;
+            text-align: center;
+            line-height: 1.6;
+            max-width: 360px;
+            margin: 0 auto 24px;
+        }
+
+        /* ─── Gold divider ─── */
+        .gold-divider {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            margin-bottom: 32px;
+        }
+        .gold-divider .line {
+            width: 60px;
+            height: 1.5px;
+            background: rgba(201,168,76,0.6);
+        }
+        .gold-divider .diamond {
+            color: rgba(201,168,76,0.7);
+            font-size: 0.55rem;
+            line-height: 1;
+        }
+
+        /* ─── Social icons row ─── */
+        .social-row {
+            display: flex;
+            justify-content: center;
+            gap: 12px;
+            margin-bottom: 36px;
+        }
+        .social-btn {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: rgba(255,255,255,0.12);
+            border: 1.5px solid rgba(201,168,76,0.4);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.1rem;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            text-decoration: none;
+            color: var(--white);
+        }
+        .social-btn:hover {
+            background: var(--gold);
+            border-color: var(--gold);
+            transform: scale(1.1);
+            color: var(--navy);
+        }
+
+        /* ─── Section label ─── */
+        .section-label {
+            font-family: var(--font-body);
+            color: var(--gold);
+            font-size: 0.7rem;
+            letter-spacing: 2px;
+            text-align: center;
+            margin-bottom: 20px;
+            font-weight: 600;
+        }
+
+        /* ─── Link buttons ─── */
+        .links-stack {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .link-btn {
+            width: 100%;
+            padding: 16px 24px;
+            border-radius: 14px;
+            display: flex;
+            align-items: center;
+            gap: 14px;
+            cursor: pointer;
+            transition: all 0.25s ease;
+            text-decoration: none;
+            position: relative;
+            overflow: hidden;
+            border: none;
+        }
+        .link-btn::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.08), transparent);
+            transform: translateX(-100%);
+            transition: transform 0.5s ease;
+            pointer-events: none;
+        }
+        .link-btn:hover::before {
+            transform: translateX(100%);
+        }
+        .link-btn:hover {
+            transform: translateY(-3px);
+        }
+        .link-btn:active {
+            transform: scale(0.97);
+        }
+
+        .link-icon {
+            width: 44px;
+            height: 44px;
+            border-radius: 50%;
+            flex-shrink: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.3rem;
+        }
+
+        .link-text {
+            flex: 1;
+            min-width: 0;
+        }
+        .link-title {
+            font-family: var(--font-body);
+            font-weight: 700;
+            font-size: 0.95rem;
+            line-height: 1.3;
+        }
+        .link-subtitle {
+            font-family: var(--font-body);
+            font-weight: 400;
+            font-size: 0.78rem;
+            margin-top: 2px;
+            line-height: 1.4;
+        }
+
+        .link-arrow {
+            font-size: 1.4rem;
+            opacity: 0.5;
+            flex-shrink: 0;
+            font-weight: 300;
+        }
+
+        /* ─── Badge pill ─── */
+        .badge {
+            position: absolute;
+            top: -6px;
+            right: 12px;
+            font-family: var(--font-body);
+            font-size: 0.65rem;
+            font-weight: 700;
+            padding: 2px 8px;
+            border-radius: 50px;
+            letter-spacing: 0.5px;
+            z-index: 2;
+            line-height: 1.4;
+        }
+        .badge-red { background: #ef4444; color: var(--white); }
+        .badge-gold { background: var(--gold); color: var(--navy); }
+
+        /* ─── Specific button styles ─── */
+        .btn-gold-bg {
+            background: var(--gold);
+            color: var(--navy);
+            box-shadow: 0 8px 32px rgba(201,168,76,0.4);
+        }
+        .btn-gold-bg:hover { box-shadow: 0 12px 40px rgba(201,168,76,0.55); }
+        .btn-gold-bg .link-icon { background: var(--navy); }
+        .btn-gold-bg .link-subtitle { color: rgba(27,58,107,0.75); }
+
+        .btn-white-bg {
+            background: var(--white);
+            color: var(--navy);
+            box-shadow: 0 4px 20px rgba(0,0,0,0.15);
+        }
+        .btn-white-bg:hover { box-shadow: 0 8px 28px rgba(0,0,0,0.2); }
+        .btn-white-bg .link-subtitle { color: rgba(27,58,107,0.7); }
+
+        .btn-gold-border {
+            background: transparent;
+            border: 2px solid var(--gold);
+            color: var(--white);
+        }
+        .btn-gold-border:hover { box-shadow: 0 4px 20px rgba(201,168,76,0.2); }
+        .btn-gold-border .link-subtitle { opacity: 0.8; }
+
+        .btn-outline-light {
+            background: transparent;
+            border: 2px solid rgba(255,255,255,0.2);
+            color: var(--white);
+        }
+        .btn-outline-light:hover { border-color: rgba(255,255,255,0.4); box-shadow: 0 4px 16px rgba(0,0,0,0.2); }
+        .btn-outline-light .link-subtitle { opacity: 0.8; }
+
+        .btn-outline-gold-subtle {
+            background: transparent;
+            border: 1.5px solid rgba(201,168,76,0.5);
+            color: var(--white);
+        }
+        .btn-outline-gold-subtle:hover { border-color: var(--gold); box-shadow: 0 4px 16px rgba(201,168,76,0.15); }
+        .btn-outline-gold-subtle .link-subtitle { opacity: 0.8; }
+
+        .btn-outline-gold-light {
+            background: transparent;
+            border: 1.5px solid rgba(201,168,76,0.4);
+            color: var(--white);
+        }
+        .btn-outline-gold-light:hover { border-color: var(--gold); }
+        .btn-outline-gold-light .link-subtitle { opacity: 0.8; }
+
+        .btn-outline-white-light {
+            background: transparent;
+            border: 1.5px solid rgba(255,255,255,0.2);
+            color: var(--white);
+        }
+        .btn-outline-white-light:hover { border-color: rgba(255,255,255,0.4); }
+        .btn-outline-white-light .link-subtitle { opacity: 0.8; }
+
+        .btn-instagram {
+            background: linear-gradient(45deg, #833ab4, #fd1d1d, #fcb045);
+            color: var(--white);
+            box-shadow: 0 4px 20px rgba(253,29,29,0.3);
+        }
+        .btn-instagram:hover { box-shadow: 0 8px 28px rgba(253,29,29,0.45); }
+        .btn-instagram .link-icon { background: rgba(255,255,255,0.2); }
+        .btn-instagram .link-subtitle { opacity: 0.9; }
+
+        .btn-facebook {
+            background: #1877f2;
+            color: var(--white);
+            box-shadow: 0 4px 20px rgba(24,119,242,0.3);
+        }
+        .btn-facebook:hover { box-shadow: 0 8px 28px rgba(24,119,242,0.45); }
+        .btn-facebook .link-icon { background: rgba(0,0,0,0.15); }
+        .btn-facebook .link-subtitle { opacity: 0.9; }
+
+        /* ─── Featured product card ─── */
+        .featured-card {
+            background: linear-gradient(135deg, var(--gold) 0%, var(--gold-light) 50%, var(--gold) 100%);
+            border-radius: 16px;
+            padding: 20px;
+            position: relative;
+            overflow: hidden;
+        }
+        .featured-card .monogram {
+            position: absolute;
+            right: -10px;
+            bottom: -20px;
+            font-family: var(--font-display);
+            font-size: 8rem;
+            font-weight: 700;
+            color: var(--navy);
+            opacity: 0.06;
+            user-select: none;
+            pointer-events: none;
+            line-height: 1;
+        }
+        .featured-label {
+            font-family: var(--font-body);
+            font-weight: 700;
+            color: var(--navy);
+            font-size: 0.7rem;
+            letter-spacing: 1px;
+        }
+        .featured-title {
+            font-family: var(--font-display);
+            color: var(--navy);
+            font-size: 1.1rem;
+            font-weight: 700;
+            margin: 6px 0 4px;
+        }
+        .featured-desc {
+            font-family: var(--font-body);
+            color: rgba(27,58,107,0.8);
+            font-size: 0.8rem;
+            line-height: 1.5;
+        }
+        .featured-price-row {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            margin-top: 10px;
+            flex-wrap: wrap;
+        }
+        .price-old {
+            font-size: 0.85rem;
+            color: var(--gray);
+            text-decoration: line-through;
+        }
+        .price-new {
+            font-size: 1.15rem;
+            font-weight: 700;
+            color: var(--navy);
+        }
+        .price-save {
+            font-size: 0.7rem;
+            font-weight: 600;
+            color: #16a34a;
+            background: rgba(22,163,74,0.12);
+            padding: 2px 8px;
+            border-radius: 50px;
+        }
+        .featured-cta {
+            display: block;
+            width: 100%;
+            text-align: center;
+            background: var(--navy);
+            color: var(--white);
+            font-family: var(--font-body);
+            font-weight: 700;
+            border: none;
+            border-radius: 50px;
+            padding: 10px 20px;
+            font-size: 0.85rem;
+            cursor: pointer;
+            margin-top: 12px;
+            transition: all 0.25s ease;
+            text-decoration: none;
+        }
+        .featured-cta:hover {
+            background: var(--gold-light);
+            color: var(--navy);
+        }
+
+        /* ─── Stats row ─── */
+        .stats-row {
+            display: flex;
+            gap: 10px;
+            margin-top: 32px;
+        }
+        .stat-card {
+            flex: 1;
+            background: rgba(255,255,255,0.08);
+            border: 1px solid rgba(201,168,76,0.2);
+            border-radius: 12px;
+            padding: 14px 10px;
+            text-align: center;
+        }
+        .stat-number {
+            font-family: var(--font-body);
+            font-weight: 700;
+            color: var(--gold);
+            font-size: 1.1rem;
+        }
+        .stat-label {
+            font-family: var(--font-body);
+            color: rgba(255,255,255,0.7);
+            font-size: 0.72rem;
+            margin-top: 2px;
+        }
+
+        /* ─── Email capture ─── */
+        .email-capture {
+            background: rgba(255,255,255,0.06);
+            border: 1px solid rgba(201,168,76,0.25);
+            border-radius: 16px;
+            padding: 24px 20px;
+            margin-top: 28px;
+        }
+        .email-heading {
+            font-family: var(--font-display);
+            color: var(--white);
+            font-size: 1rem;
+            text-align: center;
+            margin-bottom: 6px;
+        }
+        .email-subtext {
+            font-family: var(--font-body);
+            color: rgba(255,255,255,0.7);
+            font-size: 0.8rem;
+            text-align: center;
+            margin-bottom: 14px;
+        }
+        .email-input {
+            width: 100%;
+            background: var(--white);
+            border: none;
+            border-radius: 10px;
+            padding: 12px 16px;
+            font-size: 0.9rem;
+            font-family: var(--font-body);
+            margin-bottom: 10px;
+            outline: none;
+            color: var(--dark);
+        }
+        .email-input::placeholder {
+            color: #9ca3af;
+        }
+        .email-input:focus {
+            box-shadow: 0 0 0 2px var(--gold);
+        }
+        .email-submit {
+            width: 100%;
+            background: var(--gold);
+            color: var(--navy);
+            font-family: var(--font-body);
+            font-weight: 700;
+            border: none;
+            border-radius: 10px;
+            padding: 12px;
+            font-size: 0.9rem;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+        .email-submit:hover {
+            background: #b89640;
+        }
+        .email-success {
+            display: none;
+            color: #4ade80;
+            font-size: 0.85rem;
+            text-align: center;
+            margin-top: 10px;
+            font-weight: 600;
+        }
+        .email-disclaimer {
+            font-family: var(--font-body);
+            color: rgba(255,255,255,0.4);
+            font-size: 0.72rem;
+            text-align: center;
+            margin-top: 8px;
+        }
+
+        /* ─── Footer ─── */
+        .footer-hub {
+            margin-top: 40px;
+            text-align: center;
+            padding-bottom: 10px;
+        }
+        .footer-logo {
+            height: 32px;
+            opacity: 0.7;
+            display: block;
+            margin: 0 auto 8px;
+            border-radius: 4px;
+        }
+        .footer-copy {
+            font-family: var(--font-body);
+            color: rgba(255,255,255,0.4);
+            font-size: 0.72rem;
+        }
+        .footer-contact {
+            font-family: var(--font-body);
+            color: rgba(201,168,76,0.5);
+            font-size: 0.7rem;
+            margin-top: 4px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 6px;
+        }
+        .copy-email-btn {
+            cursor: pointer;
+            font-size: 0.8rem;
+            opacity: 0.7;
+            background: none;
+            border: none;
+            padding: 2px;
+            color: rgba(201,168,76,0.7);
+            position: relative;
+            transition: opacity 0.2s;
+        }
+        .copy-email-btn:hover { opacity: 1; }
+        .copy-tooltip {
+            display: none;
+            position: absolute;
+            bottom: 100%;
+            left: 50%;
+            transform: translateX(-50%);
+            background: var(--gold);
+            color: var(--navy);
+            font-size: 0.65rem;
+            font-weight: 600;
+            padding: 3px 8px;
+            border-radius: 6px;
+            white-space: nowrap;
+            margin-bottom: 4px;
+        }
+        .footer-motto {
+            font-family: var(--font-display);
+            font-style: italic;
+            color: rgba(201,168,76,0.6);
+            font-size: 0.8rem;
+            margin-top: 6px;
+        }
+        .footer-made {
+            font-family: var(--font-body);
+            color: rgba(255,255,255,0.25);
+            font-size: 0.65rem;
+            margin-top: 12px;
+        }
+
+        /* ─── Ripple effect ─── */
+        .ripple {
+            position: absolute;
+            border-radius: 50%;
+            background: rgba(255,255,255,0.18);
+            pointer-events: none;
+            transform: scale(0);
+            animation: rippleAnim 0.5s ease-out forwards;
+        }
+        @keyframes rippleAnim {
+            to { transform: scale(3.5); opacity: 0; }
+        }
+
+        /* ─── Load animations ─── */
+        @keyframes fadeInDown {
+            from { opacity: 0; transform: translateY(-20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        @keyframes fadeInUp {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        @keyframes fadeInScale {
+            from { opacity: 0; transform: scale(0.95); }
+            to { opacity: 1; transform: scale(1); }
+        }
+
+        .anim-header {
+            opacity: 0;
+            animation: fadeInDown 0.6s ease 0.1s forwards;
+        }
+        .anim-link {
+            opacity: 0;
+            animation: fadeInUp 0.45s ease forwards;
+        }
+        .anim-featured {
+            opacity: 0;
+            animation: fadeInScale 0.5s ease 0.7s forwards;
+        }
+        .anim-late {
+            opacity: 0;
+            animation: fadeInUp 0.5s ease 0.9s forwards;
+        }
+    </style>
+</head>
+<body data-id="0">
+    <app-icon data-id="1" hidden data-icon="link" data-palette="Dark"></app-icon>
+
+    <!-- Floating particles -->
+    <div data-id="2" class="particle" style="width:4px;height:4px;top:8%;left:12%;opacity:0.12;animation:floatUp1 6s ease-in-out infinite;"></div>
+    <div data-id="3" class="particle" style="width:6px;height:6px;top:15%;left:78%;opacity:0.1;animation:floatUp2 8s ease-in-out infinite;"></div>
+    <div data-id="4" class="particle" style="width:3px;height:3px;top:22%;left:32%;opacity:0.15;animation:floatUp3 7s ease-in-out infinite;"></div>
+    <div data-id="5" class="particle" style="width:8px;height:8px;top:35%;left:88%;opacity:0.08;animation:floatUp1 9s ease-in-out infinite;"></div>
+    <div data-id="6" class="particle" style="width:5px;height:5px;top:45%;left:5%;opacity:0.14;animation:floatUp2 7.5s ease-in-out infinite;"></div>
+    <div data-id="7" class="particle" style="width:10px;height:10px;top:55%;left:70%;opacity:0.08;animation:floatUp3 10s ease-in-out infinite;"></div>
+    <div data-id="8" class="particle" style="width:4px;height:4px;top:65%;left:22%;opacity:0.18;animation:floatUp1 6.5s ease-in-out infinite;"></div>
+    <div data-id="9" class="particle" style="width:7px;height:7px;top:72%;left:92%;opacity:0.1;animation:floatUp2 8.5s ease-in-out infinite;"></div>
+    <div data-id="10" class="particle" style="width:3px;height:3px;top:80%;left:50%;opacity:0.2;animation:floatUp3 5.5s ease-in-out infinite;"></div>
+    <div data-id="11" class="particle" style="width:6px;height:6px;top:88%;left:15%;opacity:0.09;animation:floatUp1 9.5s ease-in-out infinite;"></div>
+    <div data-id="12" class="particle" style="width:5px;height:5px;top:30%;left:55%;opacity:0.12;animation:floatUp2 7s ease-in-out infinite;"></div>
+    <div data-id="13" class="particle" style="width:4px;height:4px;top:92%;left:65%;opacity:0.15;animation:floatUp3 8s ease-in-out infinite;"></div>
+
+    <main data-id="14">
+        <div data-id="15" class="wrapper-hub">
+
+            <!-- ═══ SECTION A — PROFILE HEADER ═══ -->
+            <section data-id="16" class="anim-header" id="profile-header-a1b2">
+                <img data-id="17" src="https://ts3.mm.bing.net/th?id=OIP.cETti5SX0vMJvHONslIcNAHaHa&pid=15.1&o=7&rm=3" alt="Solutions by P Maria Logo" class="logo-img" id="logo-img-pm01" loading="lazy" />
+                <h1 data-id="18" class="profile-name" id="name-pm02">Princess Maria</h1>
+                <p data-id="19" class="profile-tagline" id="tagline-pm03">Certified Notary · Document Prep · Admin Support</p>
+                <p data-id="20" class="profile-location" id="location-pm04">📍 Spencer, Oklahoma</p>
+                <p data-id="21" class="profile-bio" id="bio-pm05">Professional notary services, done-for-you digital templates, and administrative support — built for real professionals, delivered with care.</p>
+
+                <div data-id="22" class="gold-divider" id="divider-pm06">
+                    <span data-id="23" class="line"></span>
+                    <span data-id="24" class="diamond">◆</span>
+                    <span data-id="25" class="line"></span>
+                </div>
+
+                <div data-id="26" class="social-row" id="social-row-pm07">
+                    <a data-id="27" href="#" class="social-btn" aria-label="Facebook" title="Facebook">📘</a>
+                    <a data-id="28" href="#" class="social-btn" aria-label="Instagram" title="Instagram">📸</a>
+                    <a data-id="29" href="#" class="social-btn" aria-label="Pinterest" title="Pinterest">📌</a>
+                    <a data-id="30" href="#" class="social-btn" aria-label="Payhip Store" title="Payhip">🛍️</a>
+                    <a data-id="31" href="#" class="social-btn" aria-label="Email us" title="Email">📧</a>
+                </div>
+            </section>
+
+            <!-- ═══ SECTION B — MAIN LINK BUTTONS ═══ -->
+            <section data-id="32" id="links-section-b1c2">
+                <p data-id="33" class="section-label anim-link" style="animation-delay:0.25s;" id="explore-label-x1">— EXPLORE —</p>
+
+                <div data-id="34" class="links-stack" id="links-stack-d3e4">
+
+                    <!-- LINK 1 — Home Page -->
+                    <a data-id="35" href="#" class="link-btn btn-gold-bg anim-link" style="animation-delay:0.3s;" aria-label="Visit Our Website" id="link-home-f5g6">
+                        <span data-id="36" class="badge badge-red">NEW</span>
+                        <span data-id="37" class="link-icon" style="background:var(--navy);color:var(--gold);">🏠</span>
+                        <span data-id="38" class="link-text">
+                            <span data-id="39" class="link-title">🏠 Visit Our Website</span>
+                            <span data-id="40" class="link-subtitle" style="display:block;">Start here — the full Solutions by P Maria experience</span>
+                        </span>
+                        <span data-id="41" class="link-arrow" style="color:var(--navy);">›</span>
+                    </a>
+
+                    <!-- LINK 2 — Shop Digital Templates -->
+                    <a data-id="42" href="#" class="link-btn btn-white-bg anim-link" style="animation-delay:0.35s;" aria-label="Shop Digital Templates" id="link-shop-h7i8">
+                        <span data-id="43" class="badge badge-gold">20+ PRODUCTS</span>
+                        <span data-id="44" class="link-icon" style="background:var(--gold);color:var(--navy);">🛍️</span>
+                        <span data-id="45" class="link-text">
+                            <span data-id="46" class="link-title" style="color:var(--navy);">🛍️ Shop Digital Templates</span>
+                            <span data-id="47" class="link-subtitle" style="display:block;color:rgba(27,58,107,0.7);">20+ done-for-you templates — instant download</span>
+                        </span>
+                        <span data-id="48" class="link-arrow" style="color:var(--navy);">›</span>
+                    </a>
+
+                    <!-- LINK 3 — Payhip Store -->
+                    <a data-id="49" href="#" class="link-btn btn-gold-border anim-link" style="animation-delay:0.4s;" aria-label="Payhip Store" id="link-payhip-j9k0">
+                        <span data-id="50" class="link-icon" style="background:var(--gold);color:var(--navy);">🛍️</span>
+                        <span data-id="51" class="link-text">
+                            <span data-id="52" class="link-title">🛍️ Payhip Store</span>
+                            <span data-id="53" class="link-subtitle" style="display:block;">Browse & purchase our full template library</span>
+                        </span>
+                        <span data-id="54" class="link-arrow">›</span>
+                    </a>
+
+                    <!-- LINK 4 — Gumroad Store -->
+                    <a data-id="55" href="#" class="link-btn btn-outline-light anim-link" style="animation-delay:0.45s;" aria-label="Gumroad Store" id="link-gumroad-l1m2">
+                        <span data-id="56" class="link-icon" style="background:rgba(255,255,255,0.15);color:var(--white);">📦</span>
+                        <span data-id="57" class="link-text">
+                            <span data-id="58" class="link-title">📦 Gumroad Store</span>
+                            <span data-id="59" class="link-subtitle" style="display:block;">Another way to shop our digital products</span>
+                        </span>
+                        <span data-id="60" class="link-arrow">›</span>
+                    </a>
+
+                    <!-- ═══ SECTION C — FEATURED PRODUCT CARD ═══ -->
+                    <div data-id="61" class="featured-card anim-featured" id="featured-card-n3o4">
+                        <span data-id="62" class="monogram">PM</span>
+                        <p data-id="63" class="featured-label">⭐ FEATURED PRODUCT</p>
+                        <h3 data-id="64" class="featured-title" id="featured-title-p5q6">Notary Business Starter Bundle</h3>
+                        <p data-id="65" class="featured-desc" id="featured-desc-r7s8">Everything you need to launch your notary business professionally.</p>
+                        <div data-id="66" class="featured-price-row" id="price-row-t9u0">
+                            <span data-id="67" class="price-old">$55</span>
+                            <span data-id="68" class="price-new">$12.99</span>
+                            <span data-id="69" class="price-save">✨ SAVE $42</span>
+                        </div>
+                        <a data-id="70" href="#" class="featured-cta" id="featured-cta-v1w2">Get Instant Access →</a>
+                    </div>
+
+                    <!-- LINK 5 — Book Appointment -->
+                    <a data-id="71" href="#" class="link-btn btn-white-bg anim-link" style="animation-delay:0.55s;" aria-label="Book an Appointment" id="link-book-x3y4">
+                        <span data-id="72" class="badge badge-gold">MOBILE AVAILABLE</span>
+                        <span data-id="73" class="link-icon" style="background:var(--navy);color:var(--gold);">📅</span>
+                        <span data-id="74" class="link-text">
+                            <span data-id="75" class="link-title" style="color:var(--navy);">📅 Book an Appointment</span>
+                            <span data-id="76" class="link-subtitle" style="display:block;color:rgba(27,58,107,0.7);">Notary, document prep, or consultation</span>
+                        </span>
+                        <span data-id="77" class="link-arrow" style="color:var(--navy);">›</span>
+                    </a>
+
+                    <!-- LINK 6 — Services & Pricing -->
+                    <a data-id="78" href="#" class="link-btn btn-outline-gold-subtle anim-link" style="animation-delay:0.6s;" aria-label="View Services and Pricing" id="link-services-z5a6">
+                        <span data-id="79" class="link-icon" style="background:rgba(201,168,76,0.15);color:var(--gold);">💼</span>
+                        <span data-id="80" class="link-text">
+                            <span data-id="81" class="link-title">💼 View Services & Pricing</span>
+                            <span data-id="82" class="link-subtitle" style="display:block;">Notary · Document Prep · Admin Support</span>
+                        </span>
+                        <span data-id="83" class="link-arrow">›</span>
+                    </a>
+
+                    <!-- LINK 7 — FAQ -->
+                    <a data-id="84" href="#" class="link-btn btn-outline-white-light anim-link" style="animation-delay:0.65s;" aria-label="Frequently Asked Questions" id="link-faq-b7c8">
+                        <span data-id="85" class="link-icon" style="background:rgba(255,255,255,0.1);color:var(--white);">❓</span>
+                        <span data-id="86" class="link-text">
+                            <span data-id="87" class="link-title">❓ Frequently Asked Questions</span>
+                            <span data-id="88" class="link-subtitle" style="display:block;">All your questions answered in one place</span>
+                        </span>
+                        <span data-id="89" class="link-arrow">›</span>
+                    </a>
+
+                    <!-- LINK 8 — About -->
+                    <a data-id="90" href="#" class="link-btn btn-outline-gold-light anim-link" style="animation-delay:0.7s;" aria-label="About Princess Maria" id="link-about-d9e0">
+                        <span data-id="91" class="link-icon" style="background:rgba(201,168,76,0.12);color:var(--gold);">👤</span>
+                        <span data-id="92" class="link-text">
+                            <span data-id="93" class="link-title">👤 About Princess Maria</span>
+                            <span data-id="94" class="link-subtitle" style="display:block;">The story behind Solutions by P Maria</span>
+                        </span>
+                        <span data-id="95" class="link-arrow">›</span>
+                    </a>
+
+                    <!-- LINK 9 — Contact -->
+                    <a data-id="96" href="#" class="link-btn btn-white-bg anim-link" style="animation-delay:0.75s;" aria-label="Contact and Book a Consultation" id="link-contact-f1g2">
+                        <span data-id="97" class="link-icon" style="background:var(--gold);color:var(--navy);">📬</span>
+                        <span data-id="98" class="link-text">
+                            <span data-id="99" class="link-title" style="color:var(--navy);">📬 Contact & Book a Consultation</span>
+                            <span data-id="100" class="link-subtitle" style="display:block;color:rgba(27,58,107,0.7);">We respond within 24 business hours</span>
+                        </span>
+                        <span data-id="101" class="link-arrow" style="color:var(--navy);">›</span>
+                    </a>
+
+                    <!-- LINK 10 — Instagram -->
+                    <a data-id="102" href="#" class="link-btn btn-instagram anim-link" style="animation-delay:0.8s;" aria-label="Follow on Instagram" id="link-insta-h3i4">
+                        <span data-id="103" class="link-icon" style="background:rgba(255,255,255,0.2);color:var(--white);">📸</span>
+                        <span data-id="104" class="link-text">
+                            <span data-id="105" class="link-title">📸 Follow on Instagram</span>
+                            <span data-id="106" class="link-subtitle" style="display:block;">@solutionsbypMaria — tips, freebies & updates</span>
+                        </span>
+                        <span data-id="107" class="link-arrow">›</span>
+                    </a>
+
+                    <!-- LINK 11 — Facebook -->
+                    <a data-id="108" href="#" class="link-btn btn-facebook anim-link" style="animation-delay:0.85s;" aria-label="Follow on Facebook" id="link-fb-j5k6">
+                        <span data-id="109" class="link-icon" style="background:rgba(0,0,0,0.15);color:var(--white);">📘</span>
+                        <span data-id="110" class="link-text">
+                            <span data-id="111" class="link-title">📘 Follow on Facebook</span>
+                            <span data-id="112" class="link-subtitle" style="display:block;">Solutions by P Maria — join the community</span>
+                        </span>
+                        <span data-id="113" class="link-arrow">›</span>
+                    </a>
+
+                </div>
+            </section>
+
+            <!-- ═══ SECTION D — STATS ROW ═══ -->
+            <div data-id="114" class="stats-row anim-late" id="stats-row-l7m8">
+                <div data-id="115" class="stat-card" id="stat1-n9o0">
+                    <div data-id="116" class="stat-number">20+</div>
+                    <div data-id="117" class="stat-label">Products</div>
+                </div>
+                <div data-id="118" class="stat-card" id="stat2-p1q2">
+                    <div data-id="119" class="stat-number">⭐ 5.0</div>
+                    <div data-id="120" class="stat-label">Rated</div>
+                </div>
+                <div data-id="121" class="stat-card" id="stat3-r3s4">
+                    <div data-id="122" class="stat-number">24hr</div>
+                    <div data-id="123" class="stat-label">Response</div>
+                </div>
+            </div>
+
+            <!-- ═══ SECTION E — EMAIL CAPTURE ═══ -->
+            <div data-id="124" class="email-capture anim-late" id="email-capture-t5u6">
+                <h3 data-id="125" class="email-heading" id="email-heading-v7w8">💌 Get 10% Off Your First Order</h3>
+                <p data-id="126" class="email-subtext" id="email-subtext-x9y0">Join our list for exclusive deals & free resources.</p>
+                <input data-id="127" type="email" class="email-input" placeholder="Enter your email..." aria-label="Email address" id="email-input-z1a2" />
+                <button data-id="128" class="email-submit" id="email-submit-b3c4">Subscribe →</button>
+                <p data-id="129" class="email-success" id="email-success-d5e6">✅ You're in! Check your inbox.</p>
+                <p data-id="130" class="email-disclaimer" id="email-disclaimer-f7g8">No spam. Unsubscribe anytime.</p>
+            </div>
+
+            <!-- ═══ SECTION F — FOOTER ═══ -->
+            <footer data-id="131" class="footer-hub anim-late" id="footer-hub-h9i0">
+                <img data-id="132" src="https://ts3.mm.bing.net/th?id=OIP.cETti5SX0vMJvHONslIcNAHaHa&pid=15.1&o=7&rm=3" alt="Solutions by P Maria" class="footer-logo" id="footer-logo-j1k2" loading="lazy" />
+                <p data-id="133" class="footer-copy" id="footer-copy-l3m4">© 2026 Solutions by P Maria</p>
+                <p data-id="134" class="footer-contact" id="footer-contact-n5o6">
+                    Spencer, Oklahoma · solutions@pbymaria.com
+                    <button data-id="135" class="copy-email-btn" aria-label="Copy email address" id="copy-email-btn-p7q8">
+                        📋
+                        <span data-id="136" class="copy-tooltip" id="copy-tooltip-r9s0">Copied!</span>
+                    </button>
+                </p>
+                <p data-id="137" class="footer-motto" id="footer-motto-t1u2">Empowering Professionals. One Document at a Time.</p>
+                <p data-id="138" class="footer-made" id="footer-made-v3w4">Made by Copilot</p>
+            </footer>
+
+        </div>
+    </main>
+
+    <script>
+        // ─── Ripple effect on link buttons ───
+        document.querySelectorAll('.link-btn').forEach(function(btn) {
+            btn.addEventListener('click', function(e) {
+                e.preventDefault();
+                var rect = btn.getBoundingClientRect();
+                var ripple = document.createElement('span');
+                ripple.className = 'ripple';
+                var size = Math.max(rect.width, rect.height);
+                ripple.style.width = ripple.style.height = size + 'px';
+                ripple.style.left = (e.clientX - rect.left - size / 2) + 'px';
+                ripple.style.top = (e.clientY - rect.top - size / 2) + 'px';
+                btn.appendChild(ripple);
+                setTimeout(function() { ripple.remove(); }, 550);
+            });
+        });
+
+        // ─── Featured CTA ripple ───
+        var featuredCta = document.getElementById('featured-cta-v1w2');
+        if (featuredCta) {
+            featuredCta.addEventListener('click', function(e) {
+                e.preventDefault();
+            });
+        }
+
+        // ─── Email subscribe ───
+        var emailSubmitBtn = document.getElementById('email-submit-b3c4');
+        var emailInput = document.getElementById('email-input-z1a2');
+        var emailSuccess = document.getElementById('email-success-d5e6');
+
+        if (emailSubmitBtn && emailInput && emailSuccess) {
+            emailSubmitBtn.addEventListener('click', function() {
+                var email = emailInput.value.trim();
+                var emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+                if (emailRegex.test(email)) {
+                    emailSuccess.style.display = 'block';
+                    emailInput.value = '';
+                    emailSubmitBtn.textContent = '✅ Subscribed!';
+                    emailSubmitBtn.style.background = '#16a34a';
+                    emailSubmitBtn.style.color = '#fff';
+                    setTimeout(function() {
+                        emailSubmitBtn.textContent = 'Subscribe →';
+                        emailSubmitBtn.style.background = '';
+                        emailSubmitBtn.style.color = '';
+                        emailSuccess.style.display = 'none';
+                    }, 4000);
+                } else {
+                    emailInput.style.boxShadow = '0 0 0 2px #ef4444';
+                    emailInput.setAttribute('placeholder', 'Please enter a valid email');
+                    setTimeout(function() {
+                        emailInput.style.boxShadow = '';
+                        emailInput.setAttribute('placeholder', 'Enter your email...');
+                    }, 2000);
+                }
+            });
+
+            emailInput.addEventListener('keydown', function(e) {
+                if (e.key === 'Enter') {
+                    emailSubmitBtn.click();
+                }
+            });
+        }
+
+        // ─── Copy email to clipboard ───
+        var copyBtn = document.getElementById('copy-email-btn-p7q8');
+        var copyTooltip = document.getElementById('copy-tooltip-r9s0');
+
+        if (copyBtn && copyTooltip) {
+            copyBtn.addEventListener('click', function() {
+                if (navigator.clipboard && navigator.clipboard.writeText) {
+                    navigator.clipboard.writeText('solutions@pbymaria.com').then(function() {
+                        copyTooltip.style.display = 'block';
+                        setTimeout(function() {
+                            copyTooltip.style.display = 'none';
+                        }, 1500);
+                    });
+                } else {
+                    var textArea = document.createElement('textarea');
+                    textArea.value = 'solutions@pbymaria.com';
+                    textArea.style.position = 'fixed';
+                    textArea.style.left = '-9999px';
+                    document.body.appendChild(textArea);
+                    textArea.select();
+                    try { document.execCommand('copy'); } catch(e) {}
+                    document.body.removeChild(textArea);
+                    copyTooltip.style.display = 'block';
+                    setTimeout(function() {
+                        copyTooltip.style.display = 'none';
+                    }, 1500);
+                }
+            });
+        }
+
+        // ─── Social button placeholder clicks ───
+        document.querySelectorAll('.social-btn').forEach(function(btn) {
+            btn.addEventListener('click', function(e) {
+                e.preventDefault();
+            });
+        });
+    </script>
+</body>
+</html>

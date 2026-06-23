@@ -1,0 +1,894 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Solutions by P Maria – FAQ Page</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://unpkg.com/lucide@latest" defer></script>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            navy: '#1B3A6B',
+            navyDark: '#142D54',
+            navyLight: '#24508F',
+            gold: '#C9A84C',
+            goldLight: '#D4BA6A',
+            goldDark: '#B8963A',
+            offwhite: '#F5F6FA',
+            warmwhite: '#FAFBFD',
+          },
+          fontFamily: {
+            display: ['"Playfair Display"', 'serif'],
+            body: ['"Inter"', 'sans-serif'],
+          },
+        },
+      },
+    };
+  </script>
+  <style>
+    :root {
+      --navy: #1B3A6B;
+      --navy-dark: #142D54;
+      --navy-light: #24508F;
+      --gold: #C9A84C;
+      --gold-light: #D4BA6A;
+      --gold-dark: #B8963A;
+      --offwhite: #F5F6FA;
+      --white: #FFFFFF;
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
+    body { font-family: 'Inter', sans-serif; color: var(--navy); background: var(--white); }
+
+    /* Fade-in animation */
+    .fade-in-up {
+      opacity: 0;
+      transform: translateY(30px);
+      transition: opacity 0.7s ease-out, transform 0.7s ease-out;
+    }
+    .fade-in-up.visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    /* Floating dots animation */
+    @keyframes floatDot1 {
+      0%, 100% { transform: translate(0, 0) scale(1); opacity: 0.3; }
+      25% { transform: translate(60px, -40px) scale(1.2); opacity: 0.5; }
+      50% { transform: translate(-30px, -80px) scale(0.8); opacity: 0.2; }
+      75% { transform: translate(40px, -20px) scale(1.1); opacity: 0.4; }
+    }
+    @keyframes floatDot2 {
+      0%, 100% { transform: translate(0, 0) scale(1); opacity: 0.2; }
+      33% { transform: translate(-50px, -60px) scale(1.3); opacity: 0.45; }
+      66% { transform: translate(70px, -30px) scale(0.9); opacity: 0.25; }
+    }
+    @keyframes floatDot3 {
+      0%, 100% { transform: translate(0, 0) scale(0.9); opacity: 0.25; }
+      20% { transform: translate(30px, -70px) scale(1.1); opacity: 0.4; }
+      50% { transform: translate(-60px, -40px) scale(1.2); opacity: 0.3; }
+      80% { transform: translate(20px, -90px) scale(0.85); opacity: 0.35; }
+    }
+    .dot {
+      position: absolute;
+      border-radius: 50%;
+      background: var(--gold);
+      pointer-events: none;
+    }
+    .dot-1 { width: 6px; height: 6px; animation: floatDot1 8s ease-in-out infinite; }
+    .dot-2 { width: 4px; height: 4px; animation: floatDot2 10s ease-in-out infinite; }
+    .dot-3 { width: 8px; height: 8px; animation: floatDot3 12s ease-in-out infinite; }
+    .dot-4 { width: 5px; height: 5px; animation: floatDot1 9s ease-in-out infinite 2s; }
+    .dot-5 { width: 3px; height: 3px; animation: floatDot2 11s ease-in-out infinite 1s; }
+    .dot-6 { width: 7px; height: 7px; animation: floatDot3 7s ease-in-out infinite 3s; }
+    .dot-7 { width: 4px; height: 4px; animation: floatDot1 13s ease-in-out infinite 4s; }
+    .dot-8 { width: 6px; height: 6px; animation: floatDot2 9s ease-in-out infinite 2s; }
+
+    /* Accordion transitions */
+    .faq-answer {
+      max-height: 0;
+      overflow: hidden;
+      transition: max-height 0.45s cubic-bezier(0.4, 0, 0.2, 1), padding 0.35s ease;
+      padding-top: 0;
+      padding-bottom: 0;
+    }
+    .faq-item.open .faq-answer {
+      padding-top: 0.75rem;
+      padding-bottom: 1.25rem;
+    }
+    .faq-item {
+      border-left: 4px solid transparent;
+      transition: border-color 0.3s ease, box-shadow 0.3s ease, transform 0.25s ease;
+    }
+    .faq-item:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 25px rgba(27, 58, 107, 0.1);
+    }
+    .faq-item.open {
+      border-left-color: var(--gold);
+    }
+    .faq-icon {
+      transition: transform 0.35s ease;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+    }
+    .faq-item.open .faq-icon {
+      transform: rotate(45deg);
+    }
+
+    /* Tab filtering transitions */
+    .faq-category-group {
+      transition: opacity 0.35s ease, max-height 0.4s ease;
+      overflow: hidden;
+    }
+    .faq-category-group.hidden-group {
+      opacity: 0;
+      max-height: 0 !important;
+      margin: 0;
+      padding: 0;
+      pointer-events: none;
+    }
+    .faq-category-group.visible-group {
+      opacity: 1;
+    }
+
+    /* Tabs scrollbar hide */
+    .tabs-scroll::-webkit-scrollbar { display: none; }
+    .tabs-scroll { -ms-overflow-style: none; scrollbar-width: none; }
+
+    /* Subtle background pattern */
+    .pattern-bg {
+      background-image: radial-gradient(circle at 1px 1px, rgba(27,58,107,0.03) 1px, transparent 0);
+      background-size: 30px 30px;
+    }
+
+    /* Gold divider */
+    .gold-divider {
+      width: 80px;
+      height: 3px;
+      background: linear-gradient(90deg, transparent, var(--gold), transparent);
+      margin: 0 auto;
+    }
+
+    /* Decorative flourish */
+    .flourish {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 12px;
+    }
+    .flourish::before, .flourish::after {
+      content: '';
+      width: 40px;
+      height: 1px;
+      background: var(--gold);
+    }
+    .flourish-diamond {
+      width: 8px;
+      height: 8px;
+      background: var(--gold);
+      transform: rotate(45deg);
+      flex-shrink: 0;
+    }
+
+    /* Sticky category label desktop */
+    @media (min-width: 1024px) {
+      .sticky-cat-label {
+        position: sticky;
+        top: 100px;
+      }
+    }
+
+    /* Mobile menu */
+    .mobile-nav-overlay {
+      transition: opacity 0.3s ease, visibility 0.3s ease;
+    }
+    .mobile-nav-overlay.open {
+      opacity: 1 !important;
+      visibility: visible !important;
+    }
+  </style>
+</head>
+<body data-id="0" class="font-body">
+  <app-icon data-id="1" hidden data-icon="file-text" data-palette="Dark"></app-icon>
+
+  <!-- STICKY NAVBAR -->
+  <header data-id="2" id="navbar-q1w2" class="fixed top-0 left-0 right-0 z-50 bg-navy border-b-2 border-gold/40">
+    <div data-id="3" class="max-w-7xl mx-auto px-4 md:px-6 lg:px-8 flex items-center justify-between h-16">
+      <a data-id="4" href="#" class="flex items-center flex-shrink-0">
+        <img data-id="5" src="https://copilot.microsoft.com/th/id/BCO.350f7f9d-12db-4287-ba3d-8ee47e21d651.png" alt="Solutions by P Maria Logo" style="height:52px;width:auto;" class="object-contain" />
+      </a>
+      <nav data-id="6" id="desktop-nav-r3t4" class="hidden md:flex items-center gap-8">
+        <a data-id="7" href="#" class="text-gold font-medium text-sm tracking-wide hover:underline underline-offset-4 transition-all duration-200">About</a>
+        <a data-id="8" href="#" class="text-gold font-medium text-sm tracking-wide hover:underline underline-offset-4 transition-all duration-200">Services</a>
+        <a data-id="9" href="#" class="text-gold font-medium text-sm tracking-wide hover:underline underline-offset-4 transition-all duration-200">Shop</a>
+        <a data-id="10" href="#" class="text-gold font-bold text-sm tracking-wide underline underline-offset-4 transition-all duration-200">FAQ</a>
+        <a data-id="11" href="#" class="text-gold font-medium text-sm tracking-wide hover:underline underline-offset-4 transition-all duration-200">Contact</a>
+      </nav>
+      <button data-id="12" id="mobile-menu-btn-y5u6" class="md:hidden p-2 text-gold min-h-[44px] min-w-[44px] flex items-center justify-center cursor-pointer" aria-label="Open menu">
+        <i data-id="13" data-lucide="menu" class="w-6 h-6"></i>
+      </button>
+    </div>
+  </header>
+
+  <!-- MOBILE MENU OVERLAY -->
+  <div data-id="14" id="mobile-menu-i7o8" class="mobile-nav-overlay fixed inset-0 bg-navy z-[60] flex flex-col opacity-0 invisible">
+    <div data-id="15" class="flex items-center justify-between px-4 h-16 border-b border-gold/30">
+      <img data-id="16" src="https://copilot.microsoft.com/th/id/BCO.350f7f9d-12db-4287-ba3d-8ee47e21d651.png" alt="Solutions by P Maria Logo" style="height:44px;width:auto;" class="object-contain" />
+      <button data-id="17" id="mobile-menu-close-p9a0" class="p-2 text-gold min-h-[44px] min-w-[44px] flex items-center justify-center cursor-pointer" aria-label="Close menu">
+        <i data-id="18" data-lucide="x" class="w-6 h-6"></i>
+      </button>
+    </div>
+    <nav data-id="19" class="flex flex-col items-center justify-center flex-1 gap-8">
+      <a data-id="20" href="#" class="text-gold text-xl font-display tracking-wide hover:underline underline-offset-4">About</a>
+      <a data-id="21" href="#" class="text-gold text-xl font-display tracking-wide hover:underline underline-offset-4">Services</a>
+      <a data-id="22" href="#" class="text-gold text-xl font-display tracking-wide hover:underline underline-offset-4">Shop</a>
+      <a data-id="23" href="#" class="text-gold text-xl font-display font-bold tracking-wide underline underline-offset-4">FAQ</a>
+      <a data-id="24" href="#" class="text-gold text-xl font-display tracking-wide hover:underline underline-offset-4">Contact</a>
+    </nav>
+  </div>
+
+  <main data-id="25">
+    <!-- HERO SECTION -->
+    <section data-id="26" id="hero-s1d2" class="relative bg-navy pt-28 pb-20 md:pt-36 md:pb-28 overflow-hidden">
+      <!-- Floating dots -->
+      <div data-id="27" class="dot dot-1" style="top:15%;left:8%"></div>
+      <div data-id="28" class="dot dot-2" style="top:30%;left:85%"></div>
+      <div data-id="29" class="dot dot-3" style="top:60%;left:12%"></div>
+      <div data-id="30" class="dot dot-4" style="top:20%;left:70%"></div>
+      <div data-id="31" class="dot dot-5" style="top:75%;left:90%"></div>
+      <div data-id="32" class="dot dot-6" style="top:50%;left:50%"></div>
+      <div data-id="33" class="dot dot-7" style="top:10%;left:40%"></div>
+      <div data-id="34" class="dot dot-8" style="top:80%;left:30%"></div>
+      <div data-id="35" class="dot dot-1" style="top:45%;left:25%"></div>
+      <div data-id="36" class="dot dot-2" style="top:65%;left:60%"></div>
+      <div data-id="37" class="dot dot-4" style="top:35%;left:95%"></div>
+      <div data-id="38" class="dot dot-5" style="top:85%;left:15%"></div>
+
+      <div data-id="39" class="relative z-10 max-w-3xl mx-auto text-center px-5 fade-in-up">
+        <p data-id="40" id="hero-label-f3g4" class="text-gold text-xs md:text-sm font-semibold tracking-[0.25em] uppercase mb-4">Got Questions? We Have Answers</p>
+        <h1 data-id="41" id="hero-heading-h5j6" class="font-display text-4xl md:text-5xl lg:text-6xl text-white font-bold leading-tight mb-5">Frequently Asked Questions</h1>
+        <p data-id="42" id="hero-sub-k7l8" class="text-white/80 text-base md:text-lg font-light leading-relaxed max-w-2xl mx-auto mb-8">Everything you need to know about our services, digital products, and how we can help you.</p>
+        <div data-id="43" class="gold-divider"></div>
+      </div>
+    </section>
+
+    <!-- FAQ CATEGORY TABS -->
+    <section data-id="44" id="tabs-section-m9n0" class="bg-offwhite border-b border-gray-200 sticky top-16 z-40">
+      <div data-id="45" class="max-w-5xl mx-auto px-4 md:px-6">
+        <div data-id="46" class="tabs-scroll flex items-center gap-2 md:gap-3 overflow-x-auto py-4" id="tabs-container-q1w2">
+          <button data-id="47" class="tab-btn px-4 md:px-6 py-2.5 rounded-full text-sm font-semibold whitespace-nowrap transition-all duration-300 cursor-pointer min-h-[44px] bg-gold text-navy" data-filter="all">All Questions</button>
+          <button data-id="48" class="tab-btn px-4 md:px-6 py-2.5 rounded-full text-sm font-medium whitespace-nowrap transition-all duration-300 cursor-pointer min-h-[44px] bg-white text-navy border border-gray-200 hover:border-gold" data-filter="notary">Notary Services</button>
+          <button data-id="49" class="tab-btn px-4 md:px-6 py-2.5 rounded-full text-sm font-medium whitespace-nowrap transition-all duration-300 cursor-pointer min-h-[44px] bg-white text-navy border border-gray-200 hover:border-gold" data-filter="digital">Digital Products</button>
+          <button data-id="50" class="tab-btn px-4 md:px-6 py-2.5 rounded-full text-sm font-medium whitespace-nowrap transition-all duration-300 cursor-pointer min-h-[44px] bg-white text-navy border border-gray-200 hover:border-gold" data-filter="document">Document Preparation</button>
+          <button data-id="51" class="tab-btn px-4 md:px-6 py-2.5 rounded-full text-sm font-medium whitespace-nowrap transition-all duration-300 cursor-pointer min-h-[44px] bg-white text-navy border border-gray-200 hover:border-gold" data-filter="admin">Administrative Support</button>
+        </div>
+      </div>
+    </section>
+
+    <!-- MAIN FAQ ACCORDION SECTION -->
+    <section data-id="52" id="faq-main-e3r4" class="pattern-bg py-12 md:py-20">
+      <div data-id="53" class="max-w-5xl mx-auto px-4 md:px-6 lg:px-8">
+        <div data-id="54" class="flex flex-col lg:flex-row gap-8 lg:gap-12">
+
+          <!-- Sticky sidebar label (desktop) -->
+          <aside data-id="55" class="hidden lg:block lg:w-56 flex-shrink-0">
+            <div data-id="56" class="sticky-cat-label">
+              <div data-id="57" class="flex items-start gap-3">
+                <div data-id="58" class="w-1 h-16 bg-gold rounded-full flex-shrink-0"></div>
+                <div data-id="59">
+                  <p data-id="60" id="sidebar-label-t5y6" class="text-navy font-display text-lg font-semibold leading-snug">Browse<br data-id="61"/>Questions</p>
+                  <p data-id="62" class="text-navy/50 text-xs mt-2 leading-relaxed">24 answers across 4 categories</p>
+                </div>
+              </div>
+              <div data-id="63" class="mt-8 space-y-3">
+                <div data-id="64" class="flex items-center gap-2 text-sm text-navy/60">
+                  <i data-id="65" data-lucide="stamp" class="w-4 h-4 text-gold"></i>
+                  <span data-id="66">Notary</span>
+                </div>
+                <div data-id="67" class="flex items-center gap-2 text-sm text-navy/60">
+                  <i data-id="68" data-lucide="shopping-bag" class="w-4 h-4 text-gold"></i>
+                  <span data-id="69">Digital Products</span>
+                </div>
+                <div data-id="70" class="flex items-center gap-2 text-sm text-navy/60">
+                  <i data-id="71" data-lucide="file-text" class="w-4 h-4 text-gold"></i>
+                  <span data-id="72">Documents</span>
+                </div>
+                <div data-id="73" class="flex items-center gap-2 text-sm text-navy/60">
+                  <i data-id="74" data-lucide="briefcase" class="w-4 h-4 text-gold"></i>
+                  <span data-id="75">Admin Support</span>
+                </div>
+              </div>
+            </div>
+          </aside>
+
+          <!-- FAQ Items -->
+          <div data-id="76" id="faq-list-u7i8" class="flex-1 space-y-10">
+
+            <!-- NOTARY SERVICES -->
+            <div data-id="77" class="faq-category-group visible-group" data-category="notary">
+              <div data-id="78" class="category-header flex items-center gap-3 mb-5 fade-in-up">
+                <div data-id="79" class="w-10 h-10 rounded-lg bg-gold/10 flex items-center justify-center flex-shrink-0">
+                  <i data-id="80" data-lucide="stamp" class="w-5 h-5 text-gold"></i>
+                </div>
+                <h2 data-id="81" class="font-display text-xl md:text-2xl text-navy font-semibold">Notary Services</h2>
+              </div>
+              <div data-id="82" class="space-y-3">
+                <div data-id="83" class="faq-item bg-white rounded-xl shadow-sm cursor-pointer fade-in-up" data-category="notary">
+                  <div data-id="84" class="faq-question flex items-center justify-between px-5 py-4 md:px-6 md:py-5 gap-4">
+                    <h3 data-id="85" class="text-navy font-semibold text-sm md:text-base leading-snug">What is a notary public and what do you do?</h3>
+                    <span data-id="86" class="faq-icon w-7 h-7 rounded-full bg-gold/10 text-gold flex-shrink-0 flex items-center justify-center">
+                      <i data-id="87" data-lucide="plus" class="w-4 h-4"></i>
+                    </span>
+                  </div>
+                  <div data-id="88" class="faq-answer px-5 md:px-6">
+                    <p data-id="89" class="text-navy/70 text-sm leading-relaxed">A notary public is a state-commissioned official authorized to witness the signing of important documents, administer oaths, and verify identities to help prevent fraud. As a certified notary in Oklahoma, Princess Maria provides professional, accurate, and reliable notarization services for a wide range of personal and business documents.</p>
+                  </div>
+                </div>
+
+                <div data-id="90" class="faq-item bg-white rounded-xl shadow-sm cursor-pointer fade-in-up" data-category="notary">
+                  <div data-id="91" class="faq-question flex items-center justify-between px-5 py-4 md:px-6 md:py-5 gap-4">
+                    <h3 data-id="92" class="text-navy font-semibold text-sm md:text-base leading-snug">What types of documents can you notarize?</h3>
+                    <span data-id="93" class="faq-icon w-7 h-7 rounded-full bg-gold/10 text-gold flex-shrink-0 flex items-center justify-center">
+                      <i data-id="94" data-lucide="plus" class="w-4 h-4"></i>
+                    </span>
+                  </div>
+                  <div data-id="95" class="faq-answer px-5 md:px-6">
+                    <p data-id="96" class="text-navy/70 text-sm leading-relaxed">I can notarize a wide variety of documents including affidavits, powers of attorney, real estate documents, loan signing packages, wills, trusts, medical consent forms, vehicle title transfers, and many more. If you're unsure whether your document qualifies, feel free to reach out and I'll let you know!</p>
+                  </div>
+                </div>
+
+                <div data-id="97" class="faq-item bg-white rounded-xl shadow-sm cursor-pointer fade-in-up" data-category="notary">
+                  <div data-id="98" class="faq-question flex items-center justify-between px-5 py-4 md:px-6 md:py-5 gap-4">
+                    <h3 data-id="99" class="text-navy font-semibold text-sm md:text-base leading-snug">Do you offer mobile notary services?</h3>
+                    <span data-id="100" class="faq-icon w-7 h-7 rounded-full bg-gold/10 text-gold flex-shrink-0 flex items-center justify-center">
+                      <i data-id="101" data-lucide="plus" class="w-4 h-4"></i>
+                    </span>
+                  </div>
+                  <div data-id="102" class="faq-answer px-5 md:px-6">
+                    <p data-id="103" class="text-navy/70 text-sm leading-relaxed">Yes! As a mobile notary, I come to you — whether that's your home, office, hospital, or any other convenient location in the Spencer, Oklahoma area. Travel fees may apply depending on distance. Contact us to schedule your appointment.</p>
+                  </div>
+                </div>
+
+                <div data-id="104" class="faq-item bg-white rounded-xl shadow-sm cursor-pointer fade-in-up" data-category="notary">
+                  <div data-id="105" class="faq-question flex items-center justify-between px-5 py-4 md:px-6 md:py-5 gap-4">
+                    <h3 data-id="106" class="text-navy font-semibold text-sm md:text-base leading-snug">How much does a notarization cost?</h3>
+                    <span data-id="107" class="faq-icon w-7 h-7 rounded-full bg-gold/10 text-gold flex-shrink-0 flex items-center justify-center">
+                      <i data-id="108" data-lucide="plus" class="w-4 h-4"></i>
+                    </span>
+                  </div>
+                  <div data-id="109" class="faq-answer px-5 md:px-6">
+                    <p data-id="110" class="text-navy/70 text-sm leading-relaxed">Notary fees in Oklahoma are regulated by state law. Standard notarization fees begin at the state-set rate per signature. Mobile notary services include a travel fee based on distance. Contact us for an exact quote based on your needs.</p>
+                  </div>
+                </div>
+
+                <div data-id="111" class="faq-item bg-white rounded-xl shadow-sm cursor-pointer fade-in-up" data-category="notary">
+                  <div data-id="112" class="faq-question flex items-center justify-between px-5 py-4 md:px-6 md:py-5 gap-4">
+                    <h3 data-id="113" class="text-navy font-semibold text-sm md:text-base leading-snug">What do I need to bring to my notary appointment?</h3>
+                    <span data-id="114" class="faq-icon w-7 h-7 rounded-full bg-gold/10 text-gold flex-shrink-0 flex items-center justify-center">
+                      <i data-id="115" data-lucide="plus" class="w-4 h-4"></i>
+                    </span>
+                  </div>
+                  <div data-id="116" class="faq-answer px-5 md:px-6">
+                    <div data-id="117" class="text-navy/70 text-sm leading-relaxed space-y-2">
+                      <p data-id="118">Please bring:</p>
+                      <ul data-id="119" class="list-disc pl-5 space-y-1">
+                        <li data-id="120">A valid, government-issued photo ID such as a driver's license or passport</li>
+                        <li data-id="121">The unsigned document(s) — documents should NOT be signed before the appointment</li>
+                        <li data-id="122">Any additional signers who are required to be present</li>
+                      </ul>
+                      <p data-id="123">All signers must appear in person.</p>
+                    </div>
+                  </div>
+                </div>
+
+                <div data-id="124" class="faq-item bg-white rounded-xl shadow-sm cursor-pointer fade-in-up" data-category="notary">
+                  <div data-id="125" class="faq-question flex items-center justify-between px-5 py-4 md:px-6 md:py-5 gap-4">
+                    <h3 data-id="126" class="text-navy font-semibold text-sm md:text-base leading-snug">Are you a loan signing agent?</h3>
+                    <span data-id="127" class="faq-icon w-7 h-7 rounded-full bg-gold/10 text-gold flex-shrink-0 flex items-center justify-center">
+                      <i data-id="128" data-lucide="plus" class="w-4 h-4"></i>
+                    </span>
+                  </div>
+                  <div data-id="129" class="faq-answer px-5 md:px-6">
+                    <p data-id="130" class="text-navy/70 text-sm leading-relaxed">Yes! In addition to general notary services, I am trained as a loan signing agent, helping facilitate the signing of mortgage and refinance loan packages. I work with title companies, escrow officers, and signing services to ensure smooth, accurate, and professional closings.</p>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- DIGITAL PRODUCTS -->
+            <div data-id="131" class="faq-category-group visible-group" data-category="digital">
+              <div data-id="132" class="category-header flex items-center gap-3 mb-5 fade-in-up">
+                <div data-id="133" class="w-10 h-10 rounded-lg bg-gold/10 flex items-center justify-center flex-shrink-0">
+                  <i data-id="134" data-lucide="shopping-bag" class="w-5 h-5 text-gold"></i>
+                </div>
+                <h2 data-id="135" class="font-display text-xl md:text-2xl text-navy font-semibold">Digital Products</h2>
+              </div>
+              <div data-id="136" class="space-y-3">
+                <div data-id="137" class="faq-item bg-white rounded-xl shadow-sm cursor-pointer fade-in-up" data-category="digital">
+                  <div data-id="138" class="faq-question flex items-center justify-between px-5 py-4 md:px-6 md:py-5 gap-4">
+                    <h3 data-id="139" class="text-navy font-semibold text-sm md:text-base leading-snug">What types of digital products do you sell?</h3>
+                    <span data-id="140" class="faq-icon w-7 h-7 rounded-full bg-gold/10 text-gold flex-shrink-0 flex items-center justify-center">
+                      <i data-id="141" data-lucide="plus" class="w-4 h-4"></i>
+                    </span>
+                  </div>
+                  <div data-id="142" class="faq-answer px-5 md:px-6">
+                    <div data-id="143" class="text-navy/70 text-sm leading-relaxed space-y-2">
+                      <p data-id="144">Solutions by P Maria offers a growing library of done-for-you digital templates, forms, guides, and toolkits including:</p>
+                      <ul data-id="145" class="list-disc pl-5 space-y-1">
+                        <li data-id="146">Notary Business Starter Bundles</li>
+                        <li data-id="147">Client Intake Forms</li>
+                        <li data-id="148">Loan Signing Agent Checklists</li>
+                        <li data-id="149">Virtual Assistant Onboarding Packets</li>
+                        <li data-id="150">Business Email Template Packs</li>
+                        <li data-id="151">Estate Document Organizers</li>
+                        <li data-id="152">Social Media Templates for Notaries</li>
+                      </ul>
+                      <p data-id="153">And much more.</p>
+                    </div>
+                  </div>
+                </div>
+
+                <div data-id="154" class="faq-item bg-white rounded-xl shadow-sm cursor-pointer fade-in-up" data-category="digital">
+                  <div data-id="155" class="faq-question flex items-center justify-between px-5 py-4 md:px-6 md:py-5 gap-4">
+                    <h3 data-id="156" class="text-navy font-semibold text-sm md:text-base leading-snug">How do I receive my digital products after purchase?</h3>
+                    <span data-id="157" class="faq-icon w-7 h-7 rounded-full bg-gold/10 text-gold flex-shrink-0 flex items-center justify-center">
+                      <i data-id="158" data-lucide="plus" class="w-4 h-4"></i>
+                    </span>
+                  </div>
+                  <div data-id="159" class="faq-answer px-5 md:px-6">
+                    <p data-id="160" class="text-navy/70 text-sm leading-relaxed">All digital products are delivered instantly via download link immediately after your purchase is confirmed. You'll receive an email with your download link. Products are available in PDF, Word, Excel, and/or Canva format depending on the product.</p>
+                  </div>
+                </div>
+
+                <div data-id="161" class="faq-item bg-white rounded-xl shadow-sm cursor-pointer fade-in-up" data-category="digital">
+                  <div data-id="162" class="faq-question flex items-center justify-between px-5 py-4 md:px-6 md:py-5 gap-4">
+                    <h3 data-id="163" class="text-navy font-semibold text-sm md:text-base leading-snug">Can I customize the templates after purchase?</h3>
+                    <span data-id="164" class="faq-icon w-7 h-7 rounded-full bg-gold/10 text-gold flex-shrink-0 flex items-center justify-center">
+                      <i data-id="165" data-lucide="plus" class="w-4 h-4"></i>
+                    </span>
+                  </div>
+                  <div data-id="166" class="faq-answer px-5 md:px-6">
+                    <p data-id="167" class="text-navy/70 text-sm leading-relaxed">Absolutely! Most templates come in editable formats (Word, Canva, or Excel) so you can personalize them with your name, business name, logo, and contact information. PDF-only products are ready to print and use as-is. Each product listing specifies which formats are included.</p>
+                  </div>
+                </div>
+
+                <div data-id="168" class="faq-item bg-white rounded-xl shadow-sm cursor-pointer fade-in-up" data-category="digital">
+                  <div data-id="169" class="faq-question flex items-center justify-between px-5 py-4 md:px-6 md:py-5 gap-4">
+                    <h3 data-id="170" class="text-navy font-semibold text-sm md:text-base leading-snug">Do you offer refunds on digital products?</h3>
+                    <span data-id="171" class="faq-icon w-7 h-7 rounded-full bg-gold/10 text-gold flex-shrink-0 flex items-center justify-center">
+                      <i data-id="172" data-lucide="plus" class="w-4 h-4"></i>
+                    </span>
+                  </div>
+                  <div data-id="173" class="faq-answer px-5 md:px-6">
+                    <p data-id="174" class="text-navy/70 text-sm leading-relaxed">Because digital products are instantly accessible after purchase, all sales are final and we do not offer refunds. However, if you experience a technical issue with your download or the file is defective, please contact us within 48 hours and we will resolve it promptly.</p>
+                  </div>
+                </div>
+
+                <div data-id="175" class="faq-item bg-white rounded-xl shadow-sm cursor-pointer fade-in-up" data-category="digital">
+                  <div data-id="176" class="faq-question flex items-center justify-between px-5 py-4 md:px-6 md:py-5 gap-4">
+                    <h3 data-id="177" class="text-navy font-semibold text-sm md:text-base leading-snug">Can I use your templates for my clients?</h3>
+                    <span data-id="178" class="faq-icon w-7 h-7 rounded-full bg-gold/10 text-gold flex-shrink-0 flex items-center justify-center">
+                      <i data-id="179" data-lucide="plus" class="w-4 h-4"></i>
+                    </span>
+                  </div>
+                  <div data-id="180" class="faq-answer px-5 md:px-6">
+                    <p data-id="181" class="text-navy/70 text-sm leading-relaxed">Our templates are licensed for personal and single-business use only. You may use them within your own business for your clients, but you may not resell, redistribute, or claim the templates as your own creation. For multi-business or commercial licensing inquiries, please contact us directly.</p>
+                  </div>
+                </div>
+
+                <div data-id="182" class="faq-item bg-white rounded-xl shadow-sm cursor-pointer fade-in-up" data-category="digital">
+                  <div data-id="183" class="faq-question flex items-center justify-between px-5 py-4 md:px-6 md:py-5 gap-4">
+                    <h3 data-id="184" class="text-navy font-semibold text-sm md:text-base leading-snug">Where can I purchase your digital products?</h3>
+                    <span data-id="185" class="faq-icon w-7 h-7 rounded-full bg-gold/10 text-gold flex-shrink-0 flex items-center justify-center">
+                      <i data-id="186" data-lucide="plus" class="w-4 h-4"></i>
+                    </span>
+                  </div>
+                  <div data-id="187" class="faq-answer px-5 md:px-6">
+                    <p data-id="188" class="text-navy/70 text-sm leading-relaxed">Our digital products are available on Payhip and Gumroad. Simply visit our shop, choose your product, complete checkout, and your download link will be delivered instantly. Links to our shops are available on our website and social media profiles.</p>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- DOCUMENT PREPARATION -->
+            <div data-id="189" class="faq-category-group visible-group" data-category="document">
+              <div data-id="190" class="category-header flex items-center gap-3 mb-5 fade-in-up">
+                <div data-id="191" class="w-10 h-10 rounded-lg bg-gold/10 flex items-center justify-center flex-shrink-0">
+                  <i data-id="192" data-lucide="file-text" class="w-5 h-5 text-gold"></i>
+                </div>
+                <h2 data-id="193" class="font-display text-xl md:text-2xl text-navy font-semibold">Document Preparation</h2>
+              </div>
+              <div data-id="194" class="space-y-3">
+                <div data-id="195" class="faq-item bg-white rounded-xl shadow-sm cursor-pointer fade-in-up" data-category="document">
+                  <div data-id="196" class="faq-question flex items-center justify-between px-5 py-4 md:px-6 md:py-5 gap-4">
+                    <h3 data-id="197" class="text-navy font-semibold text-sm md:text-base leading-snug">What is document preparation and how is it different from legal advice?</h3>
+                    <span data-id="198" class="faq-icon w-7 h-7 rounded-full bg-gold/10 text-gold flex-shrink-0 flex items-center justify-center">
+                      <i data-id="199" data-lucide="plus" class="w-4 h-4"></i>
+                    </span>
+                  </div>
+                  <div data-id="200" class="faq-answer px-5 md:px-6">
+                    <p data-id="201" class="text-navy/70 text-sm leading-relaxed">Document preparation is the professional assistance with completing, organizing, and preparing legal-adjacent documents such as affidavits, powers of attorney, and estate organizers. <strong data-id="202">Important:</strong> Document preparation is NOT legal advice. Princess Maria is not an attorney and does not provide legal counsel. For legal advice, please consult a licensed attorney.</p>
+                  </div>
+                </div>
+
+                <div data-id="203" class="faq-item bg-white rounded-xl shadow-sm cursor-pointer fade-in-up" data-category="document">
+                  <div data-id="204" class="faq-question flex items-center justify-between px-5 py-4 md:px-6 md:py-5 gap-4">
+                    <h3 data-id="205" class="text-navy font-semibold text-sm md:text-base leading-snug">What documents can you help me prepare?</h3>
+                    <span data-id="206" class="faq-icon w-7 h-7 rounded-full bg-gold/10 text-gold flex-shrink-0 flex items-center justify-center">
+                      <i data-id="207" data-lucide="plus" class="w-4 h-4"></i>
+                    </span>
+                  </div>
+                  <div data-id="208" class="faq-answer px-5 md:px-6">
+                    <div data-id="209" class="text-navy/70 text-sm leading-relaxed space-y-2">
+                      <p data-id="210">We assist with preparing and organizing a variety of documents including:</p>
+                      <ul data-id="211" class="list-disc pl-5 space-y-1">
+                        <li data-id="212">Affidavits</li>
+                        <li data-id="213">General powers of attorney</li>
+                        <li data-id="214">Healthcare directives</li>
+                        <li data-id="215">Estate document organizers</li>
+                        <li data-id="216">Personal property inventories</li>
+                        <li data-id="217">General business forms</li>
+                      </ul>
+                      <p data-id="218">Contact us if you have a specific document need.</p>
+                    </div>
+                  </div>
+                </div>
+
+                <div data-id="219" class="faq-item bg-white rounded-xl shadow-sm cursor-pointer fade-in-up" data-category="document">
+                  <div data-id="220" class="faq-question flex items-center justify-between px-5 py-4 md:px-6 md:py-5 gap-4">
+                    <h3 data-id="221" class="text-navy font-semibold text-sm md:text-base leading-snug">How long does document preparation take?</h3>
+                    <span data-id="222" class="faq-icon w-7 h-7 rounded-full bg-gold/10 text-gold flex-shrink-0 flex items-center justify-center">
+                      <i data-id="223" data-lucide="plus" class="w-4 h-4"></i>
+                    </span>
+                  </div>
+                  <div data-id="224" class="faq-answer px-5 md:px-6">
+                    <p data-id="225" class="text-navy/70 text-sm leading-relaxed">Standard document preparation is typically completed within 2–5 business days depending on the complexity of the document. Rush services may be available — contact us to discuss your timeline and we'll do our best to accommodate urgent needs.</p>
+                  </div>
+                </div>
+
+                <div data-id="226" class="faq-item bg-white rounded-xl shadow-sm cursor-pointer fade-in-up" data-category="document">
+                  <div data-id="227" class="faq-question flex items-center justify-between px-5 py-4 md:px-6 md:py-5 gap-4">
+                    <h3 data-id="228" class="text-navy font-semibold text-sm md:text-base leading-snug">Do I need an appointment for document preparation?</h3>
+                    <span data-id="229" class="faq-icon w-7 h-7 rounded-full bg-gold/10 text-gold flex-shrink-0 flex items-center justify-center">
+                      <i data-id="230" data-lucide="plus" class="w-4 h-4"></i>
+                    </span>
+                  </div>
+                  <div data-id="231" class="faq-answer px-5 md:px-6">
+                    <p data-id="232" class="text-navy/70 text-sm leading-relaxed">Yes, document preparation services begin with a consultation to understand your needs. You can book a consultation via our contact form or by emailing us directly. We offer both in-person (Spencer, OK area) and virtual consultations.</p>
+                  </div>
+                </div>
+
+                <div data-id="233" class="faq-item bg-white rounded-xl shadow-sm cursor-pointer fade-in-up" data-category="document">
+                  <div data-id="234" class="faq-question flex items-center justify-between px-5 py-4 md:px-6 md:py-5 gap-4">
+                    <h3 data-id="235" class="text-navy font-semibold text-sm md:text-base leading-snug">How much does document preparation cost?</h3>
+                    <span data-id="236" class="faq-icon w-7 h-7 rounded-full bg-gold/10 text-gold flex-shrink-0 flex items-center justify-center">
+                      <i data-id="237" data-lucide="plus" class="w-4 h-4"></i>
+                    </span>
+                  </div>
+                  <div data-id="238" class="faq-answer px-5 md:px-6">
+                    <p data-id="239" class="text-navy/70 text-sm leading-relaxed">Pricing varies based on the type and complexity of the document. We offer transparent, flat-rate pricing for most standard documents. Contact us with your specific needs for a custom quote. We believe professional document help should be accessible and affordable.</p>
+                  </div>
+                </div>
+
+                <div data-id="240" class="faq-item bg-white rounded-xl shadow-sm cursor-pointer fade-in-up" data-category="document">
+                  <div data-id="241" class="faq-question flex items-center justify-between px-5 py-4 md:px-6 md:py-5 gap-4">
+                    <h3 data-id="242" class="text-navy font-semibold text-sm md:text-base leading-snug">Is my personal information kept confidential?</h3>
+                    <span data-id="243" class="faq-icon w-7 h-7 rounded-full bg-gold/10 text-gold flex-shrink-0 flex items-center justify-center">
+                      <i data-id="244" data-lucide="plus" class="w-4 h-4"></i>
+                    </span>
+                  </div>
+                  <div data-id="245" class="faq-answer px-5 md:px-6">
+                    <p data-id="246" class="text-navy/70 text-sm leading-relaxed">Absolutely. All client information shared with Solutions by P Maria is kept strictly confidential. We do not sell, share, or disclose your personal information to any third parties. Your privacy and trust are our top priorities.</p>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- ADMINISTRATIVE SUPPORT -->
+            <div data-id="247" class="faq-category-group visible-group" data-category="admin">
+              <div data-id="248" class="category-header flex items-center gap-3 mb-5 fade-in-up">
+                <div data-id="249" class="w-10 h-10 rounded-lg bg-gold/10 flex items-center justify-center flex-shrink-0">
+                  <i data-id="250" data-lucide="briefcase" class="w-5 h-5 text-gold"></i>
+                </div>
+                <h2 data-id="251" class="font-display text-xl md:text-2xl text-navy font-semibold">Administrative Support</h2>
+              </div>
+              <div data-id="252" class="space-y-3">
+                <div data-id="253" class="faq-item bg-white rounded-xl shadow-sm cursor-pointer fade-in-up" data-category="admin">
+                  <div data-id="254" class="faq-question flex items-center justify-between px-5 py-4 md:px-6 md:py-5 gap-4">
+                    <h3 data-id="255" class="text-navy font-semibold text-sm md:text-base leading-snug">What administrative support services do you offer?</h3>
+                    <span data-id="256" class="faq-icon w-7 h-7 rounded-full bg-gold/10 text-gold flex-shrink-0 flex items-center justify-center">
+                      <i data-id="257" data-lucide="plus" class="w-4 h-4"></i>
+                    </span>
+                  </div>
+                  <div data-id="258" class="faq-answer px-5 md:px-6">
+                    <div data-id="259" class="text-navy/70 text-sm leading-relaxed space-y-2">
+                      <p data-id="260">We offer a range of administrative support services including:</p>
+                      <ul data-id="261" class="list-disc pl-5 space-y-1">
+                        <li data-id="262">Document organization and filing</li>
+                        <li data-id="263">Correspondence drafting</li>
+                        <li data-id="264">Data entry and record management</li>
+                        <li data-id="265">Appointment coordination</li>
+                        <li data-id="266">Business form preparation</li>
+                        <li data-id="267">General office support</li>
+                        <li data-id="268">Virtual assistant services</li>
+                      </ul>
+                      <p data-id="269">Contact us to discuss your specific needs.</p>
+                    </div>
+                  </div>
+                </div>
+
+                <div data-id="270" class="faq-item bg-white rounded-xl shadow-sm cursor-pointer fade-in-up" data-category="admin">
+                  <div data-id="271" class="faq-question flex items-center justify-between px-5 py-4 md:px-6 md:py-5 gap-4">
+                    <h3 data-id="272" class="text-navy font-semibold text-sm md:text-base leading-snug">Do you offer virtual administrative support?</h3>
+                    <span data-id="273" class="faq-icon w-7 h-7 rounded-full bg-gold/10 text-gold flex-shrink-0 flex items-center justify-center">
+                      <i data-id="274" data-lucide="plus" class="w-4 h-4"></i>
+                    </span>
+                  </div>
+                  <div data-id="275" class="faq-answer px-5 md:px-6">
+                    <p data-id="276" class="text-navy/70 text-sm leading-relaxed">Yes! Many of our administrative support services can be delivered virtually, making it easy to work with us no matter where you're located. We use secure, professional tools to communicate and deliver work remotely.</p>
+                  </div>
+                </div>
+
+                <div data-id="277" class="faq-item bg-white rounded-xl shadow-sm cursor-pointer fade-in-up" data-category="admin">
+                  <div data-id="278" class="faq-question flex items-center justify-between px-5 py-4 md:px-6 md:py-5 gap-4">
+                    <h3 data-id="279" class="text-navy font-semibold text-sm md:text-base leading-snug">How do I get started with administrative support services?</h3>
+                    <span data-id="280" class="faq-icon w-7 h-7 rounded-full bg-gold/10 text-gold flex-shrink-0 flex items-center justify-center">
+                      <i data-id="281" data-lucide="plus" class="w-4 h-4"></i>
+                    </span>
+                  </div>
+                  <div data-id="282" class="faq-answer px-5 md:px-6">
+                    <div data-id="283" class="text-navy/70 text-sm leading-relaxed space-y-2">
+                      <p data-id="284">Getting started is simple:</p>
+                      <ol data-id="285" class="list-decimal pl-5 space-y-1">
+                        <li data-id="286">Reach out via our contact form or email</li>
+                        <li data-id="287">We'll schedule a brief consultation to understand your needs</li>
+                        <li data-id="288">We'll provide a service proposal and pricing</li>
+                        <li data-id="289">Once confirmed, we get to work!</li>
+                      </ol>
+                      <p data-id="290">Most clients are up and running within a week.</p>
+                    </div>
+                  </div>
+                </div>
+
+                <div data-id="291" class="faq-item bg-white rounded-xl shadow-sm cursor-pointer fade-in-up" data-category="admin">
+                  <div data-id="292" class="faq-question flex items-center justify-between px-5 py-4 md:px-6 md:py-5 gap-4">
+                    <h3 data-id="293" class="text-navy font-semibold text-sm md:text-base leading-snug">Do you work with small businesses or individuals?</h3>
+                    <span data-id="294" class="faq-icon w-7 h-7 rounded-full bg-gold/10 text-gold flex-shrink-0 flex items-center justify-center">
+                      <i data-id="295" data-lucide="plus" class="w-4 h-4"></i>
+                    </span>
+                  </div>
+                  <div data-id="296" class="faq-answer px-5 md:px-6">
+                    <p data-id="297" class="text-navy/70 text-sm leading-relaxed">We work with both! Our clients include solo notaries just starting out, established small business owners, virtual assistants, real estate professionals, and individuals needing personal document and administrative help. If you're a busy professional who needs to look polished and organized — we're here for you.</p>
+                  </div>
+                </div>
+
+                <div data-id="298" class="faq-item bg-white rounded-xl shadow-sm cursor-pointer fade-in-up" data-category="admin">
+                  <div data-id="299" class="faq-question flex items-center justify-between px-5 py-4 md:px-6 md:py-5 gap-4">
+                    <h3 data-id="300" class="text-navy font-semibold text-sm md:text-base leading-snug">What are your hours of availability?</h3>
+                    <span data-id="301" class="faq-icon w-7 h-7 rounded-full bg-gold/10 text-gold flex-shrink-0 flex items-center justify-center">
+                      <i data-id="302" data-lucide="plus" class="w-4 h-4"></i>
+                    </span>
+                  </div>
+                  <div data-id="303" class="faq-answer px-5 md:px-6">
+                    <p data-id="304" class="text-navy/70 text-sm leading-relaxed">Our general business hours are Monday through Friday, 9:00 AM – 6:00 PM Central Time. Evening and weekend appointments may be available for mobile notary services — please inquire when booking. We strive to respond to all messages within 24 business hours.</p>
+                  </div>
+                </div>
+
+                <div data-id="305" class="faq-item bg-white rounded-xl shadow-sm cursor-pointer fade-in-up" data-category="admin">
+                  <div data-id="306" class="faq-question flex items-center justify-between px-5 py-4 md:px-6 md:py-5 gap-4">
+                    <h3 data-id="307" class="text-navy font-semibold text-sm md:text-base leading-snug">How do I contact Solutions by P Maria?</h3>
+                    <span data-id="308" class="faq-icon w-7 h-7 rounded-full bg-gold/10 text-gold flex-shrink-0 flex items-center justify-center">
+                      <i data-id="309" data-lucide="plus" class="w-4 h-4"></i>
+                    </span>
+                  </div>
+                  <div data-id="310" class="faq-answer px-5 md:px-6">
+                    <div data-id="311" class="text-navy/70 text-sm leading-relaxed space-y-2">
+                      <p data-id="312">You can reach us by:</p>
+                      <ul data-id="313" class="list-disc pl-5 space-y-1">
+                        <li data-id="314">Email at <strong data-id="315">solutions@pbymaria.com</strong></li>
+                        <li data-id="316">Through our contact form on the website</li>
+                        <li data-id="317">Via direct message on our Instagram and Facebook pages</li>
+                      </ul>
+                      <p data-id="318">For mobile notary appointments, please provide your location, document type, and preferred date/time when reaching out.</p>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- STILL HAVE QUESTIONS? CTA -->
+    <section data-id="319" id="cta-section-o1p2" class="bg-navy py-16 md:py-24 relative overflow-hidden">
+      <!-- subtle decorative circles -->
+      <div data-id="320" class="absolute top-0 right-0 w-64 h-64 rounded-full bg-gold/5 -translate-y-1/2 translate-x-1/3"></div>
+      <div data-id="321" class="absolute bottom-0 left-0 w-48 h-48 rounded-full bg-gold/5 translate-y-1/2 -translate-x-1/3"></div>
+
+      <div data-id="322" class="relative z-10 max-w-2xl mx-auto text-center px-5 fade-in-up">
+        <!-- Flourish -->
+        <div data-id="323" class="flourish mb-6">
+          <div data-id="324" class="flourish-diamond"></div>
+        </div>
+        <h2 data-id="325" id="cta-heading-q3r4" class="font-display text-3xl md:text-4xl text-white font-bold mb-4">Still Have Questions?</h2>
+        <p data-id="326" id="cta-text-s5t6" class="text-white/75 text-base md:text-lg font-light mb-8 leading-relaxed">We're here to help. Reach out and we'll get back to you within 24 hours.</p>
+        <div data-id="327" class="flex flex-col sm:flex-row items-center justify-center gap-4">
+          <a data-id="328" href="#" id="cta-contact-u7v8" class="inline-flex items-center justify-center gap-2 bg-gold text-navy font-semibold text-sm px-8 py-3.5 rounded-full hover:bg-goldLight transition-colors duration-300 min-h-[44px] min-w-[160px]">
+            <i data-id="329" data-lucide="mail" class="w-4 h-4"></i>
+            Contact Us
+          </a>
+          <a data-id="330" href="#" id="cta-shop-w9x0" class="inline-flex items-center justify-center gap-2 border-2 border-white text-white font-semibold text-sm px-8 py-3.5 rounded-full hover:bg-white/10 transition-colors duration-300 min-h-[44px] min-w-[160px]">
+            <i data-id="331" data-lucide="shopping-bag" class="w-4 h-4"></i>
+            Shop Templates
+          </a>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <!-- FOOTER -->
+  <footer data-id="332" id="footer-y1z2" class="bg-navyDark border-t-2 border-gold/40">
+    <div data-id="333" class="max-w-7xl mx-auto px-4 md:px-6 lg:px-8 py-8 md:py-10">
+      <div data-id="334" class="flex flex-col md:flex-row items-center justify-between gap-6">
+        <!-- Left: Logo -->
+        <div data-id="335" class="flex-shrink-0">
+          <img data-id="336" src="https://copilot.microsoft.com/th/id/BCO.350f7f9d-12db-4287-ba3d-8ee47e21d651.png" alt="Solutions by P Maria Logo" style="height:40px;width:auto;" class="object-contain" />
+        </div>
+        <!-- Center: Copyright + Tagline -->
+        <div data-id="337" class="text-center">
+          <p data-id="338" id="footer-copyright-a3b4" class="text-white/70 text-xs mb-1">© 2026 Solutions by P Maria. All Rights Reserved.</p>
+          <p data-id="339" id="footer-tagline-c5d6" class="text-gold text-xs italic font-display">Empowering Professionals. One Document at a Time.</p>
+        </div>
+        <!-- Right: Links -->
+        <nav data-id="340" class="flex items-center gap-5 flex-wrap justify-center">
+          <a data-id="341" href="#" class="text-gold text-xs font-medium hover:underline underline-offset-4 transition-all duration-200">About</a>
+          <a data-id="342" href="#" class="text-gold text-xs font-medium hover:underline underline-offset-4 transition-all duration-200">Shop</a>
+          <a data-id="343" href="#" class="text-gold text-xs font-medium hover:underline underline-offset-4 transition-all duration-200">FAQ</a>
+          <a data-id="344" href="#" class="text-gold text-xs font-medium hover:underline underline-offset-4 transition-all duration-200">Contact</a>
+        </nav>
+      </div>
+      <div data-id="345" class="text-center mt-6 pt-5 border-t border-white/10">
+        <p data-id="346" class="text-white/40 text-xs">Made by Copilot</p>
+      </div>
+    </div>
+  </footer>
+
+  <script>
+    // === LUCIDE ICONS (progressive enhancement) ===
+    if (typeof lucide !== "undefined" && typeof lucide.createIcons === "function") {
+      lucide.createIcons();
+    }
+
+    // === MOBILE MENU ===
+    const mobileMenuBtn = document.getElementById('mobile-menu-btn-y5u6');
+    const mobileMenuClose = document.getElementById('mobile-menu-close-p9a0');
+    const mobileMenu = document.getElementById('mobile-menu-i7o8');
+
+    if (mobileMenuBtn && mobileMenu) {
+      mobileMenuBtn.addEventListener('click', function() {
+        mobileMenu.classList.add('open');
+      });
+    }
+    if (mobileMenuClose && mobileMenu) {
+      mobileMenuClose.addEventListener('click', function() {
+        mobileMenu.classList.remove('open');
+      });
+    }
+    // Close mobile menu when clicking a link
+    if (mobileMenu) {
+      mobileMenu.querySelectorAll('a').forEach(function(link) {
+        link.addEventListener('click', function() {
+          mobileMenu.classList.remove('open');
+        });
+      });
+    }
+
+    // === FAQ ACCORDION ===
+    const faqItems = document.querySelectorAll('.faq-item');
+    faqItems.forEach(function(item) {
+      const question = item.querySelector('.faq-question');
+      if (!question) return;
+      question.addEventListener('click', function() {
+        const isOpen = item.classList.contains('open');
+        // Close all others
+        faqItems.forEach(function(other) {
+          if (other !== item) {
+            other.classList.remove('open');
+            const otherAnswer = other.querySelector('.faq-answer');
+            if (otherAnswer) otherAnswer.style.maxHeight = '0px';
+          }
+        });
+        // Toggle current
+        if (isOpen) {
+          item.classList.remove('open');
+          const answer = item.querySelector('.faq-answer');
+          if (answer) answer.style.maxHeight = '0px';
+        } else {
+          item.classList.add('open');
+          const answer = item.querySelector('.faq-answer');
+          if (answer) answer.style.maxHeight = answer.scrollHeight + 40 + 'px';
+        }
+      });
+    });
+
+    // === CATEGORY TAB FILTERING ===
+    const tabButtons = document.querySelectorAll('.tab-btn');
+    const categoryGroups = document.querySelectorAll('.faq-category-group');
+
+    tabButtons.forEach(function(btn) {
+      btn.addEventListener('click', function() {
+        const filter = btn.dataset.filter;
+
+        // Update active tab styling
+        tabButtons.forEach(function(b) {
+          b.classList.remove('bg-gold', 'text-navy', 'font-semibold');
+          b.classList.add('bg-white', 'text-navy', 'font-medium', 'border', 'border-gray-200');
+        });
+        btn.classList.remove('bg-white', 'font-medium', 'border', 'border-gray-200');
+        btn.classList.add('bg-gold', 'text-navy', 'font-semibold');
+
+        // Close all open FAQ items
+        faqItems.forEach(function(item) {
+          item.classList.remove('open');
+          var ans = item.querySelector('.faq-answer');
+          if (ans) ans.style.maxHeight = '0px';
+        });
+
+        // Filter categories
+        categoryGroups.forEach(function(group) {
+          const cat = group.dataset.category;
+          if (filter === 'all' || cat === filter) {
+            group.classList.remove('hidden-group');
+            group.classList.add('visible-group');
+            // Show category headers only in "all" view
+            var header = group.querySelector('.category-header');
+            if (header) {
+              header.style.display = filter === 'all' ? 'flex' : 'none';
+            }
+          } else {
+            group.classList.remove('visible-group');
+            group.classList.add('hidden-group');
+          }
+        });
+      });
+    });
+
+    // === INTERSECTION OBSERVER FOR FADE-IN ===
+    var observerOptions = {
+      threshold: 0.1,
+      rootMargin: '0px 0px -40px 0px'
+    };
+    var fadeObserver = new IntersectionObserver(function(entries) {
+      entries.forEach(function(entry) {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('visible');
+          fadeObserver.unobserve(entry.target);
+        }
+      });
+    }, observerOptions);
+    document.querySelectorAll('.fade-in-up').forEach(function(el) {
+      fadeObserver.observe(el);
+    });
+
+    // === NAVBAR SCROLL EFFECT ===
+    var navbar = document.getElementById('navbar-q1w2');
+    window.addEventListener('scroll', function() {
+      if (window.scrollY > 20) {
+        navbar.classList.add('shadow-lg');
+      } else {
+        navbar.classList.remove('shadow-lg');
+      }
+    });
+  </script>
+</body>
+</html>

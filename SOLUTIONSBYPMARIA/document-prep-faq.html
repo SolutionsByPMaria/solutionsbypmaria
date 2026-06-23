@@ -1,0 +1,735 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Solutions by P Maria – Document Prep & Admin Support FAQ</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+      tailwind.config = {
+        theme: {
+          extend: {
+            colors: {
+              navy: '#1B3A6B',
+              'navy-dark': '#142C52',
+              'navy-light': '#254D8A',
+              gold: '#C9A84C',
+              'gold-light': '#D4BA6E',
+              'gold-dark': '#A88A3A',
+              'cream': '#FFFDF5',
+              'light-gray': '#F5F6FA',
+              'body-text': '#374151',
+              'muted': '#6B7280',
+            },
+            fontFamily: {
+              display: ['"Playfair Display"', 'serif'],
+              body: ['"Inter"', 'sans-serif'],
+            },
+          },
+        },
+      };
+    </script>
+    <script src="https://unpkg.com/lucide@latest" defer></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Playfair+Display:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500&display=swap" rel="stylesheet" />
+    <style>
+      :root {
+        --navy: #1B3A6B;
+        --navy-dark: #142C52;
+        --gold: #C9A84C;
+        --gold-light: #D4BA6E;
+        --cream: #FFFDF5;
+        --light-gray: #F5F6FA;
+        --body-text: #374151;
+        --shadow-card: 0 2px 12px rgba(0,0,0,0.07);
+        --shadow-card-hover: 0 8px 24px rgba(0,0,0,0.12);
+        --transition-smooth: 0.35s ease;
+      }
+
+      html { scroll-behavior: smooth; }
+      body { font-family: 'Inter', sans-serif; margin: 0; padding: 0; color: var(--body-text); }
+
+      /* Floating dots animation */
+      .floating-dot {
+        position: absolute;
+        border-radius: 50%;
+        background: rgba(201, 168, 76, 0.25);
+        animation: floatDot linear infinite;
+        pointer-events: none;
+      }
+      @keyframes floatDot {
+        0% { transform: translateY(0) translateX(0) scale(1); opacity: 0; }
+        10% { opacity: 1; }
+        90% { opacity: 1; }
+        100% { transform: translateY(-100vh) translateX(40px) scale(0.5); opacity: 0; }
+      }
+
+      /* Gold shimmer for CTA */
+      .shimmer-bg {
+        position: relative;
+        overflow: hidden;
+      }
+      .shimmer-bg::before {
+        content: '';
+        position: absolute;
+        top: 0; left: -100%; width: 200%; height: 100%;
+        background: linear-gradient(90deg, transparent 0%, rgba(201,168,76,0.06) 25%, rgba(201,168,76,0.12) 50%, rgba(201,168,76,0.06) 75%, transparent 100%);
+        animation: shimmer 6s ease-in-out infinite;
+        pointer-events: none;
+      }
+      @keyframes shimmer {
+        0% { transform: translateX(-50%); }
+        100% { transform: translateX(50%); }
+      }
+
+      /* Accordion styles */
+      .faq-item { transition: transform var(--transition-smooth), box-shadow var(--transition-smooth); }
+      .faq-item:hover { transform: translateY(-2px); box-shadow: var(--shadow-card-hover); }
+      .faq-item.open { border-left: 4px solid var(--gold); background-color: var(--cream); }
+      .faq-item.open:hover { transform: translateY(0); }
+
+      .faq-answer-wrap {
+        max-height: 0;
+        overflow: hidden;
+        transition: max-height var(--transition-smooth);
+      }
+      .faq-item.open .faq-answer-wrap { max-height: 600px; }
+
+      .faq-toggle-icon {
+        transition: transform var(--transition-smooth);
+        display: inline-flex; align-items: center; justify-content: center;
+        width: 28px; height: 28px; flex-shrink: 0;
+        font-size: 1.4rem; color: var(--gold); font-weight: 300;
+      }
+      .faq-item.open .faq-toggle-icon { transform: rotate(45deg); }
+
+      /* Fade-in animation */
+      .fade-in-up {
+        opacity: 0;
+        transform: translateY(30px);
+        transition: opacity 0.7s ease, transform 0.7s ease;
+      }
+      .fade-in-up.visible {
+        opacity: 1;
+        transform: translateY(0);
+      }
+
+      /* Tab pill transitions */
+      .tab-btn {
+        transition: all 0.3s ease;
+        cursor: pointer;
+        white-space: nowrap;
+      }
+
+      /* Section filter transitions */
+      .faq-section-group {
+        transition: opacity 0.35s ease, max-height 0.45s ease;
+        overflow: hidden;
+      }
+      .faq-section-group.hidden-section {
+        opacity: 0;
+        max-height: 0 !important;
+        pointer-events: none;
+        margin: 0 !important;
+        padding: 0 !important;
+      }
+      .faq-section-group.visible-section {
+        opacity: 1;
+        max-height: 4000px;
+      }
+
+      /* Diamond divider */
+      .diamond-divider {
+        display: flex; align-items: center; justify-content: center; gap: 12px;
+      }
+      .diamond-divider::before, .diamond-divider::after {
+        content: '';
+        height: 1px;
+        width: 60px;
+        background: var(--gold);
+      }
+      .diamond-divider span {
+        width: 10px; height: 10px;
+        background: var(--gold);
+        transform: rotate(45deg);
+        display: inline-block;
+        flex-shrink: 0;
+      }
+
+      /* Mobile menu transition */
+      .mobile-nav {
+        transform: translateX(100%);
+        transition: transform 0.35s ease;
+      }
+      .mobile-nav.open { transform: translateX(0); }
+
+      /* Number badge */
+      .number-badge {
+        width: 48px; height: 48px;
+        border-radius: 50%;
+        background: var(--gold);
+        color: #fff;
+        display: flex; align-items: center; justify-content: center;
+        font-family: 'Playfair Display', serif;
+        font-weight: 700; font-size: 1.1rem;
+        flex-shrink: 0;
+      }
+
+      /* Sticky nav */
+      .sticky-nav {
+        position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+        background: var(--navy);
+        border-bottom: 2px solid var(--gold);
+        transition: box-shadow 0.3s ease;
+      }
+      .sticky-nav.scrolled { box-shadow: 0 4px 20px rgba(0,0,0,0.3); }
+
+      /* Info pills */
+      .info-pill {
+        border: 1.5px solid var(--gold);
+        border-radius: 50px;
+        padding: 10px 20px;
+        color: var(--gold);
+        font-size: 0.9rem;
+        display: inline-flex; align-items: center; gap: 8px;
+        white-space: nowrap;
+      }
+
+      /* Gold underline accent */
+      .gold-underline {
+        width: 60px; height: 3px;
+        background: var(--gold);
+        border-radius: 2px;
+      }
+
+      @media (max-width: 767px) {
+        .diamond-divider::before, .diamond-divider::after { width: 40px; }
+      }
+    </style>
+  </head>
+  <body data-id="0" class="bg-white">
+    <app-icon data-id="1" hidden data-icon="file-text" data-palette="Blue"></app-icon>
+
+    <!-- STICKY NAVIGATION -->
+    <nav data-id="2" class="sticky-nav" id="main-nav-a1b2">
+      <div data-id="3" class="max-w-7xl mx-auto flex items-center justify-between px-4 md:px-6 py-3">
+        <a data-id="4" href="#" class="flex-shrink-0">
+          <img data-id="5" src="https://copilot.microsoft.com/th/id/BCO.350f7f9d-12db-4287-ba3d-8ee47e21d651.png" alt="Solutions by P Maria Logo" style="height:52px;width:auto;object-fit:contain;" id="logo-nav-c3d4" />
+        </a>
+        <div data-id="6" class="hidden md:flex items-center gap-6" id="desktop-nav-e5f6">
+          <a data-id="7" href="#about" class="text-gold hover:text-gold-light font-medium transition-colors text-sm tracking-wide">About</a>
+          <a data-id="8" href="#services" class="text-gold hover:text-gold-light font-medium transition-colors text-sm tracking-wide">Services</a>
+          <a data-id="9" href="#shop" class="text-gold hover:text-gold-light font-medium transition-colors text-sm tracking-wide">Shop</a>
+          <a data-id="10" href="#faq-section" class="text-gold hover:text-gold-light font-medium transition-colors text-sm tracking-wide">FAQ</a>
+          <a data-id="11" href="#contact" class="text-gold hover:text-gold-light font-medium transition-colors text-sm tracking-wide">Contact</a>
+        </div>
+        <button data-id="12" class="md:hidden p-2 text-gold" id="hamburger-btn-g7h8" aria-label="Open menu">
+          <i data-id="13" data-lucide="menu" class="w-6 h-6"></i>
+        </button>
+      </div>
+    </nav>
+
+    <!-- MOBILE MENU -->
+    <div data-id="14" class="mobile-nav fixed inset-0 bg-navy z-[200] flex flex-col" id="mobile-menu-i9j0">
+      <div data-id="15" class="flex items-center justify-between px-4 py-3 border-b border-gold/20">
+        <img data-id="16" src="https://copilot.microsoft.com/th/id/BCO.350f7f9d-12db-4287-ba3d-8ee47e21d651.png" alt="Solutions by P Maria Logo" style="height:44px;width:auto;object-fit:contain;" />
+        <button data-id="17" class="p-2 text-gold" id="mobile-close-btn-k1l2" aria-label="Close menu">
+          <i data-id="18" data-lucide="x" class="w-6 h-6"></i>
+        </button>
+      </div>
+      <div data-id="19" class="flex flex-col items-center justify-center flex-1 gap-6">
+        <a data-id="20" href="#about" class="mobile-nav-link text-gold text-xl font-display font-semibold tracking-wide hover:text-gold-light transition-colors">About</a>
+        <a data-id="21" href="#services" class="mobile-nav-link text-gold text-xl font-display font-semibold tracking-wide hover:text-gold-light transition-colors">Services</a>
+        <a data-id="22" href="#shop" class="mobile-nav-link text-gold text-xl font-display font-semibold tracking-wide hover:text-gold-light transition-colors">Shop</a>
+        <a data-id="23" href="#faq-section" class="mobile-nav-link text-gold text-xl font-display font-semibold tracking-wide hover:text-gold-light transition-colors">FAQ</a>
+        <a data-id="24" href="#contact" class="mobile-nav-link text-gold text-xl font-display font-semibold tracking-wide hover:text-gold-light transition-colors">Contact</a>
+      </div>
+    </div>
+
+    <main data-id="25">
+      <!-- HERO SECTION -->
+      <section data-id="26" class="relative bg-navy min-h-[520px] md:min-h-[560px] flex items-center justify-center overflow-hidden pt-20" id="hero-m3n4">
+        <!-- Floating dots container -->
+        <div data-id="27" id="floating-dots-o5p6" class="absolute inset-0 pointer-events-none" aria-hidden="true"></div>
+        <div data-id="28" class="relative z-10 text-center px-4 py-16 md:py-20 max-w-3xl mx-auto">
+          <p data-id="29" class="text-gold text-xs md:text-sm font-body font-semibold tracking-[0.3em] uppercase mb-4 fade-in-up">Services FAQ</p>
+          <h1 data-id="30" class="font-display text-white text-3xl md:text-5xl lg:text-[3.2rem] font-bold leading-tight mb-5 fade-in-up" id="hero-heading-q7r8">Document Preparation &amp; Administrative Support</h1>
+          <p data-id="31" class="text-white/80 font-body text-base md:text-lg font-light leading-relaxed mb-8 max-w-2xl mx-auto fade-in-up">Get clear answers about turnaround times, confidentiality, pricing, virtual services, and how to get started.</p>
+          <div data-id="32" class="diamond-divider mb-8 fade-in-up"><span data-id="33"></span></div>
+          <div data-id="34" class="flex flex-wrap items-center justify-center gap-3 fade-in-up">
+            <span data-id="35" class="inline-flex items-center gap-2 bg-gold/15 text-gold border border-gold/30 rounded-full px-5 py-2 text-sm font-medium">📋 Document Preparation</span>
+            <span data-id="36" class="inline-flex items-center gap-2 bg-gold/15 text-gold border border-gold/30 rounded-full px-5 py-2 text-sm font-medium">🗂️ Administrative Support</span>
+          </div>
+        </div>
+      </section>
+
+      <!-- TOPIC TAB BAR -->
+      <section data-id="37" class="bg-white py-8 md:py-10 border-b border-gray-100" id="faq-section">
+        <div data-id="38" class="max-w-3xl mx-auto px-4">
+          <div data-id="39" class="flex flex-wrap items-center justify-center gap-3" id="tab-bar-s9t0">
+            <button data-id="40" class="tab-btn active px-5 py-2.5 rounded-full text-sm font-semibold border-2" data-filter="all">All Questions</button>
+            <button data-id="41" class="tab-btn px-5 py-2.5 rounded-full text-sm font-semibold border-2" data-filter="doc-prep">📋 Document Preparation</button>
+            <button data-id="42" class="tab-btn px-5 py-2.5 rounded-full text-sm font-semibold border-2" data-filter="admin-support">🗂️ Administrative Support</button>
+          </div>
+        </div>
+      </section>
+
+      <!-- FEATURE HIGHLIGHT CARDS -->
+      <section data-id="43" class="bg-light-gray py-12 md:py-16" id="features-u1v2">
+        <div data-id="44" class="max-w-6xl mx-auto px-4">
+          <div data-id="45" class="grid grid-cols-1 md:grid-cols-3 gap-6">
+            <div data-id="46" class="bg-white rounded-xl border-t-4 border-gold shadow-md p-6 md:p-8 text-center fade-in-up" id="card-fast-w3x4">
+              <div data-id="47" class="text-3xl mb-3">⏱️</div>
+              <h3 data-id="48" class="font-display text-navy text-lg font-bold mb-2">Fast Turnaround</h3>
+              <p data-id="49" class="text-muted text-sm leading-relaxed">Standard documents completed within 2–5 business days. Rush options available.</p>
+            </div>
+            <div data-id="50" class="bg-white rounded-xl border-t-4 border-gold shadow-md p-6 md:p-8 text-center fade-in-up" id="card-conf-y5z6">
+              <div data-id="51" class="text-3xl mb-3">🔒</div>
+              <h3 data-id="52" class="font-display text-navy text-lg font-bold mb-2">Strictly Confidential</h3>
+              <p data-id="53" class="text-muted text-sm leading-relaxed">All client information is protected and never shared with third parties.</p>
+            </div>
+            <div data-id="54" class="bg-white rounded-xl border-t-4 border-gold shadow-md p-6 md:p-8 text-center fade-in-up" id="card-virtual-a7b8">
+              <div data-id="55" class="text-3xl mb-3">💼</div>
+              <h3 data-id="56" class="font-display text-navy text-lg font-bold mb-2">Virtual &amp; In-Person</h3>
+              <p data-id="57" class="text-muted text-sm leading-relaxed">Work with us from anywhere — virtual consultations available for all services.</p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- FAQ ACCORDION SECTIONS -->
+      <section data-id="58" class="bg-white py-14 md:py-20" id="faq-content-c9d0">
+        <div data-id="59" class="max-w-[860px] mx-auto px-4">
+
+          <!-- SECTION 01 — Document Preparation -->
+          <div data-id="60" class="faq-section-group visible-section mb-14" data-section="doc-prep" id="doc-prep">
+            <div data-id="61" class="flex items-center gap-4 mb-3 fade-in-up">
+              <div data-id="62" class="number-badge">01</div>
+              <h2 data-id="63" class="font-display text-navy text-2xl md:text-3xl font-bold">📋 Document Preparation</h2>
+            </div>
+            <div data-id="64" class="gold-underline mb-4 ml-16 fade-in-up"></div>
+            <p data-id="65" class="text-muted text-sm md:text-base leading-relaxed mb-8 ml-16 fade-in-up">Our document preparation service helps individuals and businesses organize, complete, and present essential documents with accuracy and professionalism. Below are the most common questions about our process, timeline, pricing, and how we protect your information.</p>
+
+            <!-- Q1 -->
+            <div data-id="66" class="faq-item bg-white rounded-xl shadow-sm mb-4 border border-gray-100 fade-in-up" data-category="doc-prep" id="faq-dp-q1-e1f2">
+              <button data-id="67" class="faq-question w-full flex items-center justify-between gap-4 p-5 md:p-6 text-left cursor-pointer bg-transparent border-none" aria-expanded="false">
+                <div data-id="68">
+                  <span data-id="69" class="text-xs text-gold font-semibold uppercase tracking-wider block mb-1">Turnaround Time</span>
+                  <span data-id="70" class="text-navy font-semibold text-base md:text-lg font-body">How long does document preparation take?</span>
+                </div>
+                <span data-id="71" class="faq-toggle-icon">+</span>
+              </button>
+              <div data-id="72" class="faq-answer-wrap">
+                <div data-id="73" class="px-5 md:px-6 pb-5 md:pb-6 text-body-text leading-[1.7] text-sm md:text-base">
+                  Standard document preparation is typically completed within <strong data-id="74">2–5 business days</strong> from the time we receive all required information and materials from you. More complex documents — such as multi-part estate organizers or business document packages — may take up to <strong data-id="75">7 business days</strong>. Upon consultation, we will give you an accurate estimated completion date based on your specific request. We do not begin work until all necessary details are provided.
+                </div>
+              </div>
+            </div>
+
+            <!-- Q2 -->
+            <div data-id="76" class="faq-item bg-white rounded-xl shadow-sm mb-4 border border-gray-100 fade-in-up" data-category="doc-prep" id="faq-dp-q2-g3h4">
+              <button data-id="77" class="faq-question w-full flex items-center justify-between gap-4 p-5 md:p-6 text-left cursor-pointer bg-transparent border-none" aria-expanded="false">
+                <div data-id="78">
+                  <span data-id="79" class="text-xs text-gold font-semibold uppercase tracking-wider block mb-1">Turnaround Time</span>
+                  <span data-id="80" class="text-navy font-semibold text-base md:text-lg font-body">Do you offer rush or expedited document preparation?</span>
+                </div>
+                <span data-id="81" class="faq-toggle-icon">+</span>
+              </button>
+              <div data-id="82" class="faq-answer-wrap">
+                <div data-id="83" class="px-5 md:px-6 pb-5 md:pb-6 text-body-text leading-[1.7] text-sm md:text-base">
+                  Yes, <strong data-id="84">rush services</strong> may be available depending on current workload and the complexity of your document. Rush requests are typically fulfilled within <strong data-id="85">24–48 hours</strong> and are subject to an additional <strong data-id="86">expedited service fee</strong>. To request rush service, contact us as early as possible and clearly indicate your deadline. We will confirm availability and provide a custom quote before proceeding.
+                </div>
+              </div>
+            </div>
+
+            <!-- Q3 -->
+            <div data-id="87" class="faq-item bg-white rounded-xl shadow-sm mb-4 border border-gray-100 fade-in-up" data-category="doc-prep" id="faq-dp-q3-i5j6">
+              <button data-id="88" class="faq-question w-full flex items-center justify-between gap-4 p-5 md:p-6 text-left cursor-pointer bg-transparent border-none" aria-expanded="false">
+                <div data-id="89">
+                  <span data-id="90" class="text-xs text-gold font-semibold uppercase tracking-wider block mb-1">Confidentiality</span>
+                  <span data-id="91" class="text-navy font-semibold text-base md:text-lg font-body">How is my personal information protected?</span>
+                </div>
+                <span data-id="92" class="faq-toggle-icon">+</span>
+              </button>
+              <div data-id="93" class="faq-answer-wrap">
+                <div data-id="94" class="px-5 md:px-6 pb-5 md:pb-6 text-body-text leading-[1.7] text-sm md:text-base">
+                  Your privacy is our highest priority. All information you share with Solutions by P Maria — including your name, address, financial details, family information, and any supporting documents — is kept <strong data-id="95">strictly confidential</strong>. We do not sell, share, disclose, or transmit your personal information to any third party under any circumstances. All files are handled securely and deleted from our systems after a defined retention period or upon your request.
+                </div>
+              </div>
+            </div>
+
+            <!-- Q4 -->
+            <div data-id="96" class="faq-item bg-white rounded-xl shadow-sm mb-4 border border-gray-100 fade-in-up" data-category="doc-prep" id="faq-dp-q4-k7l8">
+              <button data-id="97" class="faq-question w-full flex items-center justify-between gap-4 p-5 md:p-6 text-left cursor-pointer bg-transparent border-none" aria-expanded="false">
+                <div data-id="98">
+                  <span data-id="99" class="text-xs text-gold font-semibold uppercase tracking-wider block mb-1">Confidentiality</span>
+                  <span data-id="100" class="text-navy font-semibold text-base md:text-lg font-body">Do you sign a confidentiality agreement?</span>
+                </div>
+                <span data-id="101" class="faq-toggle-icon">+</span>
+              </button>
+              <div data-id="102" class="faq-answer-wrap">
+                <div data-id="103" class="px-5 md:px-6 pb-5 md:pb-6 text-body-text leading-[1.7] text-sm md:text-base">
+                  Absolutely. Upon request, we are happy to provide and sign a <strong data-id="104">Non-Disclosure Agreement (NDA)</strong> before beginning any document preparation work. We take client trust seriously and welcome the opportunity to formalize our commitment to confidentiality in writing. Simply request an NDA during your initial consultation and we will prepare one promptly.
+                </div>
+              </div>
+            </div>
+
+            <!-- Q5 -->
+            <div data-id="105" class="faq-item bg-white rounded-xl shadow-sm mb-4 border border-gray-100 fade-in-up" data-category="doc-prep" id="faq-dp-q5-m9n0">
+              <button data-id="106" class="faq-question w-full flex items-center justify-between gap-4 p-5 md:p-6 text-left cursor-pointer bg-transparent border-none" aria-expanded="false">
+                <div data-id="107">
+                  <span data-id="108" class="text-xs text-gold font-semibold uppercase tracking-wider block mb-1">Pricing</span>
+                  <span data-id="109" class="text-navy font-semibold text-base md:text-lg font-body">How much does document preparation cost?</span>
+                </div>
+                <span data-id="110" class="faq-toggle-icon">+</span>
+              </button>
+              <div data-id="111" class="faq-answer-wrap">
+                <div data-id="112" class="px-5 md:px-6 pb-5 md:pb-6 text-body-text leading-[1.7] text-sm md:text-base">
+                  Our document preparation pricing is transparent and based on the type, length, and complexity of the document. We offer <strong data-id="113">flat-rate pricing</strong> for most standard documents so you always know what to expect — no surprise charges. Simple single-page documents begin at a low flat rate, while multi-part document packages are priced accordingly. Contact us with your specific needs and we will provide a detailed, no-obligation quote before any work begins.
+                </div>
+              </div>
+            </div>
+
+            <!-- Q6 -->
+            <div data-id="114" class="faq-item bg-white rounded-xl shadow-sm mb-4 border border-gray-100 fade-in-up" data-category="doc-prep" id="faq-dp-q6-o1p2">
+              <button data-id="115" class="faq-question w-full flex items-center justify-between gap-4 p-5 md:p-6 text-left cursor-pointer bg-transparent border-none" aria-expanded="false">
+                <div data-id="116">
+                  <span data-id="117" class="text-xs text-gold font-semibold uppercase tracking-wider block mb-1">Pricing</span>
+                  <span data-id="118" class="text-navy font-semibold text-base md:text-lg font-body">Are there any hidden fees I should know about?</span>
+                </div>
+                <span data-id="119" class="faq-toggle-icon">+</span>
+              </button>
+              <div data-id="120" class="faq-answer-wrap">
+                <div data-id="121" class="px-5 md:px-6 pb-5 md:pb-6 text-body-text leading-[1.7] text-sm md:text-base">
+                  No — we believe in complete <strong data-id="122">pricing transparency</strong>. The quote we provide at the start of your project is the price you pay. There are no hidden setup fees, revision charges (for standard edits), or surprise costs. Any additional fees — such as <strong data-id="123">rush service charges</strong> or <strong data-id="124">notarization fees</strong> if needed — will be clearly communicated and agreed upon before work begins. Your satisfaction and trust are more important to us than any extra charge.
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- SECTION 02 — Administrative Support -->
+          <div data-id="125" class="faq-section-group visible-section" data-section="admin-support" id="admin-support">
+            <div data-id="126" class="flex items-center gap-4 mb-3 fade-in-up">
+              <div data-id="127" class="number-badge">02</div>
+              <h2 data-id="128" class="font-display text-navy text-2xl md:text-3xl font-bold">🗂️ Administrative Support</h2>
+            </div>
+            <div data-id="129" class="gold-underline mb-4 ml-16 fade-in-up"></div>
+            <p data-id="130" class="text-muted text-sm md:text-base leading-relaxed mb-8 ml-16 fade-in-up">Our administrative support services are designed to help busy professionals and small business owners stay organized, operate professionally, and reclaim their time. Here are answers to the most common questions about how we work, what we offer, and how to get started.</p>
+
+            <!-- Q1 -->
+            <div data-id="131" class="faq-item bg-white rounded-xl shadow-sm mb-4 border border-gray-100 fade-in-up" data-category="admin-support" id="faq-as-q1-q3r4">
+              <button data-id="132" class="faq-question w-full flex items-center justify-between gap-4 p-5 md:p-6 text-left cursor-pointer bg-transparent border-none" aria-expanded="false">
+                <div data-id="133">
+                  <span data-id="134" class="text-xs text-gold font-semibold uppercase tracking-wider block mb-1">Virtual Services</span>
+                  <span data-id="135" class="text-navy font-semibold text-base md:text-lg font-body">Do you offer virtual administrative support?</span>
+                </div>
+                <span data-id="136" class="faq-toggle-icon">+</span>
+              </button>
+              <div data-id="137" class="faq-answer-wrap">
+                <div data-id="138" class="px-5 md:px-6 pb-5 md:pb-6 text-body-text leading-[1.7] text-sm md:text-base">
+                  Yes! The majority of our administrative support services are available <strong data-id="139">100% virtually</strong>, making it easy to work with us no matter where you are located. We use secure, professional communication tools and file-sharing platforms to deliver work remotely with the same quality and attention to detail as in-person service. Virtual clients enjoy the same prompt response times, professional results, and personal touch as local clients.
+                </div>
+              </div>
+            </div>
+
+            <!-- Q2 -->
+            <div data-id="140" class="faq-item bg-white rounded-xl shadow-sm mb-4 border border-gray-100 fade-in-up" data-category="admin-support" id="faq-as-q2-s5t6">
+              <button data-id="141" class="faq-question w-full flex items-center justify-between gap-4 p-5 md:p-6 text-left cursor-pointer bg-transparent border-none" aria-expanded="false">
+                <div data-id="142">
+                  <span data-id="143" class="text-xs text-gold font-semibold uppercase tracking-wider block mb-1">Virtual Services</span>
+                  <span data-id="144" class="text-navy font-semibold text-base md:text-lg font-body">What virtual administrative services do you provide?</span>
+                </div>
+                <span data-id="145" class="faq-toggle-icon">+</span>
+              </button>
+              <div data-id="146" class="faq-answer-wrap">
+                <div data-id="147" class="px-5 md:px-6 pb-5 md:pb-6 text-body-text leading-[1.7] text-sm md:text-base">
+                  Our virtual administrative support services include: <strong data-id="148">document drafting and formatting</strong>, business correspondence writing, <strong data-id="149">data entry and database management</strong>, email template creation, <strong data-id="150">SOP (Standard Operating Procedure) development</strong>, client onboarding packet creation, appointment coordination support, general office organization, and <strong data-id="151">digital file management</strong>. If you have a specific administrative need not listed here, contact us — chances are we can help.
+                </div>
+              </div>
+            </div>
+
+            <!-- Q3 -->
+            <div data-id="152" class="faq-item bg-white rounded-xl shadow-sm mb-4 border border-gray-100 fade-in-up" data-category="admin-support" id="faq-as-q3-u7v8">
+              <button data-id="153" class="faq-question w-full flex items-center justify-between gap-4 p-5 md:p-6 text-left cursor-pointer bg-transparent border-none" aria-expanded="false">
+                <div data-id="154">
+                  <span data-id="155" class="text-xs text-gold font-semibold uppercase tracking-wider block mb-1">Getting Started</span>
+                  <span data-id="156" class="text-navy font-semibold text-base md:text-lg font-body">How do I get started with administrative support services?</span>
+                </div>
+                <span data-id="157" class="faq-toggle-icon">+</span>
+              </button>
+              <div data-id="158" class="faq-answer-wrap">
+                <div data-id="159" class="px-5 md:px-6 pb-5 md:pb-6 text-body-text leading-[1.7] text-sm md:text-base">
+                  Getting started is simple and straightforward. <strong data-id="160">Step 1:</strong> Reach out via our contact form or email at <strong data-id="161">solutions@pbymaria.com</strong>. <strong data-id="162">Step 2:</strong> We schedule a brief discovery consultation (virtual or in-person) to understand your needs, goals, and current pain points. <strong data-id="163">Step 3:</strong> We provide a clear service proposal with pricing and timeline. <strong data-id="164">Step 4:</strong> Once you approve, we get to work immediately. Most new clients are fully onboarded and receiving support within <strong data-id="165">3–5 business days</strong> of their initial inquiry.
+                </div>
+              </div>
+            </div>
+
+            <!-- Q4 -->
+            <div data-id="166" class="faq-item bg-white rounded-xl shadow-sm mb-4 border border-gray-100 fade-in-up" data-category="admin-support" id="faq-as-q4-w9x0">
+              <button data-id="167" class="faq-question w-full flex items-center justify-between gap-4 p-5 md:p-6 text-left cursor-pointer bg-transparent border-none" aria-expanded="false">
+                <div data-id="168">
+                  <span data-id="169" class="text-xs text-gold font-semibold uppercase tracking-wider block mb-1">Getting Started</span>
+                  <span data-id="170" class="text-navy font-semibold text-base md:text-lg font-body">What information should I have ready before our consultation?</span>
+                </div>
+                <span data-id="171" class="faq-toggle-icon">+</span>
+              </button>
+              <div data-id="172" class="faq-answer-wrap">
+                <div data-id="173" class="px-5 md:px-6 pb-5 md:pb-6 text-body-text leading-[1.7] text-sm md:text-base">
+                  To make our consultation as productive as possible, it helps to have a general idea of: the types of tasks or documents you need help with, how frequently you need support (<strong data-id="174">one-time project vs. ongoing</strong>), any deadlines or time-sensitive needs, and your preferred method of communication (email, phone, video call). Don't worry if you don't have all the answers — our consultation is designed to help us figure out exactly what you need together.
+                </div>
+              </div>
+            </div>
+
+            <!-- Q5 -->
+            <div data-id="175" class="faq-item bg-white rounded-xl shadow-sm mb-4 border border-gray-100 fade-in-up" data-category="admin-support" id="faq-as-q5-y1z2">
+              <button data-id="176" class="faq-question w-full flex items-center justify-between gap-4 p-5 md:p-6 text-left cursor-pointer bg-transparent border-none" aria-expanded="false">
+                <div data-id="177">
+                  <span data-id="178" class="text-xs text-gold font-semibold uppercase tracking-wider block mb-1">Availability</span>
+                  <span data-id="179" class="text-navy font-semibold text-base md:text-lg font-body">What are your hours of availability?</span>
+                </div>
+                <span data-id="180" class="faq-toggle-icon">+</span>
+              </button>
+              <div data-id="181" class="faq-answer-wrap">
+                <div data-id="182" class="px-5 md:px-6 pb-5 md:pb-6 text-body-text leading-[1.7] text-sm md:text-base">
+                  Our standard business hours are <strong data-id="183">Monday through Friday, 9:00 AM – 6:00 PM Central Time</strong>. We strive to respond to all inquiries and client communications within <strong data-id="184">24 business hours</strong>. For time-sensitive requests received outside of business hours, we will respond first thing the following business day. Evening or weekend availability for special projects may be arranged on a case-by-case basis — simply reach out to discuss.
+                </div>
+              </div>
+            </div>
+
+            <!-- Q6 -->
+            <div data-id="185" class="faq-item bg-white rounded-xl shadow-sm mb-4 border border-gray-100 fade-in-up" data-category="admin-support" id="faq-as-q6-a3b4">
+              <button data-id="186" class="faq-question w-full flex items-center justify-between gap-4 p-5 md:p-6 text-left cursor-pointer bg-transparent border-none" aria-expanded="false">
+                <div data-id="187">
+                  <span data-id="188" class="text-xs text-gold font-semibold uppercase tracking-wider block mb-1">Availability</span>
+                  <span data-id="189" class="text-navy font-semibold text-base md:text-lg font-body">Do you take on ongoing or retainer-based clients?</span>
+                </div>
+                <span data-id="190" class="faq-toggle-icon">+</span>
+              </button>
+              <div data-id="191" class="faq-answer-wrap">
+                <div data-id="192" class="px-5 md:px-6 pb-5 md:pb-6 text-body-text leading-[1.7] text-sm md:text-base">
+                  Yes! We welcome both <strong data-id="193">project-based</strong> and <strong data-id="194">ongoing retainer</strong> arrangements. Retainer clients receive priority scheduling, reserved hours each month, and a consistent point of contact for all their administrative needs. Retainer packages are available in monthly increments and are ideal for business owners or professionals who need consistent, reliable administrative support on a regular basis. Contact us to discuss a custom <strong data-id="195">retainer package</strong> tailored to your workload and budget.
+                </div>
+              </div>
+            </div>
+          </div>
+
+        </div>
+      </section>
+
+      <!-- CONTACT / CTA SECTION -->
+      <section data-id="196" class="shimmer-bg bg-navy py-16 md:py-24" id="contact">
+        <div data-id="197" class="relative z-10 max-w-3xl mx-auto px-4 text-center">
+          <p data-id="198" class="text-gold text-xs md:text-sm font-semibold tracking-[0.3em] uppercase mb-4 fade-in-up">Ready to Work Together?</p>
+          <h2 data-id="199" class="font-display text-white text-3xl md:text-4xl lg:text-5xl font-bold mb-5 fade-in-up" id="cta-heading-c5d6">Let's Get Started Today</h2>
+          <p data-id="200" class="text-white/75 font-body text-base md:text-lg font-light leading-relaxed mb-10 fade-in-up">Book your free consultation or send us a message — we'll get back to you within 24 business hours.</p>
+          <div data-id="201" class="flex flex-wrap items-center justify-center gap-4 mb-10 fade-in-up">
+            <div data-id="202" class="info-pill">📍 Spencer, Oklahoma</div>
+            <div data-id="203" class="info-pill">📧 solutions@pbymaria.com</div>
+            <div data-id="204" class="info-pill">⏱️ Response within 24 hours</div>
+          </div>
+          <div data-id="205" class="flex flex-wrap items-center justify-center gap-4 fade-in-up">
+            <a data-id="206" href="mailto:solutions@pbymaria.com" class="inline-block bg-gold text-navy font-semibold font-body px-8 py-3.5 rounded-full text-sm md:text-base hover:bg-gold-light transition-colors shadow-lg hover:shadow-xl" id="cta-book-e7f8">Book a Consultation</a>
+            <a data-id="207" href="#shop" class="inline-block bg-transparent text-white font-semibold font-body px-8 py-3.5 rounded-full text-sm md:text-base border-2 border-white hover:bg-white/10 transition-colors" id="cta-shop-g9h0">Browse Digital Products</a>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <!-- FOOTER -->
+    <footer data-id="208" class="bg-navy border-t-2 border-gold py-8 md:py-10" id="footer-i1j2">
+      <div data-id="209" class="max-w-7xl mx-auto px-4">
+        <div data-id="210" class="flex flex-col md:flex-row items-center justify-between gap-6 text-center md:text-left">
+          <div data-id="211" class="flex-shrink-0">
+            <img data-id="212" src="https://copilot.microsoft.com/th/id/BCO.350f7f9d-12db-4287-ba3d-8ee47e21d651.png" alt="Solutions by P Maria Logo" style="height:40px;width:auto;object-fit:contain;" id="logo-footer-k3l4" />
+          </div>
+          <div data-id="213" class="flex flex-col items-center">
+            <p data-id="214" class="text-white/70 text-xs md:text-sm mb-1">© 2026 Solutions by P Maria. All Rights Reserved.</p>
+            <p data-id="215" class="text-gold italic text-xs md:text-sm font-display">Empowering Professionals. One Document at a Time.</p>
+            <p data-id="216" class="text-white/40 text-xs mt-2">Made by Copilot</p>
+          </div>
+          <div data-id="217" class="flex items-center gap-4 md:gap-5">
+            <a data-id="218" href="#about" class="text-gold hover:text-gold-light text-xs md:text-sm font-medium transition-colors">About</a>
+            <a data-id="219" href="#shop" class="text-gold hover:text-gold-light text-xs md:text-sm font-medium transition-colors">Shop</a>
+            <a data-id="220" href="#faq-section" class="text-gold hover:text-gold-light text-xs md:text-sm font-medium transition-colors">FAQ</a>
+            <a data-id="221" href="#contact" class="text-gold hover:text-gold-light text-xs md:text-sm font-medium transition-colors">Contact</a>
+          </div>
+        </div>
+      </div>
+    </footer>
+
+    <script>
+      // Guard Lucide icons
+      if (typeof lucide !== "undefined" && typeof lucide.createIcons === "function") {
+        lucide.createIcons();
+      }
+
+      // === FLOATING DOTS ===
+      (function() {
+        var dotsContainer = document.getElementById('floating-dots-o5p6');
+        if (!dotsContainer) return;
+        var dotConfigs = [
+          { size: 6, left: '10%', delay: 0, duration: 8 },
+          { size: 4, left: '20%', delay: 1.5, duration: 10 },
+          { size: 8, left: '35%', delay: 0.5, duration: 7 },
+          { size: 5, left: '50%', delay: 2, duration: 9 },
+          { size: 3, left: '62%', delay: 3, duration: 11 },
+          { size: 7, left: '75%', delay: 0.8, duration: 8.5 },
+          { size: 4, left: '85%', delay: 1.2, duration: 10.5 },
+          { size: 6, left: '92%', delay: 2.5, duration: 7.5 },
+          { size: 5, left: '5%', delay: 3.5, duration: 9.5 },
+          { size: 3, left: '45%', delay: 4, duration: 12 },
+        ];
+        dotConfigs.forEach(function(cfg) {
+          var dot = document.createElement('div');
+          dot.className = 'floating-dot';
+          dot.style.width = cfg.size + 'px';
+          dot.style.height = cfg.size + 'px';
+          dot.style.left = cfg.left;
+          dot.style.bottom = '-10px';
+          dot.style.animationDuration = cfg.duration + 's';
+          dot.style.animationDelay = cfg.delay + 's';
+          dotsContainer.appendChild(dot);
+        });
+      })();
+
+      // === STICKY NAV SCROLL EFFECT ===
+      (function() {
+        var nav = document.getElementById('main-nav-a1b2');
+        if (!nav) return;
+        window.addEventListener('scroll', function() {
+          if (window.scrollY > 20) {
+            nav.classList.add('scrolled');
+          } else {
+            nav.classList.remove('scrolled');
+          }
+        });
+      })();
+
+      // === MOBILE MENU ===
+      (function() {
+        var hamburger = document.getElementById('hamburger-btn-g7h8');
+        var mobileMenu = document.getElementById('mobile-menu-i9j0');
+        var closeBtn = document.getElementById('mobile-close-btn-k1l2');
+        if (!hamburger || !mobileMenu || !closeBtn) return;
+
+        hamburger.addEventListener('click', function() {
+          mobileMenu.classList.add('open');
+          document.body.style.overflow = 'hidden';
+        });
+
+        closeBtn.addEventListener('click', function() {
+          mobileMenu.classList.remove('open');
+          document.body.style.overflow = '';
+        });
+
+        var mobileLinks = mobileMenu.querySelectorAll('.mobile-nav-link');
+        mobileLinks.forEach(function(link) {
+          link.addEventListener('click', function() {
+            mobileMenu.classList.remove('open');
+            document.body.style.overflow = '';
+          });
+        });
+      })();
+
+      // === TAB FILTERING ===
+      (function() {
+        var tabBtns = document.querySelectorAll('.tab-btn');
+        var docPrepSection = document.querySelector('[data-section="doc-prep"]');
+        var adminSection = document.querySelector('[data-section="admin-support"]');
+
+        function setActiveTab(btn) {
+          tabBtns.forEach(function(b) {
+            b.classList.remove('active');
+            b.style.backgroundColor = '#FFFFFF';
+            b.style.color = '#1B3A6B';
+            b.style.borderColor = '#1B3A6B';
+          });
+          btn.classList.add('active');
+          btn.style.backgroundColor = '#C9A84C';
+          btn.style.color = '#1B3A6B';
+          btn.style.borderColor = '#C9A84C';
+        }
+
+        function filterSections(filter) {
+          if (filter === 'all') {
+            docPrepSection.classList.remove('hidden-section');
+            docPrepSection.classList.add('visible-section');
+            adminSection.classList.remove('hidden-section');
+            adminSection.classList.add('visible-section');
+          } else if (filter === 'doc-prep') {
+            docPrepSection.classList.remove('hidden-section');
+            docPrepSection.classList.add('visible-section');
+            adminSection.classList.remove('visible-section');
+            adminSection.classList.add('hidden-section');
+          } else if (filter === 'admin-support') {
+            docPrepSection.classList.remove('visible-section');
+            docPrepSection.classList.add('hidden-section');
+            adminSection.classList.remove('hidden-section');
+            adminSection.classList.add('visible-section');
+          }
+        }
+
+        tabBtns.forEach(function(btn) {
+          btn.addEventListener('click', function() {
+            setActiveTab(btn);
+            filterSections(btn.dataset.filter);
+          });
+        });
+
+        // Initialize active tab
+        var activeBtn = document.querySelector('.tab-btn.active');
+        if (activeBtn) setActiveTab(activeBtn);
+      })();
+
+      // === ACCORDION ===
+      (function() {
+        var faqItems = document.querySelectorAll('.faq-item');
+
+        faqItems.forEach(function(item) {
+          var questionBtn = item.querySelector('.faq-question');
+          if (!questionBtn) return;
+
+          questionBtn.addEventListener('click', function() {
+            var isOpen = item.classList.contains('open');
+
+            // Determine parent section
+            var parentSection = item.closest('.faq-section-group');
+            if (parentSection) {
+              var siblings = parentSection.querySelectorAll('.faq-item');
+              siblings.forEach(function(sib) {
+                sib.classList.remove('open');
+                var sibBtn = sib.querySelector('.faq-question');
+                if (sibBtn) sibBtn.setAttribute('aria-expanded', 'false');
+              });
+            }
+
+            if (!isOpen) {
+              item.classList.add('open');
+              questionBtn.setAttribute('aria-expanded', 'true');
+            }
+          });
+        });
+      })();
+
+      // === INTERSECTION OBSERVER (FADE-IN) ===
+      (function() {
+        var fadeEls = document.querySelectorAll('.fade-in-up');
+        if (!fadeEls.length) return;
+
+        var observer = new IntersectionObserver(function(entries) {
+          entries.forEach(function(entry) {
+            if (entry.isIntersecting) {
+              entry.target.classList.add('visible');
+              observer.unobserve(entry.target);
+            }
+          });
+        }, { threshold: 0.1, rootMargin: '0px 0px -40px 0px' });
+
+        fadeEls.forEach(function(el) {
+          observer.observe(el);
+        });
+      })();
+    </script>
+  </body>
+</html>

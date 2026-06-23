@@ -1,0 +1,1045 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Solutions by P Maria – Contact Page</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://unpkg.com/lucide@latest" defer></script>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            navy: { DEFAULT: '#1B3A6B', light: '#254d8a', dark: '#142c52' },
+            gold: { DEFAULT: '#C9A84C', light: '#d4bc6f', dark: '#B8933A', pale: 'rgba(201,168,76,0.15)' },
+            gray: { bg: '#F5F6FA', text: '#6b7280' }
+          },
+          fontFamily: {
+            display: ['"Playfair Display"', 'serif'],
+            body: ['Inter', 'sans-serif']
+          }
+        }
+      }
+    };
+  </script>
+  <style>
+    :root {
+      --navy: #1B3A6B;
+      --gold: #C9A84C;
+      --gold-dark: #B8933A;
+      --white: #FFFFFF;
+      --light-gray: #F5F6FA;
+      --error: #dc2626;
+    }
+    * { box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+    body { font-family: 'Inter', sans-serif; margin: 0; color: var(--navy); }
+    h1, h2, h3, h4, h5 { font-family: 'Playfair Display', serif; }
+
+    /* Navbar scroll shadow */
+    .nav-scrolled { box-shadow: 0 2px 16px rgba(27,58,107,0.18); }
+
+    /* Floating gold dots */
+    @keyframes floatDot {
+      0%, 100% { transform: translateY(0) translateX(0); opacity: var(--dot-opacity); }
+      25% { transform: translateY(-30px) translateX(10px); opacity: calc(var(--dot-opacity) * 1.3); }
+      50% { transform: translateY(-15px) translateX(-15px); opacity: var(--dot-opacity); }
+      75% { transform: translateY(-40px) translateX(5px); opacity: calc(var(--dot-opacity) * 0.7); }
+    }
+    .float-dot {
+      position: absolute;
+      border-radius: 50%;
+      background: var(--gold);
+      animation: floatDot var(--dot-duration) ease-in-out infinite;
+      opacity: var(--dot-opacity);
+      pointer-events: none;
+    }
+
+    /* Fade-in animation */
+    .fade-in-up {
+      opacity: 0;
+      transform: translateY(32px);
+      transition: opacity 0.7s cubic-bezier(.22,1,.36,1), transform 0.7s cubic-bezier(.22,1,.36,1);
+    }
+    .fade-in-up.visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    /* Gold underline accent */
+    .gold-underline {
+      display: block;
+      width: 60px;
+      height: 3px;
+      background: var(--gold);
+      margin: 12px auto 0;
+      border-radius: 2px;
+    }
+
+    /* Gold divider with diamond */
+    .gold-divider {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 14px;
+      margin: 28px 0 24px;
+    }
+    .gold-divider .line {
+      width: 60px;
+      height: 1.5px;
+      background: var(--gold);
+      opacity: 0.5;
+    }
+    .gold-divider .diamond {
+      width: 10px;
+      height: 10px;
+      background: var(--gold);
+      transform: rotate(45deg);
+      opacity: 0.7;
+    }
+
+    /* Form styles */
+    .form-input {
+      background: var(--white);
+      border: 1.5px solid var(--navy);
+      border-radius: 10px;
+      padding: 12px 16px;
+      font-family: 'Inter', sans-serif;
+      font-size: 0.95rem;
+      width: 100%;
+      transition: border-color 0.2s, box-shadow 0.2s;
+      color: var(--navy);
+    }
+    .form-input::placeholder {
+      color: #9ca3af;
+      font-style: italic;
+    }
+    .form-input:focus {
+      border-color: var(--gold);
+      box-shadow: 0 0 0 3px rgba(201,168,76,0.15);
+      outline: none;
+    }
+    .form-input.error {
+      border-color: var(--error);
+    }
+    .form-label {
+      font-family: 'Inter', sans-serif;
+      font-weight: 600;
+      color: var(--navy);
+      font-size: 0.875rem;
+      display: block;
+      margin-bottom: 6px;
+    }
+    .form-label .required {
+      color: var(--error);
+      margin-left: 2px;
+    }
+    .form-group {
+      margin-bottom: 20px;
+    }
+    .error-msg {
+      color: var(--error);
+      font-size: 0.78rem;
+      margin-top: 4px;
+      display: none;
+      font-family: 'Inter', sans-serif;
+    }
+    .error-msg.show { display: block; }
+
+    /* Select custom styling */
+    .form-select {
+      appearance: none;
+      -webkit-appearance: none;
+      background-image: url("data:image/svg+xml,%3Csvg width='12' height='8' viewBox='0 0 12 8' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M1 1.5L6 6.5L11 1.5' stroke='%23C9A84C' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
+      background-repeat: no-repeat;
+      background-position: right 14px center;
+      padding-right: 40px;
+    }
+
+    /* Accordion styles */
+    .faq-item {
+      background: white;
+      border-radius: 12px;
+      box-shadow: 0 2px 12px rgba(27,58,107,0.07);
+      margin-bottom: 16px;
+      transition: transform 0.25s, box-shadow 0.25s;
+      overflow: hidden;
+    }
+    .faq-item:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 6px 24px rgba(27,58,107,0.13);
+    }
+    .faq-question {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 20px 24px;
+      cursor: pointer;
+      font-family: 'Inter', sans-serif;
+      font-weight: 600;
+      color: var(--navy);
+      font-size: 1rem;
+      border: none;
+      background: transparent;
+      width: 100%;
+      text-align: left;
+    }
+    .faq-question .icon {
+      color: var(--gold);
+      font-size: 1.4rem;
+      font-weight: 700;
+      transition: transform 0.3s;
+      flex-shrink: 0;
+      margin-left: 12px;
+    }
+    .faq-item.open .faq-question .icon {
+      transform: rotate(45deg);
+    }
+    .faq-answer {
+      max-height: 0;
+      overflow: hidden;
+      transition: max-height 0.4s cubic-bezier(.22,1,.36,1), padding 0.3s;
+      padding: 0 24px;
+      border-left: 4px solid transparent;
+    }
+    .faq-item.open .faq-answer {
+      max-height: 300px;
+      padding: 0 24px 20px;
+      border-left-color: var(--gold);
+    }
+    .faq-answer p {
+      color: #4b5563;
+      line-height: 1.7;
+      font-size: 0.95rem;
+    }
+
+    /* Pulsing map dot */
+    @keyframes pulse-ring {
+      0% { transform: scale(1); opacity: 0.6; }
+      100% { transform: scale(2.8); opacity: 0; }
+    }
+    @keyframes pulse-dot {
+      0%, 100% { transform: scale(1); }
+      50% { transform: scale(1.15); }
+    }
+    .pulse-dot {
+      animation: pulse-dot 2s ease-in-out infinite;
+    }
+    .pulse-ring {
+      animation: pulse-ring 2s ease-out infinite;
+    }
+    .pulse-ring-delay {
+      animation: pulse-ring 2s ease-out infinite 0.6s;
+    }
+    .pulse-ring-delay2 {
+      animation: pulse-ring 2s ease-out infinite 1.2s;
+    }
+
+    /* Success checkmark */
+    .success-check {
+      width: 64px;
+      height: 64px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin: 0 auto 16px;
+      font-size: 28px;
+    }
+
+    /* Sending dots animation */
+    @keyframes sendingDots {
+      0%, 20% { content: '.'; }
+      40% { content: '..'; }
+      60%, 100% { content: '...'; }
+    }
+    .sending-dots::after {
+      content: '';
+      animation: sendingDots 1.4s steps(1) infinite;
+    }
+
+    /* Card hover lift */
+    .card-hover {
+      transition: transform 0.3s cubic-bezier(.22,1,.36,1), box-shadow 0.3s;
+    }
+    .card-hover:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 12px 32px rgba(27,58,107,0.13);
+    }
+
+    /* Social pill buttons */
+    .social-pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      border: 1.5px solid var(--gold);
+      color: var(--gold);
+      border-radius: 999px;
+      padding: 6px 14px;
+      font-size: 0.82rem;
+      font-weight: 500;
+      transition: all 0.25s;
+      text-decoration: none;
+      font-family: 'Inter', sans-serif;
+    }
+    .social-pill:hover {
+      background: var(--gold);
+      color: var(--navy);
+    }
+
+    /* Info pill in hero */
+    .info-pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      border: 1.5px solid var(--gold);
+      color: var(--gold);
+      border-radius: 999px;
+      padding: 8px 18px;
+      font-size: 0.88rem;
+      font-family: 'Inter', sans-serif;
+    }
+
+    /* Testimonial stars */
+    .stars { color: #f59e0b; letter-spacing: 2px; }
+
+    /* City label pills on map */
+    .city-label {
+      position: absolute;
+      background: rgba(255,255,255,0.92);
+      color: var(--navy);
+      font-family: 'Inter', sans-serif;
+      font-size: 0.75rem;
+      font-weight: 600;
+      padding: 4px 12px;
+      border-radius: 999px;
+      white-space: nowrap;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.12);
+    }
+
+    /* Mobile menu overlay */
+    .mobile-menu-overlay {
+      transition: opacity 0.3s, visibility 0.3s;
+    }
+    .mobile-menu-overlay.hidden {
+      opacity: 0;
+      visibility: hidden;
+    }
+    .mobile-menu-overlay:not(.hidden) {
+      opacity: 1;
+      visibility: visible;
+    }
+
+    /* Button loading state */
+    .btn-loading {
+      pointer-events: none;
+      opacity: 0.85;
+    }
+  </style>
+</head>
+<body data-id="0" class="bg-white font-body">
+  <app-icon data-id="1" hidden data-icon="mail" data-palette="Blue"></app-icon>
+
+  <!-- ====== STICKY NAVIGATION ====== -->
+  <nav data-id="2" id="navbar-main" class="fixed top-0 left-0 right-0 z-50 bg-navy transition-shadow duration-300" style="border-bottom: 2px solid #C9A84C;">
+    <div data-id="3" class="max-w-7xl mx-auto px-4 md:px-6 flex items-center justify-between h-16">
+      <!-- Logo -->
+      <a data-id="4" href="#" class="flex items-center gap-3 shrink-0">
+        <div data-id="5" class="flex items-center justify-center w-10 h-10 rounded-full bg-gold/20 border border-gold">
+          <span data-id="6" class="font-display text-gold font-bold text-lg">PM</span>
+        </div>
+        <span data-id="7" class="text-gold font-display text-lg font-semibold hidden sm:inline">Solutions by P Maria</span>
+      </a>
+      <!-- Desktop Nav -->
+      <div data-id="8" class="hidden md:flex items-center gap-6">
+        <a data-id="9" href="#" class="text-gold font-body text-sm font-medium hover:text-gold-light transition-colors">About</a>
+        <a data-id="10" href="#" class="text-gold font-body text-sm font-medium hover:text-gold-light transition-colors">Services</a>
+        <a data-id="11" href="#" class="text-gold font-body text-sm font-medium hover:text-gold-light transition-colors">Shop</a>
+        <a data-id="12" href="#" class="text-gold font-body text-sm font-medium hover:text-gold-light transition-colors">FAQ</a>
+        <a data-id="13" href="#forms" class="text-gold font-body text-sm font-medium hover:text-gold-light transition-colors relative pb-1" style="border-bottom: 2px solid #C9A84C;">Contact</a>
+      </div>
+      <!-- Mobile Hamburger -->
+      <button data-id="14" id="mobile-menu-btn" class="md:hidden p-2 text-gold" aria-label="Open menu">
+        <i data-id="15" data-lucide="menu" class="w-6 h-6"></i>
+      </button>
+    </div>
+  </nav>
+
+  <!-- ====== MOBILE MENU ====== -->
+  <div data-id="16" id="mobile-menu" class="mobile-menu-overlay hidden fixed inset-0 bg-navy z-[60] flex flex-col p-6">
+    <div data-id="17" class="flex items-center justify-between mb-10">
+      <div data-id="18" class="flex items-center gap-3">
+        <div data-id="19" class="flex items-center justify-center w-10 h-10 rounded-full bg-gold/20 border border-gold">
+          <span data-id="20" class="font-display text-gold font-bold text-lg">PM</span>
+        </div>
+        <span data-id="21" class="text-gold font-display text-lg font-semibold">Solutions by P Maria</span>
+      </div>
+      <button data-id="22" id="mobile-menu-close" class="p-2 text-gold" aria-label="Close menu">
+        <i data-id="23" data-lucide="x" class="w-6 h-6"></i>
+      </button>
+    </div>
+    <nav data-id="24" class="flex flex-col gap-5">
+      <a data-id="25" href="#" class="text-gold font-body text-lg font-medium hover:text-gold-light transition-colors">About</a>
+      <a data-id="26" href="#" class="text-gold font-body text-lg font-medium hover:text-gold-light transition-colors">Services</a>
+      <a data-id="27" href="#" class="text-gold font-body text-lg font-medium hover:text-gold-light transition-colors">Shop</a>
+      <a data-id="28" href="#" class="text-gold font-body text-lg font-medium hover:text-gold-light transition-colors">FAQ</a>
+      <a data-id="29" href="#forms" class="text-gold font-body text-lg font-medium hover:text-gold-light transition-colors mobile-nav-link" style="border-bottom: 2px solid #C9A84C; width: fit-content; padding-bottom: 2px;">Contact</a>
+    </nav>
+    <div data-id="30" class="mt-auto pt-8 border-t border-gold/20">
+      <p data-id="31" class="text-gold/60 text-sm font-body">solutions@pbymaria.com</p>
+      <p data-id="32" class="text-gold/40 text-xs font-body mt-1">Spencer, Oklahoma</p>
+    </div>
+  </div>
+
+  <!-- ====== HERO SECTION ====== -->
+  <section data-id="33" id="hero-section" class="relative min-h-[520px] md:min-h-[560px] flex items-center justify-center overflow-hidden" style="background: #1B3A6B; padding-top: 64px;">
+    <!-- Floating gold dots -->
+    <div data-id="34" class="float-dot" style="width:6px;height:6px;top:12%;left:8%;--dot-opacity:0.15;--dot-duration:8s;"></div>
+    <div data-id="35" class="float-dot" style="width:10px;height:10px;top:25%;left:82%;--dot-opacity:0.12;--dot-duration:12s;"></div>
+    <div data-id="36" class="float-dot" style="width:4px;height:4px;top:60%;left:15%;--dot-opacity:0.2;--dot-duration:6s;"></div>
+    <div data-id="37" class="float-dot" style="width:14px;height:14px;top:70%;left:75%;--dot-opacity:0.1;--dot-duration:16s;"></div>
+    <div data-id="38" class="float-dot" style="width:8px;height:8px;top:18%;left:45%;--dot-opacity:0.18;--dot-duration:10s;"></div>
+    <div data-id="39" class="float-dot" style="width:5px;height:5px;top:80%;left:55%;--dot-opacity:0.25;--dot-duration:7s;"></div>
+    <div data-id="40" class="float-dot" style="width:12px;height:12px;top:40%;left:92%;--dot-opacity:0.1;--dot-duration:18s;"></div>
+    <div data-id="41" class="float-dot" style="width:7px;height:7px;top:50%;left:5%;--dot-opacity:0.15;--dot-duration:14s;"></div>
+    <div data-id="42" class="float-dot" style="width:9px;height:9px;top:35%;left:30%;--dot-opacity:0.13;--dot-duration:11s;"></div>
+    <div data-id="43" class="float-dot" style="width:6px;height:6px;top:85%;left:35%;--dot-opacity:0.2;--dot-duration:9s;"></div>
+
+    <div data-id="44" class="relative z-10 text-center px-5 max-w-3xl mx-auto fade-in-up">
+      <p data-id="45" class="text-gold font-body text-xs md:text-sm font-semibold uppercase tracking-[0.3em] mb-4">Get in Touch</p>
+      <h1 data-id="46" class="font-display text-white font-bold mb-5" style="font-size: clamp(2rem, 5vw, 3.5rem); line-height: 1.15;">We'd Love to Hear From You</h1>
+      <p data-id="47" class="text-white/80 font-body text-base md:text-lg max-w-2xl mx-auto leading-relaxed">Whether you need a notarization, document help, admin support, or a custom template — we're here and ready to help.</p>
+      <div data-id="48" class="gold-divider">
+        <div data-id="49" class="line"></div>
+        <div data-id="50" class="diamond"></div>
+        <div data-id="51" class="line"></div>
+      </div>
+      <div data-id="52" class="flex flex-wrap justify-center gap-3 mt-2">
+        <span data-id="53" class="info-pill">📍 Spencer, Oklahoma</span>
+        <span data-id="54" class="info-pill">⏱️ Response within 24 hours</span>
+        <span data-id="55" class="info-pill">📧 solutions@pbymaria.com</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- ====== CONTACT INFO CARDS ====== -->
+  <section data-id="56" id="contact-info" class="py-16 md:py-20 bg-white">
+    <div data-id="57" class="max-w-6xl mx-auto px-4 md:px-6">
+      <div data-id="58" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+        <!-- Card 1 — Email -->
+        <div data-id="59" class="bg-white rounded-2xl shadow-md p-6 text-center card-hover fade-in-up" style="border-top: 4px solid #C9A84C;">
+          <div data-id="60" class="text-4xl mb-3">📧</div>
+          <h3 data-id="61" class="font-display text-navy text-lg font-semibold mb-2">Email Us</h3>
+          <a data-id="62" href="mailto:solutions@pbymaria.com" class="text-gold font-body font-medium text-sm hover:underline transition-colors">solutions@pbymaria.com</a>
+          <p data-id="63" class="text-gray-text font-body text-xs mt-3 leading-relaxed">We respond within 24 business hours.</p>
+        </div>
+        <!-- Card 2 — Location -->
+        <div data-id="64" class="bg-white rounded-2xl shadow-md p-6 text-center card-hover fade-in-up" style="border-top: 4px solid #C9A84C;">
+          <div data-id="65" class="text-4xl mb-3">📍</div>
+          <h3 data-id="66" class="font-display text-navy text-lg font-semibold mb-2">Our Location</h3>
+          <p data-id="67" class="text-gold font-body font-bold text-sm">Spencer, Oklahoma</p>
+          <p data-id="68" class="text-gray-text font-body text-xs mt-3 leading-relaxed">Serving Spencer, Midwest City, Del City, Choctaw, Harrah, Luther &amp; greater OKC metro.</p>
+        </div>
+        <!-- Card 3 — Business Hours -->
+        <div data-id="69" class="bg-white rounded-2xl shadow-md p-6 text-center card-hover fade-in-up" style="border-top: 4px solid #C9A84C;">
+          <div data-id="70" class="text-4xl mb-3">🕘</div>
+          <h3 data-id="71" class="font-display text-navy text-lg font-semibold mb-2">Business Hours</h3>
+          <div data-id="72" class="font-body text-sm space-y-1 mt-2">
+            <div data-id="73" class="flex justify-between text-xs"><span data-id="74" class="text-navy">Mon – Fri</span><span data-id="75" class="text-gold font-semibold">9:00 AM – 6:00 PM CT</span></div>
+            <div data-id="76" class="flex justify-between text-xs"><span data-id="77" class="text-navy">Saturday</span><span data-id="78" class="text-gray-text">By Appointment</span></div>
+            <div data-id="79" class="flex justify-between text-xs"><span data-id="80" class="text-navy">Sunday</span><span data-id="81" class="text-gray-text">Closed</span></div>
+          </div>
+          <p data-id="82" class="text-gray-text font-body text-xs mt-3 leading-relaxed">Evening &amp; weekend notary appointments available by request.</p>
+        </div>
+        <!-- Card 4 — Online Presence -->
+        <div data-id="83" class="bg-white rounded-2xl shadow-md p-6 text-center card-hover fade-in-up" style="border-top: 4px solid #C9A84C;">
+          <div data-id="84" class="text-4xl mb-3">🌐</div>
+          <h3 data-id="85" class="font-display text-navy text-lg font-semibold mb-2">Find Us Online</h3>
+          <div data-id="86" class="flex flex-wrap justify-center gap-2 mt-3">
+            <a data-id="87" href="#" class="social-pill">📘 Facebook</a>
+            <a data-id="88" href="#" class="social-pill">📸 Instagram</a>
+            <a data-id="89" href="#" class="social-pill">📌 Pinterest</a>
+            <a data-id="90" href="#" class="social-pill">🛍️ Payhip Shop</a>
+          </div>
+          <p data-id="91" class="text-gray-text font-body text-xs mt-3 leading-relaxed">Follow for tips, freebies &amp; updates.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ====== MAIN CONTACT & BOOKING FORMS ====== -->
+  <section data-id="92" id="forms" class="py-16 md:py-20" style="background: #F5F6FA;">
+    <div data-id="93" class="max-w-7xl mx-auto px-4 md:px-6">
+      <div data-id="94" class="grid grid-cols-1 lg:grid-cols-2 gap-8 items-start">
+        <!-- LEFT — General Contact Form -->
+        <div data-id="95" id="contact-form-card" class="bg-white rounded-[20px] shadow-lg p-6 md:p-10 fade-in-up">
+          <div data-id="96" id="contact-form-wrapper">
+            <h2 data-id="97" class="font-display text-navy text-2xl md:text-3xl font-bold">Send Us a Message</h2>
+            <span data-id="98" class="gold-underline" style="margin: 12px 0 0 0;"></span>
+            <p data-id="99" class="text-gray-text font-body text-sm mt-4 mb-6 leading-relaxed">Have a question, need a quote, or want to learn more? Fill out the form and we'll be in touch.</p>
+            <form data-id="100" id="contact-form" novalidate>
+              <div data-id="101" class="form-group">
+                <label data-id="102" class="form-label" for="cf-name">Full Name <span data-id="103" class="required">*</span></label>
+                <input data-id="104" type="text" id="cf-name" class="form-input" placeholder="Your full name" aria-required="true" />
+                <p data-id="105" class="error-msg" id="cf-name-err">This field is required</p>
+              </div>
+              <div data-id="106" class="form-group">
+                <label data-id="107" class="form-label" for="cf-email">Email Address <span data-id="108" class="required">*</span></label>
+                <input data-id="109" type="email" id="cf-email" class="form-input" placeholder="your@email.com" aria-required="true" />
+                <p data-id="110" class="error-msg" id="cf-email-err">Please enter a valid email address</p>
+              </div>
+              <div data-id="111" class="form-group">
+                <label data-id="112" class="form-label" for="cf-phone">Phone Number</label>
+                <input data-id="113" type="tel" id="cf-phone" class="form-input" placeholder="(405) 000-0000" />
+              </div>
+              <div data-id="114" class="form-group">
+                <label data-id="115" class="form-label" for="cf-service">Service Interested In <span data-id="116" class="required">*</span></label>
+                <select data-id="117" id="cf-service" class="form-input form-select" aria-required="true">
+                  <option data-id="118" value="">Select a service...</option>
+                  <option data-id="119">General Notarization</option>
+                  <option data-id="120">Mobile Notary Services</option>
+                  <option data-id="121">Loan Signing Agent</option>
+                  <option data-id="122">Real Estate Document Notarization</option>
+                  <option data-id="123">Estate &amp; Will Documents</option>
+                  <option data-id="124">Apostille Assistance</option>
+                  <option data-id="125">Document Preparation</option>
+                  <option data-id="126">Administrative Support</option>
+                  <option data-id="127">Digital Products / Templates</option>
+                  <option data-id="128">Bundle Package</option>
+                  <option data-id="129">Other / General Inquiry</option>
+                </select>
+                <p data-id="130" class="error-msg" id="cf-service-err">This field is required</p>
+              </div>
+              <div data-id="131" class="form-group">
+                <label data-id="132" class="form-label" for="cf-message">Message <span data-id="133" class="required">*</span></label>
+                <textarea data-id="134" id="cf-message" class="form-input" rows="5" placeholder="Tell us about your needs, timeline, or any questions you have..." aria-required="true"></textarea>
+                <p data-id="135" class="error-msg" id="cf-message-err">This field is required</p>
+              </div>
+              <div data-id="136" class="form-group">
+                <label data-id="137" class="form-label" for="cf-referral">How did you hear about us?</label>
+                <select data-id="138" id="cf-referral" class="form-input form-select">
+                  <option data-id="139" value="">Select one...</option>
+                  <option data-id="140">Google Search</option>
+                  <option data-id="141">Instagram</option>
+                  <option data-id="142">Facebook</option>
+                  <option data-id="143">Pinterest</option>
+                  <option data-id="144">Referral from a friend</option>
+                  <option data-id="145">Payhip / Gumroad</option>
+                  <option data-id="146">Other</option>
+                </select>
+              </div>
+              <button data-id="147" type="submit" id="cf-submit-btn" class="w-full font-body font-bold text-navy py-3.5 rounded-[10px] text-base transition-all duration-200 hover:shadow-lg" style="background: #C9A84C;">
+                Send Message →
+              </button>
+            </form>
+          </div>
+          <!-- Success State -->
+          <div data-id="148" id="contact-success" class="hidden text-center py-8">
+            <div data-id="149" class="success-check" style="background: #dcfce7;">
+              <span data-id="150" style="color: #16a34a;">✓</span>
+            </div>
+            <h3 data-id="151" class="font-display text-navy text-2xl font-bold mb-3">Message Sent!</h3>
+            <p data-id="152" class="text-gray-text font-body text-sm leading-relaxed max-w-sm mx-auto" id="contact-success-msg"></p>
+            <button data-id="153" id="contact-reset-btn" class="mt-6 text-gold font-body font-semibold text-sm hover:underline">Send Another Message</button>
+          </div>
+        </div>
+
+        <!-- RIGHT — Appointment Booking Form -->
+        <div data-id="154" id="booking" class="fade-in-up">
+          <div data-id="155" class="bg-white rounded-[20px] shadow-lg p-6 md:p-10" style="border: 2px solid #C9A84C;">
+            <!-- Gold label strip -->
+            <div data-id="156" class="rounded-lg text-center py-2 px-4 mb-6" style="background: rgba(201,168,76,0.12);">
+              <span data-id="157" class="text-gold font-body text-xs font-bold uppercase tracking-[0.2em]">Book an Appointment</span>
+            </div>
+            <div data-id="158" id="booking-form-wrapper">
+              <h2 data-id="159" class="font-display text-navy text-2xl md:text-3xl font-bold">Request an Appointment</h2>
+              <span data-id="160" class="gold-underline" style="margin: 12px 0 0 0;"></span>
+              <p data-id="161" class="text-gray-text font-body text-sm mt-4 mb-6 leading-relaxed">Ready to book a notary, document prep, or consultation? Complete this form and we'll confirm your appointment.</p>
+              <form data-id="162" id="booking-form" novalidate>
+                <div data-id="163" class="form-group">
+                  <label data-id="164" class="form-label" for="bf-name">Full Name <span data-id="165" class="required">*</span></label>
+                  <input data-id="166" type="text" id="bf-name" class="form-input" placeholder="Your full name" aria-required="true" />
+                  <p data-id="167" class="error-msg" id="bf-name-err">This field is required</p>
+                </div>
+                <div data-id="168" class="form-group">
+                  <label data-id="169" class="form-label" for="bf-email">Email Address <span data-id="170" class="required">*</span></label>
+                  <input data-id="171" type="email" id="bf-email" class="form-input" placeholder="your@email.com" aria-required="true" />
+                  <p data-id="172" class="error-msg" id="bf-email-err">Please enter a valid email address</p>
+                </div>
+                <div data-id="173" class="form-group">
+                  <label data-id="174" class="form-label" for="bf-phone">Phone Number <span data-id="175" class="required">*</span></label>
+                  <input data-id="176" type="tel" id="bf-phone" class="form-input" placeholder="(405) 000-0000" aria-required="true" />
+                  <p data-id="177" class="error-msg" id="bf-phone-err">This field is required</p>
+                </div>
+                <div data-id="178" class="form-group">
+                  <label data-id="179" class="form-label" for="bf-type">Appointment Type <span data-id="180" class="required">*</span></label>
+                  <select data-id="181" id="bf-type" class="form-input form-select" aria-required="true">
+                    <option data-id="182" value="">Select appointment type...</option>
+                    <option data-id="183">Mobile Notary — I'll come to you</option>
+                    <option data-id="184">In-Person Notary (Spencer, OK)</option>
+                    <option data-id="185">Loan Signing Appointment</option>
+                    <option data-id="186">Document Preparation Consultation</option>
+                    <option data-id="187">Administrative Support Consultation</option>
+                    <option data-id="188">Virtual Consultation (Video Call)</option>
+                  </select>
+                  <p data-id="189" class="error-msg" id="bf-type-err">This field is required</p>
+                </div>
+                <div data-id="190" class="form-group">
+                  <label data-id="191" class="form-label" for="bf-doctype">Document Type</label>
+                  <input data-id="192" type="text" id="bf-doctype" class="form-input" placeholder="e.g., Power of Attorney, Affidavit, Loan Package..." />
+                </div>
+                <div data-id="193" class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                  <div data-id="194" class="form-group">
+                    <label data-id="195" class="form-label" for="bf-date">Preferred Date <span data-id="196" class="required">*</span></label>
+                    <input data-id="197" type="date" id="bf-date" class="form-input" aria-required="true" />
+                    <p data-id="198" class="error-msg" id="bf-date-err">This field is required</p>
+                  </div>
+                  <div data-id="199" class="form-group">
+                    <label data-id="200" class="form-label" for="bf-time">Preferred Time <span data-id="201" class="required">*</span></label>
+                    <select data-id="202" id="bf-time" class="form-input form-select" aria-required="true">
+                      <option data-id="203" value="">Select a time slot...</option>
+                      <option data-id="204">Morning (9:00 AM – 12:00 PM)</option>
+                      <option data-id="205">Afternoon (12:00 PM – 3:00 PM)</option>
+                      <option data-id="206">Late Afternoon (3:00 PM – 6:00 PM)</option>
+                      <option data-id="207">Evening (By Special Request)</option>
+                    </select>
+                    <p data-id="208" class="error-msg" id="bf-time-err">This field is required</p>
+                  </div>
+                </div>
+                <div data-id="209" class="form-group">
+                  <label data-id="210" class="form-label" for="bf-location">Your Location / Address</label>
+                  <textarea data-id="211" id="bf-location" class="form-input" rows="3" placeholder="Street address, city, zip — or 'Virtual' for online appointments"></textarea>
+                </div>
+                <div data-id="212" class="form-group">
+                  <label data-id="213" class="form-label" for="bf-notes">Additional Notes</label>
+                  <textarea data-id="214" id="bf-notes" class="form-input" rows="3" placeholder="Any special instructions, accessibility needs, or details we should know..."></textarea>
+                </div>
+                <button data-id="215" type="submit" id="bf-submit-btn" class="w-full font-body font-bold text-white py-3.5 rounded-[10px] text-base transition-all duration-200 hover:shadow-lg" style="background: #1B3A6B;">
+                  Request Appointment →
+                </button>
+              </form>
+            </div>
+            <!-- Booking Success State -->
+            <div data-id="216" id="booking-success" class="hidden text-center py-8">
+              <div data-id="217" class="success-check" style="background: rgba(201,168,76,0.15);">
+                <span data-id="218" style="color: #C9A84C; font-size: 28px;">✓</span>
+              </div>
+              <h3 data-id="219" class="font-display text-navy text-2xl font-bold mb-3">Appointment Requested!</h3>
+              <p data-id="220" class="text-gray-text font-body text-sm leading-relaxed max-w-sm mx-auto" id="booking-success-msg"></p>
+              <button data-id="221" id="booking-reset-btn" class="mt-6 text-gold font-body font-semibold text-sm hover:underline">Request Another Appointment</button>
+            </div>
+          </div>
+          <!-- Small print note -->
+          <div data-id="222" class="mt-4 px-2">
+            <p data-id="223" class="text-gray-text font-body text-xs leading-relaxed">📌 <strong data-id="224">Note:</strong> Submitting this form does not guarantee your appointment. We will contact you to confirm availability, travel fees (if applicable), and payment details before your appointment is finalized.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ====== SERVICE AREA MAP ====== -->
+  <section data-id="225" id="service-area" class="py-16 md:py-20 bg-white">
+    <div data-id="226" class="max-w-5xl mx-auto px-4 md:px-6">
+      <div data-id="227" class="text-center mb-12 fade-in-up">
+        <h2 data-id="228" class="font-display text-navy text-2xl md:text-3xl font-bold">Our Service Area</h2>
+        <span data-id="229" class="gold-underline"></span>
+        <p data-id="230" class="text-gray-text font-body text-sm mt-4 max-w-xl mx-auto leading-relaxed">Based in Spencer, Oklahoma — we serve the greater Oklahoma City metro area for mobile notary and in-person services. Virtual services available nationwide.</p>
+      </div>
+      <!-- Map Card -->
+      <div data-id="231" class="bg-white rounded-2xl shadow-lg p-6 md:p-10 fade-in-up">
+        <div data-id="232" class="relative rounded-xl overflow-hidden" style="background: #1B3A6B; height: 340px;">
+          <!-- Concentric pulse rings -->
+          <div data-id="233" class="absolute" style="top: 50%; left: 50%; transform: translate(-50%, -50%);">
+            <div data-id="234" class="pulse-ring absolute rounded-full border-2 border-gold/40" style="width: 200px; height: 200px; top: -100px; left: -100px;"></div>
+            <div data-id="235" class="pulse-ring-delay absolute rounded-full border border-gold/25" style="width: 300px; height: 300px; top: -150px; left: -150px;"></div>
+            <div data-id="236" class="pulse-ring-delay2 absolute rounded-full border border-gold/15" style="width: 400px; height: 400px; top: -200px; left: -200px;"></div>
+            <!-- Center pulsing dot -->
+            <div data-id="237" class="pulse-dot relative z-10">
+              <div data-id="238" class="w-5 h-5 rounded-full bg-gold shadow-lg" style="box-shadow: 0 0 20px rgba(201,168,76,0.5);"></div>
+            </div>
+          </div>
+          <!-- Spencer label -->
+          <div data-id="239" class="absolute z-20 text-center" style="top: calc(50% + 18px); left: 50%; transform: translateX(-50%);">
+            <span data-id="240" class="bg-white/95 text-navy font-body text-xs font-bold px-3 py-1.5 rounded-full shadow-md">📍 Spencer, OK — Home Base</span>
+          </div>
+          <!-- City labels -->
+          <span data-id="241" class="city-label" style="top: 25%; left: 18%;">Oklahoma City</span>
+          <span data-id="242" class="city-label" style="top: 72%; left: 22%;">Del City</span>
+          <span data-id="243" class="city-label" style="top: 65%; left: 58%;">Midwest City</span>
+          <span data-id="244" class="city-label" style="top: 22%; left: 68%;">Choctaw</span>
+          <span data-id="245" class="city-label" style="top: 35%; right: 8%;">Harrah</span>
+          <span data-id="246" class="city-label" style="top: 15%; left: 42%;">Luther</span>
+        </div>
+        <p data-id="247" class="text-center text-gold font-body text-xs mt-5 font-medium">Mobile Notary Service Radius: ~30 miles from Spencer, OK. Contact us for locations beyond this area.</p>
+      </div>
+      <!-- Service pills -->
+      <div data-id="248" class="flex flex-wrap justify-center gap-4 mt-8 fade-in-up">
+        <div data-id="249" class="bg-white rounded-full shadow px-5 py-2.5 flex items-center gap-2 font-body text-sm text-navy font-medium">🚗 Mobile Notary — We Come to You</div>
+        <div data-id="250" class="bg-white rounded-full shadow px-5 py-2.5 flex items-center gap-2 font-body text-sm text-navy font-medium">💻 Virtual Admin Support — Anywhere in the U.S.</div>
+        <div data-id="251" class="bg-white rounded-full shadow px-5 py-2.5 flex items-center gap-2 font-body text-sm text-navy font-medium">📦 Digital Products — Instant Download Worldwide</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ====== FAQ SECTION ====== -->
+  <section data-id="252" id="faq" class="py-16 md:py-20" style="background: #F5F6FA;">
+    <div data-id="253" class="max-w-3xl mx-auto px-4 md:px-6">
+      <div data-id="254" class="text-center mb-10 fade-in-up">
+        <h2 data-id="255" class="font-display text-navy text-2xl md:text-3xl font-bold">Quick Answers</h2>
+        <span data-id="256" class="gold-underline"></span>
+        <p data-id="257" class="text-gray-text font-body text-sm mt-4">The most common questions before reaching out — answered.</p>
+      </div>
+      <div data-id="258" class="space-y-4 fade-in-up">
+        <!-- FAQ 1 -->
+        <div data-id="259" class="faq-item">
+          <button data-id="260" class="faq-question" aria-expanded="false">
+            <span data-id="261">How quickly do you respond to messages?</span>
+            <span data-id="262" class="icon">+</span>
+          </button>
+          <div data-id="263" class="faq-answer">
+            <p data-id="264">We respond to all inquiries within 24 business hours, Monday through Friday. Messages received on weekends or holidays will be answered first thing the following business day. For urgent notary appointments, please note that in the subject or message field and we'll prioritize your request.</p>
+          </div>
+        </div>
+        <!-- FAQ 2 -->
+        <div data-id="265" class="faq-item">
+          <button data-id="266" class="faq-question" aria-expanded="false">
+            <span data-id="267">Do I need an appointment for notary services?</span>
+            <span data-id="268" class="icon">+</span>
+          </button>
+          <div data-id="269" class="faq-answer">
+            <p data-id="270">Yes, all notary services require a scheduled appointment. Walk-ins are not currently available. You can request an appointment using the booking form on this page, or by emailing us directly. We typically confirm appointments within 24 hours of your request.</p>
+          </div>
+        </div>
+        <!-- FAQ 3 -->
+        <div data-id="271" class="faq-item">
+          <button data-id="272" class="faq-question" aria-expanded="false">
+            <span data-id="273">Can I get a same-day or rush notary appointment?</span>
+            <span data-id="274" class="icon">+</span>
+          </button>
+          <div data-id="275" class="faq-answer">
+            <p data-id="276">Same-day and rush appointments may be available depending on current scheduling. If you need urgent service, please contact us directly via email at solutions@pbymaria.com and clearly indicate it is an urgent request. Rush appointments are subject to availability and may include an expedited service fee.</p>
+          </div>
+        </div>
+        <!-- FAQ 4 -->
+        <div data-id="277" class="faq-item">
+          <button data-id="278" class="faq-question" aria-expanded="false">
+            <span data-id="279">What is the best way to contact you for a quick question?</span>
+            <span data-id="280" class="icon">+</span>
+          </button>
+          <div data-id="281" class="faq-answer">
+            <p data-id="282">Email is our primary and fastest communication channel: solutions@pbymaria.com. You can also reach us via direct message on Instagram or Facebook. For appointment-related inquiries, using the booking form above ensures we have all the details we need to respond efficiently.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ====== TESTIMONIALS ====== -->
+  <section data-id="283" id="testimonials" class="py-16 md:py-20" style="background: #1B3A6B;">
+    <div data-id="284" class="max-w-6xl mx-auto px-4 md:px-6">
+      <div data-id="285" class="text-center mb-12 fade-in-up">
+        <h2 data-id="286" class="font-display text-white text-2xl md:text-3xl font-bold">What Our Clients Say</h2>
+        <span data-id="287" class="gold-underline"></span>
+      </div>
+      <div data-id="288" class="grid grid-cols-1 md:grid-cols-3 gap-6 fade-in-up">
+        <!-- Testimonial 1 -->
+        <div data-id="289" class="bg-white rounded-2xl p-6 shadow-lg card-hover">
+          <div data-id="290" class="stars text-sm mb-3">⭐⭐⭐⭐⭐</div>
+          <p data-id="291" class="font-body text-gray-text text-sm leading-relaxed mb-4 italic">"Princess Maria was professional, prompt, and made the entire notarization process so easy. I highly recommend her services!"</p>
+          <p data-id="292" class="font-body text-navy text-xs font-semibold">— Real Estate Client, Midwest City OK</p>
+        </div>
+        <!-- Testimonial 2 -->
+        <div data-id="293" class="bg-white rounded-2xl p-6 shadow-lg card-hover">
+          <div data-id="294" class="stars text-sm mb-3">⭐⭐⭐⭐⭐</div>
+          <p data-id="295" class="font-body text-gray-text text-sm leading-relaxed mb-4 italic">"She came to my mother's hospital room and handled everything with such care and compassion. We are so grateful."</p>
+          <p data-id="296" class="font-body text-navy text-xs font-semibold">— Family Client, Oklahoma City OK</p>
+        </div>
+        <!-- Testimonial 3 -->
+        <div data-id="297" class="bg-white rounded-2xl p-6 shadow-lg card-hover">
+          <div data-id="298" class="stars text-sm mb-3">⭐⭐⭐⭐⭐</div>
+          <p data-id="299" class="font-body text-gray-text text-sm leading-relaxed mb-4 italic">"Quick response, transparent pricing, and flawless loan signing. She's our go-to notary for all closings."</p>
+          <p data-id="300" class="font-body text-navy text-xs font-semibold">— Title Company, OKC Metro</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ====== FINAL CTA ====== -->
+  <section data-id="301" id="cta-strip" class="py-14 md:py-16" style="background: #C9A84C;">
+    <div data-id="302" class="max-w-3xl mx-auto px-4 md:px-6 text-center fade-in-up">
+      <h2 data-id="303" class="font-display text-navy text-2xl md:text-3xl font-bold mb-3">Ready to Get Started?</h2>
+      <p data-id="304" class="text-navy/80 font-body text-sm md:text-base mb-7">Book your service, shop our templates, or simply say hello — we're here for you.</p>
+      <div data-id="305" class="flex flex-col sm:flex-row items-center justify-center gap-4">
+        <a data-id="306" href="#booking" class="inline-block bg-navy text-white font-body font-bold py-3 px-8 rounded-[10px] text-sm hover:bg-navy-light transition-colors shadow-md min-w-[200px]">Book an Appointment</a>
+        <a data-id="307" href="#" class="inline-block border-2 border-navy text-navy font-body font-bold py-3 px-8 rounded-[10px] text-sm hover:bg-navy hover:text-white transition-colors min-w-[200px]">Browse the Shop</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- ====== FOOTER ====== -->
+  <footer data-id="308" class="py-10 md:py-12" style="background: #1B3A6B; border-top: 2px solid #C9A84C;">
+    <div data-id="309" class="max-w-6xl mx-auto px-4 md:px-6">
+      <div data-id="310" class="grid grid-cols-1 md:grid-cols-3 gap-8 items-start text-center md:text-left">
+        <!-- Left Column -->
+        <div data-id="311" class="flex flex-col items-center md:items-start">
+          <div data-id="312" class="flex items-center gap-3 mb-3">
+            <div data-id="313" class="flex items-center justify-center w-10 h-10 rounded-full bg-gold/20 border border-gold">
+              <span data-id="314" class="font-display text-gold font-bold text-lg">PM</span>
+            </div>
+            <span data-id="315" class="text-gold font-display text-base font-semibold">Solutions by P Maria</span>
+          </div>
+          <p data-id="316" class="text-gold/70 font-body text-xs italic">Empowering Professionals. One Document at a Time.</p>
+        </div>
+        <!-- Center Column -->
+        <div data-id="317" class="flex flex-col items-center">
+          <p data-id="318" class="text-white/70 font-body text-xs mb-3">© 2026 Solutions by P Maria. All Rights Reserved.</p>
+          <div data-id="319" class="flex gap-3">
+            <a data-id="320" href="#" class="w-8 h-8 rounded-full bg-white/10 flex items-center justify-center text-sm hover:bg-gold/30 transition-colors" title="Facebook">📘</a>
+            <a data-id="321" href="#" class="w-8 h-8 rounded-full bg-white/10 flex items-center justify-center text-sm hover:bg-gold/30 transition-colors" title="Instagram">📸</a>
+            <a data-id="322" href="#" class="w-8 h-8 rounded-full bg-white/10 flex items-center justify-center text-sm hover:bg-gold/30 transition-colors" title="Pinterest">📌</a>
+            <a data-id="323" href="#" class="w-8 h-8 rounded-full bg-white/10 flex items-center justify-center text-sm hover:bg-gold/30 transition-colors" title="Payhip Shop">🛍️</a>
+          </div>
+        </div>
+        <!-- Right Column -->
+        <div data-id="324" class="flex flex-col items-center md:items-end">
+          <nav data-id="325" class="flex flex-wrap justify-center md:justify-end gap-x-4 gap-y-2">
+            <a data-id="326" href="#" class="text-gold font-body text-xs hover:text-gold-light transition-colors">About</a>
+            <a data-id="327" href="#" class="text-gold font-body text-xs hover:text-gold-light transition-colors">Services</a>
+            <a data-id="328" href="#" class="text-gold font-body text-xs hover:text-gold-light transition-colors">Shop</a>
+            <a data-id="329" href="#" class="text-gold font-body text-xs hover:text-gold-light transition-colors">FAQ</a>
+            <a data-id="330" href="#forms" class="text-gold font-body text-xs hover:text-gold-light transition-colors">Contact</a>
+            <a data-id="331" href="#" class="text-gold font-body text-xs hover:text-gold-light transition-colors">Payhip Store</a>
+            <a data-id="332" href="#" class="text-gold font-body text-xs hover:text-gold-light transition-colors">Gumroad Store</a>
+          </nav>
+        </div>
+      </div>
+      <div data-id="333" class="text-center mt-8 pt-6 border-t border-white/10">
+        <p data-id="334" class="text-white/40 font-body text-xs">Made by Copilot</p>
+      </div>
+    </div>
+  </footer>
+
+  <script>
+    // ===== Lucide Icons =====
+    if (typeof lucide !== "undefined" && typeof lucide.createIcons === "function") {
+      lucide.createIcons();
+    }
+
+    // ===== Mobile Menu =====
+    const mobileMenuBtn = document.getElementById('mobile-menu-btn');
+    const mobileMenu = document.getElementById('mobile-menu');
+    const mobileMenuClose = document.getElementById('mobile-menu-close');
+
+    if (mobileMenuBtn && mobileMenu && mobileMenuClose) {
+      mobileMenuBtn.addEventListener('click', function() {
+        mobileMenu.classList.remove('hidden');
+      });
+      mobileMenuClose.addEventListener('click', function() {
+        mobileMenu.classList.add('hidden');
+      });
+      // Close on nav link click
+      mobileMenu.querySelectorAll('a').forEach(function(link) {
+        link.addEventListener('click', function() {
+          mobileMenu.classList.add('hidden');
+        });
+      });
+    }
+
+    // ===== Navbar scroll shadow =====
+    const navbar = document.getElementById('navbar-main');
+    window.addEventListener('scroll', function() {
+      if (window.scrollY > 10) {
+        navbar.classList.add('nav-scrolled');
+      } else {
+        navbar.classList.remove('nav-scrolled');
+      }
+    });
+
+    // ===== Intersection Observer Fade-in =====
+    const fadeEls = document.querySelectorAll('.fade-in-up');
+    const fadeObserver = new IntersectionObserver(function(entries) {
+      entries.forEach(function(entry) {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('visible');
+          fadeObserver.unobserve(entry.target);
+        }
+      });
+    }, { threshold: 0.12, rootMargin: '0px 0px -40px 0px' });
+    fadeEls.forEach(function(el) { fadeObserver.observe(el); });
+
+    // ===== FAQ Accordion =====
+    document.querySelectorAll('.faq-question').forEach(function(btn) {
+      btn.addEventListener('click', function() {
+        var item = btn.closest('.faq-item');
+        var isOpen = item.classList.contains('open');
+        // Close all
+        document.querySelectorAll('.faq-item').forEach(function(fi) {
+          fi.classList.remove('open');
+          fi.querySelector('.faq-question').setAttribute('aria-expanded', 'false');
+        });
+        // Toggle clicked
+        if (!isOpen) {
+          item.classList.add('open');
+          btn.setAttribute('aria-expanded', 'true');
+        }
+      });
+    });
+
+    // ===== Set min date for booking =====
+    var dateInput = document.getElementById('bf-date');
+    if (dateInput) {
+      var today = new Date();
+      var yyyy = today.getFullYear();
+      var mm = String(today.getMonth() + 1).padStart(2, '0');
+      var dd = String(today.getDate()).padStart(2, '0');
+      dateInput.setAttribute('min', yyyy + '-' + mm + '-' + dd);
+    }
+
+    // ===== Form Validation Helpers =====
+    function showError(inputId, errId, msg) {
+      var input = document.getElementById(inputId);
+      var err = document.getElementById(errId);
+      if (input) input.classList.add('error');
+      if (err) {
+        err.textContent = msg || err.textContent;
+        err.classList.add('show');
+      }
+    }
+    function clearError(inputId, errId) {
+      var input = document.getElementById(inputId);
+      var err = document.getElementById(errId);
+      if (input) input.classList.remove('error');
+      if (err) err.classList.remove('show');
+    }
+    function clearAllErrors(prefix, fields) {
+      fields.forEach(function(f) { clearError(prefix + f[0], prefix + f[0] + '-err'); });
+    }
+    function isValidEmail(email) {
+      return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
+    }
+
+    // ===== Contact Form =====
+    var contactForm = document.getElementById('contact-form');
+    var contactSuccess = document.getElementById('contact-success');
+    var contactFormWrapper = document.getElementById('contact-form-wrapper');
+    var cfSubmitBtn = document.getElementById('cf-submit-btn');
+
+    if (contactForm) {
+      contactForm.addEventListener('submit', function(e) {
+        e.preventDefault();
+        var valid = true;
+        var cfFields = [['name','This field is required'],['email','Please enter a valid email address'],['service','This field is required'],['message','This field is required']];
+        clearAllErrors('cf-', cfFields);
+
+        var name = document.getElementById('cf-name').value.trim();
+        var email = document.getElementById('cf-email').value.trim();
+        var service = document.getElementById('cf-service').value;
+        var message = document.getElementById('cf-message').value.trim();
+
+        if (!name) { showError('cf-name', 'cf-name-err', 'This field is required'); valid = false; }
+        if (!email) { showError('cf-email', 'cf-email-err', 'This field is required'); valid = false; }
+        else if (!isValidEmail(email)) { showError('cf-email', 'cf-email-err', 'Please enter a valid email address'); valid = false; }
+        if (!service) { showError('cf-service', 'cf-service-err', 'This field is required'); valid = false; }
+        if (!message) { showError('cf-message', 'cf-message-err', 'This field is required'); valid = false; }
+
+        if (valid) {
+          cfSubmitBtn.textContent = 'Sending';
+          cfSubmitBtn.classList.add('btn-loading', 'sending-dots');
+          setTimeout(function() {
+            cfSubmitBtn.textContent = 'Send Message →';
+            cfSubmitBtn.classList.remove('btn-loading', 'sending-dots');
+            contactFormWrapper.classList.add('hidden');
+            document.getElementById('contact-success-msg').textContent =
+              'Thank you, ' + name + '! We\'ve received your message and will respond within 24 business hours.';
+            contactSuccess.classList.remove('hidden');
+          }, 1800);
+        }
+      });
+    }
+
+    // Contact Reset
+    var contactResetBtn = document.getElementById('contact-reset-btn');
+    if (contactResetBtn) {
+      contactResetBtn.addEventListener('click', function() {
+        contactSuccess.classList.add('hidden');
+        contactFormWrapper.classList.remove('hidden');
+        contactForm.reset();
+      });
+    }
+
+    // ===== Booking Form =====
+    var bookingForm = document.getElementById('booking-form');
+    var bookingSuccess = document.getElementById('booking-success');
+    var bookingFormWrapper = document.getElementById('booking-form-wrapper');
+    var bfSubmitBtn = document.getElementById('bf-submit-btn');
+
+    if (bookingForm) {
+      bookingForm.addEventListener('submit', function(e) {
+        e.preventDefault();
+        var valid = true;
+        var bfFields = [['name',''],['email',''],['phone',''],['type',''],['date',''],['time','']];
+        clearAllErrors('bf-', bfFields);
+
+        var name = document.getElementById('bf-name').value.trim();
+        var email = document.getElementById('bf-email').value.trim();
+        var phone = document.getElementById('bf-phone').value.trim();
+        var type = document.getElementById('bf-type').value;
+        var date = document.getElementById('bf-date').value;
+        var time = document.getElementById('bf-time').value;
+
+        if (!name) { showError('bf-name', 'bf-name-err', 'This field is required'); valid = false; }
+        if (!email) { showError('bf-email', 'bf-email-err', 'This field is required'); valid = false; }
+        else if (!isValidEmail(email)) { showError('bf-email', 'bf-email-err', 'Please enter a valid email address'); valid = false; }
+        if (!phone) { showError('bf-phone', 'bf-phone-err', 'This field is required'); valid = false; }
+        if (!type) { showError('bf-type', 'bf-type-err', 'This field is required'); valid = false; }
+        if (!date) { showError('bf-date', 'bf-date-err', 'This field is required'); valid = false; }
+        if (!time) { showError('bf-time', 'bf-time-err', 'This field is required'); valid = false; }
+
+        if (valid) {
+          bfSubmitBtn.textContent = 'Requesting';
+          bfSubmitBtn.classList.add('btn-loading', 'sending-dots');
+          setTimeout(function() {
+            bfSubmitBtn.textContent = 'Request Appointment →';
+            bfSubmitBtn.classList.remove('btn-loading', 'sending-dots');
+            bookingFormWrapper.classList.add('hidden');
+            document.getElementById('booking-success-msg').textContent =
+              'Thank you, ' + name + '! We\'ll review your request and confirm your appointment within 24 hours. Check your email for confirmation details.';
+            bookingSuccess.classList.remove('hidden');
+          }, 1800);
+        }
+      });
+    }
+
+    // Booking Reset
+    var bookingResetBtn = document.getElementById('booking-reset-btn');
+    if (bookingResetBtn) {
+      bookingResetBtn.addEventListener('click', function() {
+        bookingSuccess.classList.add('hidden');
+        bookingFormWrapper.classList.remove('hidden');
+        bookingForm.reset();
+      });
+    }
+
+    // ===== Clear errors on input =====
+    document.querySelectorAll('.form-input').forEach(function(input) {
+      input.addEventListener('input', function() {
+        var errEl = document.getElementById(input.id + '-err');
+        if (errEl) {
+          input.classList.remove('error');
+          errEl.classList.remove('show');
+        }
+      });
+      input.addEventListener('change', function() {
+        var errEl = document.getElementById(input.id + '-err');
+        if (errEl) {
+          input.classList.remove('error');
+          errEl.classList.remove('show');
+        }
+      });
+    });
+  </script>
+</body>
+</html>

@@ -1,0 +1,805 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Solutions by P Maria – Notary Services FAQ</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://unpkg.com/lucide@latest" defer></script>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;600;700;800&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        navy: { DEFAULT: '#1B3A6B', light: '#264d8a', dark: '#132a4f', faint: '#e8edf5' },
+                        gold: { DEFAULT: '#C9A84C', light: '#d4ba6e', dark: '#b08f3a', faint: '#faf6eb' },
+                        cream: '#F5F6FA',
+                        offwhite: '#FAFBFD',
+                    },
+                    fontFamily: {
+                        display: ['"Playfair Display"', 'Georgia', 'serif'],
+                        body: ['"Inter"', 'system-ui', 'sans-serif'],
+                    },
+                },
+            },
+        };
+    </script>
+    <style>
+        :root {
+            --navy: #1B3A6B;
+            --navy-light: #264d8a;
+            --navy-dark: #132a4f;
+            --gold: #C9A84C;
+            --gold-light: #d4ba6e;
+            --gold-dark: #b08f3a;
+            --cream: #F5F6FA;
+            --white: #FFFFFF;
+        }
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        html { scroll-behavior: smooth; scroll-padding-top: 80px; }
+        body { font-family: 'Inter', system-ui, sans-serif; color: #1B3A6B; background: var(--white); }
+        h1, h2, h3, h4, h5 { font-family: 'Playfair Display', Georgia, serif; }
+
+        /* Floating dots animation */
+        .hero-dots { position: absolute; inset: 0; overflow: hidden; pointer-events: none; }
+        .hero-dot {
+            position: absolute;
+            width: 6px; height: 6px;
+            background: rgba(201,168,76,0.35);
+            border-radius: 50%;
+            animation: floatDot linear infinite;
+        }
+        @keyframes floatDot {
+            0% { transform: translateY(0) scale(1); opacity: 0; }
+            10% { opacity: 1; }
+            90% { opacity: 1; }
+            100% { transform: translateY(-600px) scale(0.5); opacity: 0; }
+        }
+        .hero-dot:nth-child(1) { left: 8%; animation-duration: 12s; animation-delay: 0s; bottom: -10px; width: 5px; height: 5px; }
+        .hero-dot:nth-child(2) { left: 20%; animation-duration: 9s; animation-delay: 1.5s; bottom: -10px; width: 4px; height: 4px; }
+        .hero-dot:nth-child(3) { left: 35%; animation-duration: 14s; animation-delay: 3s; bottom: -10px; width: 7px; height: 7px; }
+        .hero-dot:nth-child(4) { left: 50%; animation-duration: 10s; animation-delay: 0.8s; bottom: -10px; width: 5px; height: 5px; }
+        .hero-dot:nth-child(5) { left: 65%; animation-duration: 11s; animation-delay: 2.2s; bottom: -10px; width: 6px; height: 6px; }
+        .hero-dot:nth-child(6) { left: 78%; animation-duration: 13s; animation-delay: 4s; bottom: -10px; width: 4px; height: 4px; }
+        .hero-dot:nth-child(7) { left: 90%; animation-duration: 10s; animation-delay: 1s; bottom: -10px; width: 8px; height: 8px; }
+        .hero-dot:nth-child(8) { left: 45%; animation-duration: 15s; animation-delay: 5s; bottom: -10px; width: 5px; height: 5px; }
+        .hero-dot:nth-child(9) { left: 12%; animation-duration: 8s; animation-delay: 2s; bottom: -10px; width: 3px; height: 3px; }
+        .hero-dot:nth-child(10) { left: 72%; animation-duration: 16s; animation-delay: 3.5s; bottom: -10px; width: 6px; height: 6px; }
+        .hero-dot:nth-child(11) { left: 55%; animation-duration: 11s; animation-delay: 6s; bottom: -10px; width: 4px; height: 4px; }
+        .hero-dot:nth-child(12) { left: 30%; animation-duration: 13s; animation-delay: 7s; bottom: -10px; width: 5px; height: 5px; }
+
+        /* Gold decorative divider */
+        .gold-divider {
+            width: 80px; height: 3px;
+            background: linear-gradient(90deg, transparent, var(--gold), transparent);
+            margin: 0 auto;
+        }
+
+        /* Sidebar active state */
+        .sidebar-link { transition: all 0.25s ease; border-left: 3px solid transparent; }
+        .sidebar-link:hover, .sidebar-link.active {
+            color: var(--gold) !important;
+            border-left-color: var(--gold);
+            background: rgba(201,168,76,0.06);
+        }
+
+        /* Accordion */
+        .faq-card { transition: transform 0.2s ease, box-shadow 0.2s ease; }
+        .faq-card:hover { transform: translateY(-2px); box-shadow: 0 8px 24px rgba(27,58,107,0.1); }
+        .faq-answer {
+            max-height: 0; overflow: hidden;
+            transition: max-height 0.45s cubic-bezier(0.4, 0, 0.2, 1), padding 0.35s ease;
+            padding: 0 24px;
+        }
+        .faq-answer.open {
+            max-height: 400px;
+            padding: 0 24px 20px 24px;
+        }
+        .faq-card.open { border-left: 4px solid var(--gold); }
+        .faq-icon { transition: transform 0.35s ease; display: inline-flex; }
+        .faq-icon.open { transform: rotate(45deg); }
+
+        /* Fade-in animation */
+        .fade-in-up { opacity: 0; transform: translateY(32px); transition: opacity 0.7s ease, transform 0.7s ease; }
+        .fade-in-up.visible { opacity: 1; transform: translateY(0); }
+
+        /* Gold shimmer */
+        .shimmer-bg {
+            position: relative; overflow: hidden;
+        }
+        .shimmer-bg::before {
+            content: '';
+            position: absolute; top: 0; left: -100%; width: 50%; height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(201,168,76,0.07), transparent);
+            animation: shimmer 4s infinite;
+        }
+        @keyframes shimmer { 0% { left: -100%; } 100% { left: 200%; } }
+
+        /* Service pill badges */
+        .service-pill {
+            display: inline-block;
+            padding: 6px 18px;
+            border: 1px solid rgba(201,168,76,0.5);
+            border-radius: 999px;
+            color: var(--gold);
+            font-size: 0.8rem;
+            font-weight: 500;
+            letter-spacing: 0.03em;
+            white-space: nowrap;
+        }
+
+        /* Number badge */
+        .num-badge {
+            display: inline-flex; align-items: center; justify-content: center;
+            width: 52px; height: 52px; border-radius: 12px;
+            background: linear-gradient(135deg, var(--gold), var(--gold-dark));
+            color: white; font-family: 'Playfair Display', serif;
+            font-size: 1.25rem; font-weight: 700; flex-shrink: 0;
+        }
+
+        /* Mobile service tabs */
+        .mobile-tabs { display: none; }
+        @media (max-width: 1023px) {
+            .mobile-tabs { display: flex; }
+            .desktop-sidebar { display: none; }
+        }
+        @media (min-width: 1024px) {
+            .mobile-tabs { display: none; }
+            .desktop-sidebar { display: block; }
+        }
+
+        .mobile-tab {
+            flex-shrink: 0;
+            padding: 10px 18px;
+            border-radius: 999px;
+            font-size: 0.82rem;
+            font-weight: 500;
+            white-space: nowrap;
+            border: 1.5px solid #ddd;
+            color: var(--navy);
+            transition: all 0.2s ease;
+            cursor: pointer;
+            background: white;
+        }
+        .mobile-tab.active {
+            background: var(--gold);
+            color: white;
+            border-color: var(--gold);
+        }
+
+        /* Custom scrollbar for mobile tabs */
+        .tabs-scroll::-webkit-scrollbar { height: 0; }
+        .tabs-scroll { -ms-overflow-style: none; scrollbar-width: none; }
+
+        /* Print hidden */
+        @media print { nav, .hero-dots { display: none !important; } }
+    </style>
+</head>
+<body data-id="0" class="bg-white">
+    <app-icon data-id="1" hidden data-icon="stamp" data-palette="Dark"></app-icon>
+    <app-disclaimer data-id="2" intent="legal"></app-disclaimer>
+
+    <!-- ==================== STICKY NAVIGATION ==================== -->
+    <nav data-id="3" id="navbar-8f3a" class="fixed top-0 left-0 right-0 z-50 bg-navy border-b-2 border-gold" style="border-bottom-width:2px;">
+        <div data-id="4" class="max-w-7xl mx-auto px-4 md:px-6 flex items-center justify-between h-[68px]">
+            <a data-id="5" href="#" class="flex-shrink-0">
+                <img data-id="6" src="https://copilot.microsoft.com/th/id/BCO.350f7f9d-12db-4287-ba3d-8ee47e21d651.png" alt="Solutions by P Maria Logo" class="h-[52px] w-auto" />
+            </a>
+            <div data-id="7" class="hidden md:flex items-center gap-8">
+                <a data-id="8" href="#" class="text-gold hover:text-gold-light font-medium text-sm tracking-wide transition-colors">About</a>
+                <a data-id="9" href="#" class="text-gold hover:text-gold-light font-medium text-sm tracking-wide transition-colors">Services</a>
+                <a data-id="10" href="#" class="text-gold hover:text-gold-light font-medium text-sm tracking-wide transition-colors">Shop</a>
+                <a data-id="11" href="#faq-content-area" class="text-gold hover:text-gold-light font-medium text-sm tracking-wide transition-colors">FAQ</a>
+                <a data-id="12" href="#cta-section-v9k2" class="text-gold hover:text-gold-light font-medium text-sm tracking-wide transition-colors">Contact</a>
+            </div>
+            <button data-id="13" id="mobile-menu-btn-x4r2" class="md:hidden p-2 text-gold" aria-label="Open menu">
+                <i data-id="14" data-lucide="menu" class="w-6 h-6"></i>
+            </button>
+        </div>
+    </nav>
+
+    <!-- Mobile Menu -->
+    <div data-id="15" id="mobile-menu-d8e1" class="hidden fixed inset-0 bg-navy z-[60] flex flex-col">
+        <div data-id="16" class="flex items-center justify-between px-4 h-[68px] border-b border-navy-light">
+            <img data-id="17" src="https://copilot.microsoft.com/th/id/BCO.350f7f9d-12db-4287-ba3d-8ee47e21d651.png" alt="Solutions by P Maria Logo" class="h-[44px] w-auto" />
+            <button data-id="18" id="mobile-menu-close-p3k7" class="p-2 text-gold" aria-label="Close menu">
+                <i data-id="19" data-lucide="x" class="w-6 h-6"></i>
+            </button>
+        </div>
+        <div data-id="20" class="flex flex-col gap-2 p-6 mt-4">
+            <a data-id="21" href="#" class="mobile-nav-link text-gold text-lg font-medium py-3 px-4 rounded-lg hover:bg-navy-light transition-colors">About</a>
+            <a data-id="22" href="#" class="mobile-nav-link text-gold text-lg font-medium py-3 px-4 rounded-lg hover:bg-navy-light transition-colors">Services</a>
+            <a data-id="23" href="#" class="mobile-nav-link text-gold text-lg font-medium py-3 px-4 rounded-lg hover:bg-navy-light transition-colors">Shop</a>
+            <a data-id="24" href="#faq-content-area" class="mobile-nav-link text-gold text-lg font-medium py-3 px-4 rounded-lg hover:bg-navy-light transition-colors">FAQ</a>
+            <a data-id="25" href="#cta-section-v9k2" class="mobile-nav-link text-gold text-lg font-medium py-3 px-4 rounded-lg hover:bg-navy-light transition-colors">Contact</a>
+        </div>
+        <div data-id="26" class="mt-auto p-6 border-t border-navy-light">
+            <p data-id="27" class="text-gold/50 text-sm italic text-center">Empowering Professionals. One Document at a Time.</p>
+        </div>
+    </div>
+
+    <main data-id="28" class="pt-[68px]">
+        <!-- ==================== HERO SECTION ==================== -->
+        <section data-id="29" id="hero-section-a2b5" class="relative bg-navy py-20 md:py-28 lg:py-32 overflow-hidden">
+            <div data-id="30" class="hero-dots">
+                <div data-id="31" class="hero-dot"></div><div data-id="32" class="hero-dot"></div><div data-id="33" class="hero-dot"></div>
+                <div data-id="34" class="hero-dot"></div><div data-id="35" class="hero-dot"></div><div data-id="36" class="hero-dot"></div>
+                <div data-id="37" class="hero-dot"></div><div data-id="38" class="hero-dot"></div><div data-id="39" class="hero-dot"></div>
+                <div data-id="40" class="hero-dot"></div><div data-id="41" class="hero-dot"></div><div data-id="42" class="hero-dot"></div>
+            </div>
+            <div data-id="43" class="relative z-10 max-w-4xl mx-auto px-5 text-center">
+                <p data-id="44" class="text-gold text-xs md:text-sm font-semibold tracking-[0.25em] uppercase mb-4 fade-in-up">Notary Services</p>
+                <h1 data-id="45" class="font-display text-3xl md:text-5xl lg:text-6xl text-white font-bold leading-tight mb-5 fade-in-up">Your Notary Questions, Answered</h1>
+                <p data-id="46" class="text-white/80 text-base md:text-lg max-w-2xl mx-auto mb-8 leading-relaxed fade-in-up">Explore our 6 professional notary services and find answers to the most common questions our clients ask.</p>
+                <div data-id="47" class="gold-divider mb-10 fade-in-up"></div>
+                <div data-id="48" class="flex flex-wrap justify-center gap-2 md:gap-3 fade-in-up">
+                    <span data-id="49" class="service-pill">General Notarization</span>
+                    <span data-id="50" class="service-pill">Mobile Notary</span>
+                    <span data-id="51" class="service-pill">Loan Signing</span>
+                    <span data-id="52" class="service-pill">Real Estate Docs</span>
+                    <span data-id="53" class="service-pill">Estate &amp; Wills</span>
+                    <span data-id="54" class="service-pill">Apostille Services</span>
+                </div>
+            </div>
+        </section>
+
+        <!-- ==================== MOBILE SERVICE TABS ==================== -->
+        <div data-id="55" class="mobile-tabs tabs-scroll bg-cream sticky top-[68px] z-30 overflow-x-auto px-4 py-3 gap-2 border-b border-gray-200" id="mobile-tabs-w5c3">
+            <button data-id="56" class="mobile-tab active" data-target="service-01">📋 General</button>
+            <button data-id="57" class="mobile-tab" data-target="service-02">🚗 Mobile</button>
+            <button data-id="58" class="mobile-tab" data-target="service-03">📝 Loan</button>
+            <button data-id="59" class="mobile-tab" data-target="service-04">🏠 Real Estate</button>
+            <button data-id="60" class="mobile-tab" data-target="service-05">📜 Estate</button>
+            <button data-id="61" class="mobile-tab" data-target="service-06">🌐 Apostille</button>
+        </div>
+
+        <!-- ==================== FAQ CONTENT AREA ==================== -->
+        <section data-id="62" id="faq-content-area" class="bg-cream min-h-screen">
+            <div data-id="63" class="max-w-7xl mx-auto px-4 md:px-6 py-10 md:py-16 lg:py-20">
+                <div data-id="64" class="flex gap-10">
+                    <!-- LEFT SIDEBAR -->
+                    <aside data-id="65" class="desktop-sidebar w-[280px] flex-shrink-0">
+                        <div data-id="66" class="sticky top-[100px]">
+                            <div data-id="67" class="bg-white rounded-2xl shadow-sm border border-gray-100 p-6">
+                                <h3 data-id="68" class="font-display text-navy text-xl font-bold mb-3">Our 6 Services</h3>
+                                <div data-id="69" class="w-12 h-0.5 bg-gold mb-5"></div>
+                                <nav data-id="70" class="flex flex-col gap-1" id="sidebar-nav-q8m1">
+                                    <a data-id="71" href="#service-01" class="sidebar-link active flex items-center gap-3 py-2.5 px-3 rounded-lg text-sm font-medium text-navy transition-all" data-service="service-01">
+                                        <span data-id="72" class="w-2 h-2 rounded-full bg-gold flex-shrink-0"></span>
+                                        📋 General Notarization
+                                    </a>
+                                    <a data-id="73" href="#service-02" class="sidebar-link flex items-center gap-3 py-2.5 px-3 rounded-lg text-sm font-medium text-navy transition-all" data-service="service-02">
+                                        <span data-id="74" class="w-2 h-2 rounded-full bg-gold flex-shrink-0"></span>
+                                        🚗 Mobile Notary Services
+                                    </a>
+                                    <a data-id="75" href="#service-03" class="sidebar-link flex items-center gap-3 py-2.5 px-3 rounded-lg text-sm font-medium text-navy transition-all" data-service="service-03">
+                                        <span data-id="76" class="w-2 h-2 rounded-full bg-gold flex-shrink-0"></span>
+                                        📝 Loan Signing Agent
+                                    </a>
+                                    <a data-id="77" href="#service-04" class="sidebar-link flex items-center gap-3 py-2.5 px-3 rounded-lg text-sm font-medium text-navy transition-all" data-service="service-04">
+                                        <span data-id="78" class="w-2 h-2 rounded-full bg-gold flex-shrink-0"></span>
+                                        🏠 Real Estate Documents
+                                    </a>
+                                    <a data-id="79" href="#service-05" class="sidebar-link flex items-center gap-3 py-2.5 px-3 rounded-lg text-sm font-medium text-navy transition-all" data-service="service-05">
+                                        <span data-id="80" class="w-2 h-2 rounded-full bg-gold flex-shrink-0"></span>
+                                        📜 Estate &amp; Will Documents
+                                    </a>
+                                    <a data-id="81" href="#service-06" class="sidebar-link flex items-center gap-3 py-2.5 px-3 rounded-lg text-sm font-medium text-navy transition-all" data-service="service-06">
+                                        <span data-id="82" class="w-2 h-2 rounded-full bg-gold flex-shrink-0"></span>
+                                        🌐 Apostille Services
+                                    </a>
+                                </nav>
+                            </div>
+                        </div>
+                    </aside>
+
+                    <!-- RIGHT CONTENT -->
+                    <div data-id="83" class="flex-1 min-w-0">
+
+                        <!-- SERVICE 01 -->
+                        <div data-id="84" id="service-01" class="mb-14 fade-in-up">
+                            <div data-id="85" class="bg-white/60 rounded-2xl p-5 md:p-6 mb-6 border border-gray-100">
+                                <div data-id="86" class="flex items-center gap-4 mb-3">
+                                    <div data-id="87" class="num-badge">01</div>
+                                    <div data-id="88">
+                                        <h2 data-id="89" class="font-display text-navy text-xl md:text-2xl font-bold">📋 General Notarization</h2>
+                                        <div data-id="90" class="w-16 h-0.5 bg-gold mt-2"></div>
+                                    </div>
+                                </div>
+                                <p data-id="91" class="text-navy/70 text-sm md:text-base leading-relaxed mt-3">General notarization is the cornerstone of our services. As a state-commissioned notary public in Oklahoma, Princess Maria verifies identities, witnesses document signings, and places her official seal to authenticate documents — providing the layer of trust that courts, banks, and institutions require.</p>
+                            </div>
+                            <div data-id="92" class="space-y-3">
+                                <div data-id="93" class="faq-card bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden cursor-pointer" data-faq>
+                                    <div data-id="94" class="faq-question flex items-center justify-between py-4 px-5 md:px-6">
+                                        <span data-id="95" class="text-navy font-semibold text-sm md:text-base pr-4">What is general notarization and why do I need it?</span>
+                                        <span data-id="96" class="faq-icon text-gold flex-shrink-0"><i data-id="97" data-lucide="plus" class="w-5 h-5"></i></span>
+                                    </div>
+                                    <div data-id="98" class="faq-answer">
+                                        <p data-id="99" class="text-navy/70 text-sm leading-relaxed">Notarization is the official process by which a notary public verifies your identity, witnesses you sign a document, and stamps it with an official seal to confirm its authenticity. It's required for many legal, financial, and personal documents to be recognized by courts, government agencies, banks, and other institutions. Without notarization, many important documents may be rejected or considered invalid.</p>
+                                    </div>
+                                </div>
+                                <div data-id="100" class="faq-card bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden cursor-pointer" data-faq>
+                                    <div data-id="101" class="faq-question flex items-center justify-between py-4 px-5 md:px-6">
+                                        <span data-id="102" class="text-navy font-semibold text-sm md:text-base pr-4">What documents commonly require notarization?</span>
+                                        <span data-id="103" class="faq-icon text-gold flex-shrink-0"><i data-id="104" data-lucide="plus" class="w-5 h-5"></i></span>
+                                    </div>
+                                    <div data-id="105" class="faq-answer">
+                                        <p data-id="106" class="text-navy/70 text-sm leading-relaxed">Many documents require notarization, including: affidavits and sworn statements, powers of attorney, financial agreements, vehicle title transfers, child travel consent forms, medical authorization letters, business contracts, immigration documents, and more. If you're unsure whether your document needs notarization, contact us and we'll let you know right away.</p>
+                                    </div>
+                                </div>
+                                <div data-id="107" class="faq-card bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden cursor-pointer" data-faq>
+                                    <div data-id="108" class="faq-question flex items-center justify-between py-4 px-5 md:px-6">
+                                        <span data-id="109" class="text-navy font-semibold text-sm md:text-base pr-4">How long does a notarization appointment take?</span>
+                                        <span data-id="110" class="faq-icon text-gold flex-shrink-0"><i data-id="111" data-lucide="plus" class="w-5 h-5"></i></span>
+                                    </div>
+                                    <div data-id="112" class="faq-answer">
+                                        <p data-id="113" class="text-navy/70 text-sm leading-relaxed">Most standard notarizations are completed in 15–30 minutes. More complex signings involving multiple documents or multiple signers may take longer. We recommend arriving or scheduling with all required parties present and all documents ready — but unsigned, as documents must be signed in the notary's presence.</p>
+                                    </div>
+                                </div>
+                                <div data-id="114" class="faq-card bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden cursor-pointer" data-faq>
+                                    <div data-id="115" class="faq-question flex items-center justify-between py-4 px-5 md:px-6">
+                                        <span data-id="116" class="text-navy font-semibold text-sm md:text-base pr-4">What ID do I need to bring to my notarization?</span>
+                                        <span data-id="117" class="faq-icon text-gold flex-shrink-0"><i data-id="118" data-lucide="plus" class="w-5 h-5"></i></span>
+                                    </div>
+                                    <div data-id="119" class="faq-answer">
+                                        <p data-id="120" class="text-navy/70 text-sm leading-relaxed">You must bring a valid, current government-issued photo ID. Acceptable forms include: a state driver's license, state ID card, U.S. passport, military ID, or permanent resident card. Expired IDs cannot be accepted. All parties required to sign must present their own valid ID at the time of the appointment.</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- SERVICE 02 -->
+                        <div data-id="121" id="service-02" class="mb-14 fade-in-up">
+                            <div data-id="122" class="bg-white/60 rounded-2xl p-5 md:p-6 mb-6 border border-gray-100">
+                                <div data-id="123" class="flex items-center gap-4 mb-3">
+                                    <div data-id="124" class="num-badge">02</div>
+                                    <div data-id="125">
+                                        <h2 data-id="126" class="font-display text-navy text-xl md:text-2xl font-bold">🚗 Mobile Notary Services</h2>
+                                        <div data-id="127" class="w-16 h-0.5 bg-gold mt-2"></div>
+                                    </div>
+                                </div>
+                                <p data-id="128" class="text-navy/70 text-sm md:text-base leading-relaxed mt-3">Can't come to us? We come to you! As a certified mobile notary, Princess Maria travels to your home, office, hospital, care facility, or any convenient location within the Spencer, Oklahoma area — making professional notarization accessible wherever you are.</p>
+                            </div>
+                            <div data-id="129" class="space-y-3">
+                                <div data-id="130" class="faq-card bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden cursor-pointer" data-faq>
+                                    <div data-id="131" class="faq-question flex items-center justify-between py-4 px-5 md:px-6">
+                                        <span data-id="132" class="text-navy font-semibold text-sm md:text-base pr-4">What is a mobile notary and how is it different from a regular notary?</span>
+                                        <span data-id="133" class="faq-icon text-gold flex-shrink-0"><i data-id="134" data-lucide="plus" class="w-5 h-5"></i></span>
+                                    </div>
+                                    <div data-id="135" class="faq-answer">
+                                        <p data-id="136" class="text-navy/70 text-sm leading-relaxed">A mobile notary is a notary public who travels to the client's location instead of requiring the client to visit a fixed office. This service is especially valuable for clients who are elderly, hospitalized, homebound, have tight schedules, or simply prefer the convenience of in-person service at their chosen location. All the same legal standards and requirements apply — the only difference is we come to you.</p>
+                                    </div>
+                                </div>
+                                <div data-id="137" class="faq-card bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden cursor-pointer" data-faq>
+                                    <div data-id="138" class="faq-question flex items-center justify-between py-4 px-5 md:px-6">
+                                        <span data-id="139" class="text-navy font-semibold text-sm md:text-base pr-4">Where do you travel for mobile notary services?</span>
+                                        <span data-id="140" class="faq-icon text-gold flex-shrink-0"><i data-id="141" data-lucide="plus" class="w-5 h-5"></i></span>
+                                    </div>
+                                    <div data-id="142" class="faq-answer">
+                                        <p data-id="143" class="text-navy/70 text-sm leading-relaxed">We primarily serve Spencer, Oklahoma and the surrounding areas including Midwest City, Del City, Choctaw, Harrah, Luther, and the greater Oklahoma City metro area. For locations outside our primary service area, please contact us to discuss availability and travel fees. We do our best to accommodate clients across the region.</p>
+                                    </div>
+                                </div>
+                                <div data-id="144" class="faq-card bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden cursor-pointer" data-faq>
+                                    <div data-id="145" class="faq-question flex items-center justify-between py-4 px-5 md:px-6">
+                                        <span data-id="146" class="text-navy font-semibold text-sm md:text-base pr-4">Is there an extra fee for mobile notary services?</span>
+                                        <span data-id="147" class="faq-icon text-gold flex-shrink-0"><i data-id="148" data-lucide="plus" class="w-5 h-5"></i></span>
+                                    </div>
+                                    <div data-id="149" class="faq-answer">
+                                        <p data-id="150" class="text-navy/70 text-sm leading-relaxed">Yes, a travel fee applies in addition to the standard notarization fee. Travel fees are calculated based on distance from our base in Spencer, OK. We provide transparent, upfront pricing — no surprise charges. Contact us with your location and document details for an exact quote before booking.</p>
+                                    </div>
+                                </div>
+                                <div data-id="151" class="faq-card bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden cursor-pointer" data-faq>
+                                    <div data-id="152" class="faq-question flex items-center justify-between py-4 px-5 md:px-6">
+                                        <span data-id="153" class="text-navy font-semibold text-sm md:text-base pr-4">Can you come to a hospital or nursing home for notarizations?</span>
+                                        <span data-id="154" class="faq-icon text-gold flex-shrink-0"><i data-id="155" data-lucide="plus" class="w-5 h-5"></i></span>
+                                    </div>
+                                    <div data-id="156" class="faq-answer">
+                                        <p data-id="157" class="text-navy/70 text-sm leading-relaxed">Absolutely. We regularly provide mobile notary services at hospitals, nursing homes, rehabilitation centers, and assisted living facilities. These signings are handled with extra care, sensitivity, and professionalism. Please note that the signer must be mentally competent and sign of their own free will — we cannot notarize documents if we have reason to believe the signer is being coerced or lacks capacity.</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- SERVICE 03 -->
+                        <div data-id="158" id="service-03" class="mb-14 fade-in-up">
+                            <div data-id="159" class="bg-white/60 rounded-2xl p-5 md:p-6 mb-6 border border-gray-100">
+                                <div data-id="160" class="flex items-center gap-4 mb-3">
+                                    <div data-id="161" class="num-badge">03</div>
+                                    <div data-id="162">
+                                        <h2 data-id="163" class="font-display text-navy text-xl md:text-2xl font-bold">📝 Loan Signing Agent</h2>
+                                        <div data-id="164" class="w-16 h-0.5 bg-gold mt-2"></div>
+                                    </div>
+                                </div>
+                                <p data-id="165" class="text-navy/70 text-sm md:text-base leading-relaxed mt-3">As a trained and certified loan signing agent, Princess Maria facilitates the signing of mortgage, refinance, and real estate loan packages with precision, accuracy, and professionalism — working alongside title companies, escrow officers, lenders, and signing services to ensure every closing goes smoothly.</p>
+                            </div>
+                            <div data-id="166" class="space-y-3">
+                                <div data-id="167" class="faq-card bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden cursor-pointer" data-faq>
+                                    <div data-id="168" class="faq-question flex items-center justify-between py-4 px-5 md:px-6">
+                                        <span data-id="169" class="text-navy font-semibold text-sm md:text-base pr-4">What does a loan signing agent do?</span>
+                                        <span data-id="170" class="faq-icon text-gold flex-shrink-0"><i data-id="171" data-lucide="plus" class="w-5 h-5"></i></span>
+                                    </div>
+                                    <div data-id="172" class="faq-answer">
+                                        <p data-id="173" class="text-navy/70 text-sm leading-relaxed">A loan signing agent is a specialized notary who guides borrowers through the signing of mortgage or refinance loan documents. We explain each document's general purpose (without providing legal advice), ensure all required signatures and initials are completed correctly, witness the signing, and return the completed package to the title company or lender. Our role is to make the closing process smooth, professional, and stress-free.</p>
+                                    </div>
+                                </div>
+                                <div data-id="174" class="faq-card bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden cursor-pointer" data-faq>
+                                    <div data-id="175" class="faq-question flex items-center justify-between py-4 px-5 md:px-6">
+                                        <span data-id="176" class="text-navy font-semibold text-sm md:text-base pr-4">Are you certified as a loan signing agent?</span>
+                                        <span data-id="177" class="faq-icon text-gold flex-shrink-0"><i data-id="178" data-lucide="plus" class="w-5 h-5"></i></span>
+                                    </div>
+                                    <div data-id="179" class="faq-answer">
+                                        <p data-id="180" class="text-navy/70 text-sm leading-relaxed">Yes. In addition to my Oklahoma notary commission, I have completed professional loan signing agent training. I work with title companies, escrow firms, and signing services across the region. I carry Errors &amp; Omissions (E&amp;O) insurance for added protection and professionalism during every loan closing.</p>
+                                    </div>
+                                </div>
+                                <div data-id="181" class="faq-card bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden cursor-pointer" data-faq>
+                                    <div data-id="182" class="faq-question flex items-center justify-between py-4 px-5 md:px-6">
+                                        <span data-id="183" class="text-navy font-semibold text-sm md:text-base pr-4">How do I schedule a loan signing appointment?</span>
+                                        <span data-id="184" class="faq-icon text-gold flex-shrink-0"><i data-id="185" data-lucide="plus" class="w-5 h-5"></i></span>
+                                    </div>
+                                    <div data-id="186" class="faq-answer">
+                                        <p data-id="187" class="text-navy/70 text-sm leading-relaxed">Loan signing appointments are typically scheduled through a title company, escrow officer, or signing service platform. If you're a title company or lender looking for a reliable signing agent in the Oklahoma City metro area, you can contact us directly to be added to our availability roster. Borrowers should coordinate through their lender or title company to request us by name.</p>
+                                    </div>
+                                </div>
+                                <div data-id="188" class="faq-card bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden cursor-pointer" data-faq>
+                                    <div data-id="189" class="faq-question flex items-center justify-between py-4 px-5 md:px-6">
+                                        <span data-id="190" class="text-navy font-semibold text-sm md:text-base pr-4">What happens if there is an error in the loan documents?</span>
+                                        <span data-id="191" class="faq-icon text-gold flex-shrink-0"><i data-id="192" data-lucide="plus" class="w-5 h-5"></i></span>
+                                    </div>
+                                    <div data-id="193" class="faq-answer">
+                                        <p data-id="194" class="text-navy/70 text-sm leading-relaxed">Our job is to catch incomplete or inconsistent signatures and initials — not to review the legal terms of the loan. If we notice a document issue during the signing, we will flag it immediately and contact the title company or lender for guidance. We do not provide legal advice or alter any documents. Accuracy and attention to detail are our top priorities at every closing.</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- SERVICE 04 -->
+                        <div data-id="195" id="service-04" class="mb-14 fade-in-up">
+                            <div data-id="196" class="bg-white/60 rounded-2xl p-5 md:p-6 mb-6 border border-gray-100">
+                                <div data-id="197" class="flex items-center gap-4 mb-3">
+                                    <div data-id="198" class="num-badge">04</div>
+                                    <div data-id="199">
+                                        <h2 data-id="200" class="font-display text-navy text-xl md:text-2xl font-bold">🏠 Real Estate Documents</h2>
+                                        <div data-id="201" class="w-16 h-0.5 bg-gold mt-2"></div>
+                                    </div>
+                                </div>
+                                <p data-id="202" class="text-navy/70 text-sm md:text-base leading-relaxed mt-3">Real estate transactions are among the most important and document-heavy events in a person's life. Solutions by P Maria provides expert notarization for a wide range of real estate documents — ensuring every signature is witnessed, every seal is authentic, and every closing moves forward without a hitch.</p>
+                            </div>
+                            <div data-id="203" class="space-y-3">
+                                <div data-id="204" class="faq-card bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden cursor-pointer" data-faq>
+                                    <div data-id="205" class="faq-question flex items-center justify-between py-4 px-5 md:px-6">
+                                        <span data-id="206" class="text-navy font-semibold text-sm md:text-base pr-4">What real estate documents do you notarize?</span>
+                                        <span data-id="207" class="faq-icon text-gold flex-shrink-0"><i data-id="208" data-lucide="plus" class="w-5 h-5"></i></span>
+                                    </div>
+                                    <div data-id="209" class="faq-answer">
+                                        <p data-id="210" class="text-navy/70 text-sm leading-relaxed">We notarize a wide range of real estate documents including: deeds (warranty, quitclaim, and grant deeds), mortgage and deed of trust documents, refinance packages, title transfer documents, seller disclosure statements, lease agreements, real estate contracts, and closing disclosure documents. Whether you're buying, selling, or refinancing, we've got you covered.</p>
+                                    </div>
+                                </div>
+                                <div data-id="211" class="faq-card bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden cursor-pointer" data-faq>
+                                    <div data-id="212" class="faq-question flex items-center justify-between py-4 px-5 md:px-6">
+                                        <span data-id="213" class="text-navy font-semibold text-sm md:text-base pr-4">Can you notarize documents for a property closing same day?</span>
+                                        <span data-id="214" class="faq-icon text-gold flex-shrink-0"><i data-id="215" data-lucide="plus" class="w-5 h-5"></i></span>
+                                    </div>
+                                    <div data-id="216" class="faq-answer">
+                                        <p data-id="217" class="text-navy/70 text-sm leading-relaxed">Same-day notarization may be available depending on scheduling and document complexity. We recommend contacting us as early as possible to ensure availability. For planned closings, we encourage booking at least 24–48 hours in advance to allow time for document review and proper scheduling.</p>
+                                    </div>
+                                </div>
+                                <div data-id="218" class="faq-card bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden cursor-pointer" data-faq>
+                                    <div data-id="219" class="faq-question flex items-center justify-between py-4 px-5 md:px-6">
+                                        <span data-id="220" class="text-navy font-semibold text-sm md:text-base pr-4">Do all parties need to be present for real estate document notarization?</span>
+                                        <span data-id="221" class="faq-icon text-gold flex-shrink-0"><i data-id="222" data-lucide="plus" class="w-5 h-5"></i></span>
+                                    </div>
+                                    <div data-id="223" class="faq-answer">
+                                        <p data-id="224" class="text-navy/70 text-sm leading-relaxed">Yes — any party whose signature requires notarization must appear in person before the notary with valid photo ID. Documents cannot be notarized by proxy or based on someone else's representation. If both a buyer and seller require notarization, both must be present either together or in separate appointments.</p>
+                                    </div>
+                                </div>
+                                <div data-id="225" class="faq-card bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden cursor-pointer" data-faq>
+                                    <div data-id="226" class="faq-question flex items-center justify-between py-4 px-5 md:px-6">
+                                        <span data-id="227" class="text-navy font-semibold text-sm md:text-base pr-4">Can you notarize real estate documents for out-of-state properties?</span>
+                                        <span data-id="228" class="faq-icon text-gold flex-shrink-0"><i data-id="229" data-lucide="plus" class="w-5 h-5"></i></span>
+                                    </div>
+                                    <div data-id="230" class="faq-answer">
+                                        <p data-id="231" class="text-navy/70 text-sm leading-relaxed">Yes! Oklahoma notaries can notarize documents that will be used in other states, as long as the signing takes place in Oklahoma and all standard notarization requirements are met. However, some states have specific notarization requirements — we recommend verifying with your title company or attorney that our notarization will be accepted in the destination state.</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- SERVICE 05 -->
+                        <div data-id="232" id="service-05" class="mb-14 fade-in-up">
+                            <div data-id="233" class="bg-white/60 rounded-2xl p-5 md:p-6 mb-6 border border-gray-100">
+                                <div data-id="234" class="flex items-center gap-4 mb-3">
+                                    <div data-id="235" class="num-badge">05</div>
+                                    <div data-id="236">
+                                        <h2 data-id="237" class="font-display text-navy text-xl md:text-2xl font-bold">📜 Estate &amp; Will Documents</h2>
+                                        <div data-id="238" class="w-16 h-0.5 bg-gold mt-2"></div>
+                                    </div>
+                                </div>
+                                <p data-id="239" class="text-navy/70 text-sm md:text-base leading-relaxed mt-3">End-of-life planning documents are among the most sensitive and important papers a person can sign. Solutions by P Maria handles estate document notarizations with the utmost care, confidentiality, and professionalism — ensuring your wishes are properly documented and legally witnessed.</p>
+                            </div>
+                            <div data-id="240" class="space-y-3">
+                                <div data-id="241" class="faq-card bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden cursor-pointer" data-faq>
+                                    <div data-id="242" class="faq-question flex items-center justify-between py-4 px-5 md:px-6">
+                                        <span data-id="243" class="text-navy font-semibold text-sm md:text-base pr-4">What estate documents can you notarize?</span>
+                                        <span data-id="244" class="faq-icon text-gold flex-shrink-0"><i data-id="245" data-lucide="plus" class="w-5 h-5"></i></span>
+                                    </div>
+                                    <div data-id="246" class="faq-answer">
+                                        <p data-id="247" class="text-navy/70 text-sm leading-relaxed">We provide notarization for a range of estate planning documents including: last will and testaments (where notarization is required), durable powers of attorney, healthcare powers of attorney and medical directives, living wills and advance directives, trust certifications, and personal property memorandums. Note: We are not attorneys and do not draft these documents — we notarize documents that have already been prepared, ideally by a licensed estate planning attorney.</p>
+                                    </div>
+                                </div>
+                                <div data-id="248" class="faq-card bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden cursor-pointer" data-faq>
+                                    <div data-id="249" class="faq-question flex items-center justify-between py-4 px-5 md:px-6">
+                                        <span data-id="250" class="text-navy font-semibold text-sm md:text-base pr-4">Does a will need to be notarized in Oklahoma?</span>
+                                        <span data-id="251" class="faq-icon text-gold flex-shrink-0"><i data-id="252" data-lucide="plus" class="w-5 h-5"></i></span>
+                                    </div>
+                                    <div data-id="253" class="faq-answer">
+                                        <p data-id="254" class="text-navy/70 text-sm leading-relaxed">In Oklahoma, a will does not strictly require notarization to be valid — it requires two witnesses. However, a "self-proving affidavit" attached to a will does require notarization. This affidavit allows the will to be admitted to probate without the witnesses needing to testify in court. We strongly recommend having estate documents notarized for added legal protection and ease of probate.</p>
+                                    </div>
+                                </div>
+                                <div data-id="255" class="faq-card bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden cursor-pointer" data-faq>
+                                    <div data-id="256" class="faq-question flex items-center justify-between py-4 px-5 md:px-6">
+                                        <span data-id="257" class="text-navy font-semibold text-sm md:text-base pr-4">Can you come to a hospital or home for estate document signings?</span>
+                                        <span data-id="258" class="faq-icon text-gold flex-shrink-0"><i data-id="259" data-lucide="plus" class="w-5 h-5"></i></span>
+                                    </div>
+                                    <div data-id="260" class="faq-answer">
+                                        <p data-id="261" class="text-navy/70 text-sm leading-relaxed">Yes, absolutely. We provide compassionate mobile notary services for estate and end-of-life documents at hospitals, hospice facilities, nursing homes, and private residences. We understand these situations require sensitivity and discretion, and we approach every appointment with the care and professionalism the moment deserves.</p>
+                                    </div>
+                                </div>
+                                <div data-id="262" class="faq-card bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden cursor-pointer" data-faq>
+                                    <div data-id="263" class="faq-question flex items-center justify-between py-4 px-5 md:px-6">
+                                        <span data-id="264" class="text-navy font-semibold text-sm md:text-base pr-4">What is a power of attorney and do you notarize them?</span>
+                                        <span data-id="265" class="faq-icon text-gold flex-shrink-0"><i data-id="266" data-lucide="plus" class="w-5 h-5"></i></span>
+                                    </div>
+                                    <div data-id="267" class="faq-answer">
+                                        <p data-id="268" class="text-navy/70 text-sm leading-relaxed">A power of attorney (POA) is a legal document that grants one person (the agent) the authority to act on behalf of another (the principal) in financial, medical, or legal matters. Durable powers of attorney in Oklahoma must be notarized to be legally effective. We notarize all types of POA documents — general, durable, limited, and healthcare — for individuals and families across the Spencer area.</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- SERVICE 06 -->
+                        <div data-id="269" id="service-06" class="mb-14 fade-in-up">
+                            <div data-id="270" class="bg-white/60 rounded-2xl p-5 md:p-6 mb-6 border border-gray-100">
+                                <div data-id="271" class="flex items-center gap-4 mb-3">
+                                    <div data-id="272" class="num-badge">06</div>
+                                    <div data-id="273">
+                                        <h2 data-id="274" class="font-display text-navy text-xl md:text-2xl font-bold">🌐 Apostille Services</h2>
+                                        <div data-id="275" class="w-16 h-0.5 bg-gold mt-2"></div>
+                                    </div>
+                                </div>
+                                <p data-id="276" class="text-navy/70 text-sm md:text-base leading-relaxed mt-3">Need a document authenticated for use in another country? An apostille is a specialized certificate issued by a government authority that verifies the authenticity of an official document for international use. Solutions by P Maria assists clients in understanding and navigating the apostille process with confidence.</p>
+                            </div>
+                            <div data-id="277" class="space-y-3">
+                                <div data-id="278" class="faq-card bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden cursor-pointer" data-faq>
+                                    <div data-id="279" class="faq-question flex items-center justify-between py-4 px-5 md:px-6">
+                                        <span data-id="280" class="text-navy font-semibold text-sm md:text-base pr-4">What is an apostille and when do I need one?</span>
+                                        <span data-id="281" class="faq-icon text-gold flex-shrink-0"><i data-id="282" data-lucide="plus" class="w-5 h-5"></i></span>
+                                    </div>
+                                    <div data-id="283" class="faq-answer">
+                                        <p data-id="284" class="text-navy/70 text-sm leading-relaxed">An apostille is an official authentication certificate attached to a public document (such as a birth certificate, marriage certificate, diploma, or notarized document) that makes it legally recognized in countries that are members of the Hague Convention. You may need an apostille if you're working abroad, getting married in a foreign country, adopting internationally, pursuing foreign education, or conducting international business.</p>
+                                    </div>
+                                </div>
+                                <div data-id="285" class="faq-card bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden cursor-pointer" data-faq>
+                                    <div data-id="286" class="faq-question flex items-center justify-between py-4 px-5 md:px-6">
+                                        <span data-id="287" class="text-navy font-semibold text-sm md:text-base pr-4">Can you provide apostille services directly?</span>
+                                        <span data-id="288" class="faq-icon text-gold flex-shrink-0"><i data-id="289" data-lucide="plus" class="w-5 h-5"></i></span>
+                                    </div>
+                                    <div data-id="290" class="faq-answer">
+                                        <p data-id="291" class="text-navy/70 text-sm leading-relaxed">As a notary, Princess Maria can notarize documents that are then submitted for apostille certification. The actual apostille certificate is issued by the Oklahoma Secretary of State (for state documents) or the U.S. Department of State (for federal documents). We assist by ensuring your document is properly notarized and prepared so the apostille application process goes smoothly.</p>
+                                    </div>
+                                </div>
+                                <div data-id="292" class="faq-card bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden cursor-pointer" data-faq>
+                                    <div data-id="293" class="faq-question flex items-center justify-between py-4 px-5 md:px-6">
+                                        <span data-id="294" class="text-navy font-semibold text-sm md:text-base pr-4">What documents can receive an apostille?</span>
+                                        <span data-id="295" class="faq-icon text-gold flex-shrink-0"><i data-id="296" data-lucide="plus" class="w-5 h-5"></i></span>
+                                    </div>
+                                    <div data-id="297" class="faq-answer">
+                                        <p data-id="298" class="text-navy/70 text-sm leading-relaxed">Documents commonly submitted for apostille include: birth and death certificates, marriage and divorce certificates, adoption papers, educational diplomas and transcripts, notarized affidavits, corporate documents, and court documents. The document must first be an official or notarized document before it can receive an apostille stamp.</p>
+                                    </div>
+                                </div>
+                                <div data-id="299" class="faq-card bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden cursor-pointer" data-faq>
+                                    <div data-id="300" class="faq-question flex items-center justify-between py-4 px-5 md:px-6">
+                                        <span data-id="301" class="text-navy font-semibold text-sm md:text-base pr-4">How long does the apostille process take?</span>
+                                        <span data-id="302" class="faq-icon text-gold flex-shrink-0"><i data-id="303" data-lucide="plus" class="w-5 h-5"></i></span>
+                                    </div>
+                                    <div data-id="304" class="faq-answer">
+                                        <p data-id="305" class="text-navy/70 text-sm leading-relaxed">The timeline varies. After notarization, submission to the Oklahoma Secretary of State for apostille typically takes 5–10 business days by mail, or same-day/next-day for in-person filing. Federal apostilles through the U.S. Department of State can take several weeks. We can help you understand the timeline and ensure your documents are prepared correctly to avoid delays.</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ==================== CTA SECTION ==================== -->
+        <section data-id="306" id="cta-section-v9k2" class="shimmer-bg bg-navy py-20 md:py-28 relative overflow-hidden">
+            <!-- Decorative gold circles -->
+            <div data-id="307" class="absolute top-8 left-8 w-24 h-24 rounded-full border border-gold/15"></div>
+            <div data-id="308" class="absolute bottom-10 right-12 w-40 h-40 rounded-full border border-gold/10"></div>
+            <div data-id="309" class="absolute top-1/2 right-1/4 w-16 h-16 rounded-full border border-gold/10"></div>
+            <div data-id="310" class="relative z-10 max-w-3xl mx-auto px-5 text-center">
+                <h2 data-id="311" class="font-display text-white text-2xl md:text-4xl lg:text-5xl font-bold mb-5 fade-in-up">Ready to Book Your Notary Service?</h2>
+                <p data-id="312" class="text-white/70 text-base md:text-lg mb-10 leading-relaxed max-w-xl mx-auto fade-in-up">Professional, reliable, and mobile — we come to you. Contact us today to schedule your appointment.</p>
+                <div data-id="313" class="flex flex-col sm:flex-row items-center justify-center gap-4 fade-in-up">
+                    <a data-id="314" href="#" class="inline-flex items-center gap-2 bg-gold hover:bg-gold-dark text-white font-semibold py-3.5 px-8 rounded-full transition-all shadow-lg shadow-gold/20 hover:shadow-gold/40 text-sm md:text-base min-h-[48px]">
+                        <i data-id="315" data-lucide="calendar" class="w-5 h-5"></i>
+                        Book an Appointment
+                    </a>
+                    <a data-id="316" href="#" class="inline-flex items-center gap-2 border-2 border-white/80 hover:border-white text-white font-semibold py-3.5 px-8 rounded-full transition-all hover:bg-white/10 text-sm md:text-base min-h-[48px]">
+                        <i data-id="317" data-lucide="mail" class="w-5 h-5"></i>
+                        Contact Us
+                    </a>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- ==================== FOOTER ==================== -->
+    <footer data-id="318" id="footer-j4x9" class="bg-navy-dark border-t-2 border-gold">
+        <div data-id="319" class="max-w-7xl mx-auto px-4 md:px-6 py-8">
+            <div data-id="320" class="flex flex-col md:flex-row items-center justify-between gap-6">
+                <div data-id="321" class="flex-shrink-0">
+                    <img data-id="322" src="https://copilot.microsoft.com/th/id/BCO.350f7f9d-12db-4287-ba3d-8ee47e21d651.png" alt="Solutions by P Maria Logo" class="h-[40px] w-auto" />
+                </div>
+                <div data-id="323" class="text-center">
+                    <p data-id="324" class="text-white/70 text-sm mb-1">&copy; 2026 Solutions by P Maria. All Rights Reserved.</p>
+                    <p data-id="325" class="text-gold/80 text-sm italic font-display">Empowering Professionals. One Document at a Time.</p>
+                </div>
+                <div data-id="326" class="flex items-center gap-6">
+                    <a data-id="327" href="#" class="text-gold hover:text-gold-light text-sm transition-colors">About</a>
+                    <a data-id="328" href="#" class="text-gold hover:text-gold-light text-sm transition-colors">Shop</a>
+                    <a data-id="329" href="#faq-content-area" class="text-gold hover:text-gold-light text-sm transition-colors">FAQ</a>
+                    <a data-id="330" href="#cta-section-v9k2" class="text-gold hover:text-gold-light text-sm transition-colors">Contact</a>
+                </div>
+            </div>
+            <div data-id="331" class="text-center mt-6 pt-4 border-t border-white/10">
+                <p data-id="332" class="text-white/40 text-xs">Made by Copilot</p>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // ============ Icons (progressive enhancement) ============
+        if (typeof lucide !== "undefined" && typeof lucide.createIcons === "function") {
+            lucide.createIcons();
+        }
+
+        // ============ Mobile Menu ============
+        const mobileMenuBtn = document.getElementById('mobile-menu-btn-x4r2');
+        const mobileMenu = document.getElementById('mobile-menu-d8e1');
+        const mobileMenuClose = document.getElementById('mobile-menu-close-p3k7');
+
+        if (mobileMenuBtn && mobileMenu && mobileMenuClose) {
+            mobileMenuBtn.addEventListener('click', function() {
+                mobileMenu.classList.remove('hidden');
+                document.body.style.overflow = 'hidden';
+            });
+            mobileMenuClose.addEventListener('click', function() {
+                mobileMenu.classList.add('hidden');
+                document.body.style.overflow = '';
+            });
+            // Close mobile menu when clicking a nav link
+            mobileMenu.querySelectorAll('.mobile-nav-link').forEach(function(link) {
+                link.addEventListener('click', function() {
+                    mobileMenu.classList.add('hidden');
+                    document.body.style.overflow = '';
+                });
+            });
+        }
+
+        // ============ FAQ Accordions ============
+        document.querySelectorAll('[data-faq]').forEach(function(card) {
+            var question = card.querySelector('.faq-question');
+            if (question) {
+                question.addEventListener('click', function() {
+                    var answer = card.querySelector('.faq-answer');
+                    var icon = card.querySelector('.faq-icon');
+                    var isOpen = card.classList.contains('open');
+
+                    // Close all other FAQs in the same service section
+                    var parentSection = card.closest('[id^="service-"]');
+                    if (parentSection) {
+                        parentSection.querySelectorAll('[data-faq]').forEach(function(otherCard) {
+                            if (otherCard !== card) {
+                                otherCard.classList.remove('open');
+                                var otherAnswer = otherCard.querySelector('.faq-answer');
+                                var otherIcon = otherCard.querySelector('.faq-icon');
+                                if (otherAnswer) otherAnswer.classList.remove('open');
+                                if (otherIcon) otherIcon.classList.remove('open');
+                            }
+                        });
+                    }
+
+                    if (isOpen) {
+                        card.classList.remove('open');
+                        if (answer) answer.classList.remove('open');
+                        if (icon) icon.classList.remove('open');
+                    } else {
+                        card.classList.add('open');
+                        if (answer) answer.classList.add('open');
+                        if (icon) icon.classList.add('open');
+                    }
+                });
+            }
+        });
+
+        // ============ Sidebar Active Highlight on Scroll ============
+        var serviceIds = ['service-01', 'service-02', 'service-03', 'service-04', 'service-05', 'service-06'];
+        var sidebarLinks = document.querySelectorAll('#sidebar-nav-q8m1 .sidebar-link');
+        var mobileTabs = document.querySelectorAll('.mobile-tab');
+
+        function updateActiveLink() {
+            var scrollPos = window.scrollY + 140;
+            var currentId = serviceIds[0];
+
+            for (var i = serviceIds.length - 1; i >= 0; i--) {
+                var el = document.getElementById(serviceIds[i]);
+                if (el && el.offsetTop <= scrollPos) {
+                    currentId = serviceIds[i];
+                    break;
+                }
+            }
+
+            sidebarLinks.forEach(function(link) {
+                if (link.getAttribute('data-service') === currentId) {
+                    link.classList.add('active');
+                } else {
+                    link.classList.remove('active');
+                }
+            });
+
+            mobileTabs.forEach(function(tab) {
+                if (tab.getAttribute('data-target') === currentId) {
+                    tab.classList.add('active');
+                    // Scroll tab into view
+                    tab.scrollIntoView({ behavior: 'smooth', block: 'nearest', inline: 'center' });
+                } else {
+                    tab.classList.remove('active');
+                }
+            });
+        }
+
+        window.addEventListener('scroll', updateActiveLink, { passive: true });
+
+        // ============ Mobile Tab Click ============
+        mobileTabs.forEach(function(tab) {
+            tab.addEventListener('click', function() {
+                var target = tab.getAttribute('data-target');
+                var el = document.getElementById(target);
+                if (el) {
+                    el.scrollIntoView({ behavior: 'smooth' });
+                }
+            });
+        });
+
+        // ============ Fade-in-up Animations ============
+        var fadeObserver = new IntersectionObserver(function(entries) {
+            entries.forEach(function(entry) {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('visible');
+                    fadeObserver.unobserve(entry.target);
+                }
+            });
+        }, { threshold: 0.08, rootMargin: '0px 0px -40px 0px' });
+
+        document.querySelectorAll('.fade-in-up').forEach(function(el) {
+            fadeObserver.observe(el);
+        });
+
+        // ============ Sidebar Click ============
+        sidebarLinks.forEach(function(link) {
+            link.addEventListener('click', function(e) {
+                e.preventDefault();
+                var target = link.getAttribute('data-service');
+                var el = document.getElementById(target);
+                if (el) {
+                    el.scrollIntoView({ behavior: 'smooth' });
+                }
+            });
+        });
+    </script>
+</body>
+</html>

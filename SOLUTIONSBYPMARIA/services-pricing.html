@@ -1,0 +1,794 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Solutions by P Maria – Services & Pricing</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<script src="https://unpkg.com/lucide@latest" defer></script>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Playfair+Display:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500&display=swap" rel="stylesheet" />
+<script>
+tailwind.config = {
+  theme: {
+    extend: {
+      colors: {
+        navy: '#1B3A6B',
+        'navy-dark': '#142D54',
+        gold: '#C9A84C',
+        'gold-dark': '#B5953F',
+        'gold-light': '#FFFBEE',
+        'light-gray': '#F5F6FA',
+        'text-body': '#374151',
+        'text-muted': '#6b7280',
+      },
+      fontFamily: {
+        display: ['"Playfair Display"', 'serif'],
+        body: ['"Inter"', 'sans-serif'],
+      },
+    },
+  },
+};
+</script>
+<style>
+html { scroll-behavior: smooth; }
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body { font-family: 'Inter', sans-serif; color: #374151; overflow-x: hidden; }
+h1, h2, h3, h4, h5 { font-family: 'Playfair Display', serif; }
+
+/* Floating gold dots */
+@keyframes floatDot {
+  0%, 100% { transform: translateY(0) translateX(0); }
+  25% { transform: translateY(-30px) translateX(10px); }
+  50% { transform: translateY(-15px) translateX(-10px); }
+  75% { transform: translateY(-40px) translateX(5px); }
+}
+.floating-dot {
+  position: absolute;
+  border-radius: 50%;
+  background: #C9A84C;
+  animation: floatDot linear infinite;
+  pointer-events: none;
+}
+
+/* Shimmer */
+@keyframes shimmer {
+  0% { background-position: -200% center; }
+  100% { background-position: 200% center; }
+}
+.shimmer-overlay {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(90deg, transparent 0%, rgba(201,168,76,0.08) 25%, rgba(201,168,76,0.15) 50%, rgba(201,168,76,0.08) 75%, transparent 100%);
+  background-size: 200% 100%;
+  animation: shimmer 6s ease-in-out infinite;
+  pointer-events: none;
+}
+
+/* Fade in up animation */
+.fade-in-up {
+  opacity: 0;
+  transform: translateY(32px);
+  transition: opacity 0.7s cubic-bezier(0.22,1,0.36,1), transform 0.7s cubic-bezier(0.22,1,0.36,1);
+}
+.fade-in-up.visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* Card hover */
+.pricing-card {
+  transition: transform 0.28s cubic-bezier(0.22,1,0.36,1), box-shadow 0.28s cubic-bezier(0.22,1,0.36,1);
+}
+.pricing-card:hover {
+  transform: translateY(-6px);
+  box-shadow: 0 12px 40px rgba(0,0,0,0.15);
+}
+
+/* Button transitions */
+.btn-transition {
+  transition: background-color 0.2s ease, color 0.2s ease, transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+/* Nav link underline */
+.nav-link { position: relative; }
+.nav-link::after {
+  content: '';
+  position: absolute;
+  bottom: -4px;
+  left: 0;
+  width: 0;
+  height: 2px;
+  background: #C9A84C;
+  transition: width 0.3s ease;
+}
+.nav-link:hover::after { width: 100%; }
+
+/* Navbar shadow on scroll */
+.nav-scrolled { box-shadow: 0 2px 16px rgba(0,0,0,0.18); }
+
+/* Quick nav button */
+.quick-nav-btn {
+  transition: background-color 0.2s ease, color 0.2s ease;
+}
+.quick-nav-btn:hover, .quick-nav-btn:focus {
+  background: #C9A84C;
+  color: #1B3A6B;
+}
+
+/* Gold dot pattern */
+.dot-pattern {
+  background-image: radial-gradient(circle, rgba(201,168,76,0.12) 1px, transparent 1px);
+  background-size: 28px 28px;
+}
+
+/* Price strikethrough */
+.strike-price {
+  text-decoration: line-through;
+  color: #9ca3af;
+  font-size: 0.95rem;
+}
+
+/* Table styling */
+.pricing-table th {
+  background: #C9A84C;
+  color: #1B3A6B;
+  font-weight: 700;
+  font-family: 'Inter', sans-serif;
+}
+.pricing-table tr:nth-child(even) { background: #F5F6FA; }
+.pricing-table td, .pricing-table th {
+  padding: 12px 16px;
+  text-align: left;
+  border-bottom: 1px solid #e5e7eb;
+}
+
+/* Hamburger icon */
+.hamburger-line {
+  display: block;
+  width: 24px;
+  height: 2px;
+  background: #C9A84C;
+  transition: transform 0.3s ease, opacity 0.3s ease;
+}
+.hamburger-active .hamburger-line:nth-child(1) { transform: translateY(8px) rotate(45deg); }
+.hamburger-active .hamburger-line:nth-child(2) { opacity: 0; }
+.hamburger-active .hamburger-line:nth-child(3) { transform: translateY(-8px) rotate(-45deg); }
+
+/* Mobile menu */
+.mobile-menu {
+  max-height: 0;
+  overflow: hidden;
+  transition: max-height 0.4s cubic-bezier(0.22,1,0.36,1);
+}
+.mobile-menu.open { max-height: 400px; }
+
+/* Decorative diamond divider */
+.diamond-divider {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  margin: 24px auto;
+}
+.diamond-divider::before, .diamond-divider::after {
+  content: '';
+  width: 60px;
+  height: 1px;
+  background: #C9A84C;
+}
+.diamond-divider span {
+  width: 10px;
+  height: 10px;
+  border: 2px solid #C9A84C;
+  transform: rotate(45deg);
+  display: block;
+}
+</style>
+</head>
+<body data-id="0" class="bg-white">
+<app-icon data-id="1" hidden data-icon="stamp" data-palette="Dark"></app-icon>
+
+<!-- ===== STICKY NAVIGATION ===== -->
+<nav data-id="2" id="navbar-main" class="fixed top-0 left-0 w-full z-50 bg-navy border-b-2 border-gold" style="transition: box-shadow 0.3s ease;">
+  <div data-id="3" class="max-w-7xl mx-auto flex items-center justify-between px-4 md:px-8 py-3">
+    <!-- Logo -->
+    <a data-id="4" href="#" class="flex items-center gap-3" aria-label="Solutions by P Maria home">
+      <div data-id="5" class="flex items-center justify-center w-[52px] h-[52px] rounded-lg bg-gold/10 border border-gold/30">
+        <span data-id="6" class="font-display text-gold text-2xl font-bold leading-none">PM</span>
+      </div>
+      <span data-id="7" class="hidden sm:block text-white font-display text-lg font-semibold">Solutions by P Maria</span>
+    </a>
+    <!-- Desktop nav -->
+    <div data-id="8" class="hidden md:flex items-center gap-7">
+      <a data-id="9" href="#hero-section" class="nav-link text-gold font-semibold text-sm tracking-wide">About</a>
+      <a data-id="10" href="#notary" class="nav-link text-gold font-semibold text-sm tracking-wide">Services</a>
+      <a data-id="11" href="#shop" class="nav-link text-gold font-semibold text-sm tracking-wide">Shop</a>
+      <a data-id="12" href="#bundles-section" class="nav-link text-gold font-semibold text-sm tracking-wide">FAQ</a>
+      <a data-id="13" href="#contact" class="nav-link text-gold font-semibold text-sm tracking-wide">Contact</a>
+    </div>
+    <!-- Mobile hamburger -->
+    <button data-id="14" id="hamburger-btn" class="md:hidden flex flex-col gap-[6px] p-2 min-h-[44px] min-w-[44px] items-center justify-center cursor-pointer" aria-label="Toggle menu">
+      <span data-id="15" class="hamburger-line"></span>
+      <span data-id="16" class="hamburger-line"></span>
+      <span data-id="17" class="hamburger-line"></span>
+    </button>
+  </div>
+  <!-- Mobile menu -->
+  <div data-id="18" id="mobile-menu-panel" class="mobile-menu md:hidden bg-navy border-t border-gold/20">
+    <div data-id="19" class="flex flex-col items-center gap-5 py-6">
+      <a data-id="20" href="#hero-section" class="mobile-nav-link text-gold font-semibold text-base tracking-wide">About</a>
+      <a data-id="21" href="#notary" class="mobile-nav-link text-gold font-semibold text-base tracking-wide">Services</a>
+      <a data-id="22" href="#shop" class="mobile-nav-link text-gold font-semibold text-base tracking-wide">Shop</a>
+      <a data-id="23" href="#bundles-section" class="mobile-nav-link text-gold font-semibold text-base tracking-wide">FAQ</a>
+      <a data-id="24" href="#contact" class="mobile-nav-link text-gold font-semibold text-base tracking-wide">Contact</a>
+    </div>
+  </div>
+</nav>
+
+<main data-id="25">
+
+<!-- ===== HERO SECTION ===== -->
+<section data-id="26" id="hero-section" class="relative bg-navy min-h-[85vh] flex items-center justify-center overflow-hidden pt-24 pb-16 px-4">
+  <!-- Floating dots -->
+  <div data-id="27" class="floating-dot" style="width:6px;height:6px;top:12%;left:8%;opacity:0.15;animation-duration:7s;"></div>
+  <div data-id="28" class="floating-dot" style="width:10px;height:10px;top:25%;left:22%;opacity:0.1;animation-duration:9s;"></div>
+  <div data-id="29" class="floating-dot" style="width:4px;height:4px;top:60%;left:15%;opacity:0.25;animation-duration:6s;"></div>
+  <div data-id="30" class="floating-dot" style="width:8px;height:8px;top:40%;left:75%;opacity:0.2;animation-duration:8s;"></div>
+  <div data-id="31" class="floating-dot" style="width:5px;height:5px;top:70%;left:85%;opacity:0.15;animation-duration:10s;"></div>
+  <div data-id="32" class="floating-dot" style="width:12px;height:12px;top:15%;left:90%;opacity:0.1;animation-duration:11s;"></div>
+  <div data-id="33" class="floating-dot" style="width:7px;height:7px;top:80%;left:45%;opacity:0.3;animation-duration:7.5s;"></div>
+  <div data-id="34" class="floating-dot" style="width:9px;height:9px;top:50%;left:55%;opacity:0.12;animation-duration:9.5s;"></div>
+  <div data-id="35" class="floating-dot" style="width:5px;height:5px;top:30%;left:40%;opacity:0.18;animation-duration:8.5s;"></div>
+  <div data-id="36" class="floating-dot" style="width:6px;height:6px;top:85%;left:65%;opacity:0.22;animation-duration:6.5s;"></div>
+
+  <div data-id="37" class="relative z-10 text-center max-w-3xl mx-auto">
+    <p data-id="38" class="fade-in-up text-gold text-xs md:text-sm font-semibold tracking-[0.3em] uppercase mb-5">Professional Services &amp; Pricing</p>
+    <h1 data-id="39" class="fade-in-up text-white font-display font-bold leading-tight mb-6" style="font-size:clamp(2rem,5vw,3.5rem);">Transparent Pricing. Professional Results.</h1>
+    <p data-id="40" class="fade-in-up text-white/80 font-body font-light text-base md:text-lg max-w-[620px] mx-auto mb-8 leading-relaxed">Every service is delivered with precision, confidentiality, and care. No hidden fees — just clear, honest pricing built around your needs.</p>
+    <div data-id="41" class="diamond-divider fade-in-up"><span data-id="42"></span></div>
+    <div data-id="43" class="fade-in-up flex flex-wrap justify-center gap-3 mt-8">
+      <span data-id="44" class="border border-gold/50 text-gold text-xs md:text-sm font-medium px-4 py-2 rounded-full">🖊️ Notary Services</span>
+      <span data-id="45" class="border border-gold/50 text-gold text-xs md:text-sm font-medium px-4 py-2 rounded-full">📋 Document Preparation</span>
+      <span data-id="46" class="border border-gold/50 text-gold text-xs md:text-sm font-medium px-4 py-2 rounded-full">🗂️ Administrative Support</span>
+      <span data-id="47" class="border border-gold/50 text-gold text-xs md:text-sm font-medium px-4 py-2 rounded-full">🛍️ Digital Products</span>
+    </div>
+  </div>
+</section>
+
+<!-- ===== SERVICES QUICK NAV ===== -->
+<section data-id="48" id="quick-nav-bar" class="bg-white border-b-2 border-gold/30 sticky top-[76px] z-40">
+  <div data-id="49" class="max-w-5xl mx-auto flex flex-wrap justify-center gap-3 py-4 px-4">
+    <a data-id="50" href="#notary" class="quick-nav-btn text-navy border-2 border-gold rounded-full px-5 py-2.5 text-sm font-semibold no-underline cursor-pointer min-h-[44px] flex items-center">🖊️ Notary</a>
+    <a data-id="51" href="#doc-prep" class="quick-nav-btn text-navy border-2 border-gold rounded-full px-5 py-2.5 text-sm font-semibold no-underline cursor-pointer min-h-[44px] flex items-center">📋 Document Prep</a>
+    <a data-id="52" href="#admin" class="quick-nav-btn text-navy border-2 border-gold rounded-full px-5 py-2.5 text-sm font-semibold no-underline cursor-pointer min-h-[44px] flex items-center">🗂️ Admin Support</a>
+    <a data-id="53" href="#shop" class="quick-nav-btn text-navy border-2 border-gold rounded-full px-5 py-2.5 text-sm font-semibold no-underline cursor-pointer min-h-[44px] flex items-center">🛍️ Digital Shop</a>
+  </div>
+</section>
+
+<!-- ===== NOTARY SERVICES ===== -->
+<section data-id="54" id="notary" class="bg-light-gray py-20 px-4 md:px-8">
+  <div data-id="55" class="max-w-7xl mx-auto">
+    <!-- Section header -->
+    <div data-id="56" class="text-center mb-14">
+      <div data-id="57" class="fade-in-up inline-flex items-center justify-center w-12 h-12 rounded-full bg-gold text-navy font-display font-bold text-lg mb-4">01</div>
+      <h2 data-id="58" class="fade-in-up font-display text-navy font-bold mb-3" style="font-size:clamp(1.8rem,4vw,2.8rem);">Notary Services</h2>
+      <div data-id="59" class="fade-in-up w-[60px] h-[3px] bg-gold rounded mx-auto mb-5"></div>
+      <p data-id="60" class="fade-in-up text-text-muted font-body max-w-[600px] mx-auto leading-relaxed">State-commissioned notary public serving Spencer, Oklahoma and surrounding areas. Professional, accurate, and reliable.</p>
+    </div>
+
+    <!-- Pricing cards grid -->
+    <div data-id="61" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-7 mb-10">
+
+      <!-- Card 1: General Notarization -->
+      <div data-id="62" class="fade-in-up pricing-card bg-white rounded-2xl border-t-4 border-gold shadow-md p-7 flex flex-col relative" style="box-shadow:0 4px 24px rgba(0,0,0,0.08);">
+        <div data-id="63" class="text-3xl mb-4">📋</div>
+        <h3 data-id="64" class="font-display text-navy text-xl font-semibold mb-2">General Notarization</h3>
+        <p data-id="65" class="text-text-muted text-xs mb-1">Starting at</p>
+        <p data-id="66" class="font-display text-gold font-bold mb-1" style="font-size:2.2rem;">$10</p>
+        <p data-id="67" class="text-text-muted text-xs mb-5">Per notarial act (state-regulated)</p>
+        <ul data-id="68" class="flex-1 space-y-2.5 mb-6">
+          <li data-id="69" class="flex items-start gap-2.5 text-sm"><span data-id="70" class="text-gold font-bold">✓</span> Identity verification</li>
+          <li data-id="71" class="flex items-start gap-2.5 text-sm"><span data-id="72" class="text-gold font-bold">✓</span> Document witnessing</li>
+          <li data-id="73" class="flex items-start gap-2.5 text-sm"><span data-id="74" class="text-gold font-bold">✓</span> Official notary seal</li>
+          <li data-id="75" class="flex items-start gap-2.5 text-sm"><span data-id="76" class="text-gold font-bold">✓</span> Multiple document types accepted</li>
+          <li data-id="77" class="flex items-start gap-2.5 text-sm"><span data-id="78" class="text-gold font-bold">✓</span> In-office or scheduled appointment</li>
+        </ul>
+        <button data-id="79" class="btn-transition w-full bg-gold text-navy font-bold py-3 rounded-lg cursor-pointer hover:bg-gold-dark text-sm">Book Now</button>
+      </div>
+
+      <!-- Card 2: Mobile Notary (Most Popular) -->
+      <div data-id="80" class="fade-in-up pricing-card bg-white rounded-2xl border-t-4 border-gold shadow-lg p-7 flex flex-col relative" style="box-shadow:0 6px 32px rgba(0,0,0,0.12);">
+        <div data-id="81" class="absolute top-0 right-0 bg-gold text-navy text-xs font-bold px-4 py-1.5" style="border-radius:0 16px 0 12px;">Most Popular</div>
+        <div data-id="82" class="text-3xl mb-4">🚗</div>
+        <h3 data-id="83" class="font-display text-navy text-xl font-semibold mb-2">Mobile Notary</h3>
+        <p data-id="84" class="text-text-muted text-xs mb-1">Starting at</p>
+        <p data-id="85" class="font-display text-gold font-bold mb-1" style="font-size:2.2rem;">$35</p>
+        <p data-id="86" class="text-text-muted text-xs mb-5">Includes travel to your location</p>
+        <ul data-id="87" class="flex-1 space-y-2.5 mb-6">
+          <li data-id="88" class="flex items-start gap-2.5 text-sm"><span data-id="89" class="text-gold font-bold">✓</span> We come to you</li>
+          <li data-id="90" class="flex items-start gap-2.5 text-sm"><span data-id="91" class="text-gold font-bold">✓</span> Home, office, hospital, or facility</li>
+          <li data-id="92" class="flex items-start gap-2.5 text-sm"><span data-id="93" class="text-gold font-bold">✓</span> Spencer, OK &amp; surrounding areas</li>
+          <li data-id="94" class="flex items-start gap-2.5 text-sm"><span data-id="95" class="text-gold font-bold">✓</span> Flexible scheduling</li>
+          <li data-id="96" class="flex items-start gap-2.5 text-sm"><span data-id="97" class="text-gold font-bold">✓</span> Travel fee based on distance</li>
+          <li data-id="98" class="flex items-start gap-2.5 text-sm"><span data-id="99" class="text-gold font-bold">✓</span> Evening/weekend availability (by request)</li>
+        </ul>
+        <button data-id="100" class="btn-transition w-full bg-gold text-navy font-bold py-3 rounded-lg cursor-pointer hover:bg-gold-dark text-sm">Book Now</button>
+      </div>
+
+      <!-- Card 3: Loan Signing Agent -->
+      <div data-id="101" class="fade-in-up pricing-card bg-white rounded-2xl border-t-4 border-gold shadow-md p-7 flex flex-col relative" style="box-shadow:0 4px 24px rgba(0,0,0,0.08);">
+        <div data-id="102" class="text-3xl mb-4">📝</div>
+        <h3 data-id="103" class="font-display text-navy text-xl font-semibold mb-2">Loan Signing Agent</h3>
+        <p data-id="104" class="text-text-muted text-xs mb-1">Starting at</p>
+        <p data-id="105" class="font-display text-gold font-bold mb-1" style="font-size:2.2rem;">$75</p>
+        <p data-id="106" class="text-text-muted text-xs mb-5">Per loan signing package</p>
+        <ul data-id="107" class="flex-1 space-y-2.5 mb-6">
+          <li data-id="108" class="flex items-start gap-2.5 text-sm"><span data-id="109" class="text-gold font-bold">✓</span> Mortgage &amp; refinance signings</li>
+          <li data-id="110" class="flex items-start gap-2.5 text-sm"><span data-id="111" class="text-gold font-bold">✓</span> Works with title companies &amp; lenders</li>
+          <li data-id="112" class="flex items-start gap-2.5 text-sm"><span data-id="113" class="text-gold font-bold">✓</span> Full package signing guidance</li>
+          <li data-id="114" class="flex items-start gap-2.5 text-sm"><span data-id="115" class="text-gold font-bold">✓</span> E&amp;O insurance coverage</li>
+          <li data-id="116" class="flex items-start gap-2.5 text-sm"><span data-id="117" class="text-gold font-bold">✓</span> Fast document return</li>
+          <li data-id="118" class="flex items-start gap-2.5 text-sm"><span data-id="119" class="text-gold font-bold">✓</span> Professional &amp; detail-oriented</li>
+        </ul>
+        <button data-id="120" class="btn-transition w-full bg-gold text-navy font-bold py-3 rounded-lg cursor-pointer hover:bg-gold-dark text-sm">Book Now</button>
+      </div>
+
+      <!-- Card 4: Real Estate Documents -->
+      <div data-id="121" class="fade-in-up pricing-card bg-white rounded-2xl border-t-4 border-gold shadow-md p-7 flex flex-col relative" style="box-shadow:0 4px 24px rgba(0,0,0,0.08);">
+        <div data-id="122" class="text-3xl mb-4">🏠</div>
+        <h3 data-id="123" class="font-display text-navy text-xl font-semibold mb-2">Real Estate Documents</h3>
+        <p data-id="124" class="text-text-muted text-xs mb-1">Starting at</p>
+        <p data-id="125" class="font-display text-gold font-bold mb-1" style="font-size:2.2rem;">$25</p>
+        <p data-id="126" class="text-text-muted text-xs mb-5">Per document or package</p>
+        <ul data-id="127" class="flex-1 space-y-2.5 mb-6">
+          <li data-id="128" class="flex items-start gap-2.5 text-sm"><span data-id="129" class="text-gold font-bold">✓</span> Deeds &amp; title transfers</li>
+          <li data-id="130" class="flex items-start gap-2.5 text-sm"><span data-id="131" class="text-gold font-bold">✓</span> Mortgage documents</li>
+          <li data-id="132" class="flex items-start gap-2.5 text-sm"><span data-id="133" class="text-gold font-bold">✓</span> Closing packages</li>
+          <li data-id="134" class="flex items-start gap-2.5 text-sm"><span data-id="135" class="text-gold font-bold">✓</span> Seller disclosures</li>
+          <li data-id="136" class="flex items-start gap-2.5 text-sm"><span data-id="137" class="text-gold font-bold">✓</span> Same-day available (by request)</li>
+        </ul>
+        <button data-id="138" class="btn-transition w-full bg-gold text-navy font-bold py-3 rounded-lg cursor-pointer hover:bg-gold-dark text-sm">Book Now</button>
+      </div>
+
+      <!-- Card 5: Estate & Will Documents -->
+      <div data-id="139" class="fade-in-up pricing-card bg-white rounded-2xl border-t-4 border-gold shadow-md p-7 flex flex-col relative" style="box-shadow:0 4px 24px rgba(0,0,0,0.08);">
+        <div data-id="140" class="text-3xl mb-4">📜</div>
+        <h3 data-id="141" class="font-display text-navy text-xl font-semibold mb-2">Estate &amp; Will Documents</h3>
+        <p data-id="142" class="text-text-muted text-xs mb-1">Starting at</p>
+        <p data-id="143" class="font-display text-gold font-bold mb-1" style="font-size:2.2rem;">$15</p>
+        <p data-id="144" class="text-text-muted text-xs mb-5">Per notarial act</p>
+        <ul data-id="145" class="flex-1 space-y-2.5 mb-6">
+          <li data-id="146" class="flex items-start gap-2.5 text-sm"><span data-id="147" class="text-gold font-bold">✓</span> Wills &amp; self-proving affidavits</li>
+          <li data-id="148" class="flex items-start gap-2.5 text-sm"><span data-id="149" class="text-gold font-bold">✓</span> Powers of attorney</li>
+          <li data-id="150" class="flex items-start gap-2.5 text-sm"><span data-id="151" class="text-gold font-bold">✓</span> Healthcare directives</li>
+          <li data-id="152" class="flex items-start gap-2.5 text-sm"><span data-id="153" class="text-gold font-bold">✓</span> Mobile service available</li>
+          <li data-id="154" class="flex items-start gap-2.5 text-sm"><span data-id="155" class="text-gold font-bold">✓</span> Compassionate &amp; confidential</li>
+        </ul>
+        <button data-id="156" class="btn-transition w-full bg-gold text-navy font-bold py-3 rounded-lg cursor-pointer hover:bg-gold-dark text-sm">Book Now</button>
+      </div>
+
+      <!-- Card 6: Apostille Assistance -->
+      <div data-id="157" class="fade-in-up pricing-card bg-white rounded-2xl border-t-4 border-gold shadow-md p-7 flex flex-col relative" style="box-shadow:0 4px 24px rgba(0,0,0,0.08);">
+        <div data-id="158" class="text-3xl mb-4">🌐</div>
+        <h3 data-id="159" class="font-display text-navy text-xl font-semibold mb-2">Apostille Assistance</h3>
+        <p data-id="160" class="text-text-muted text-xs mb-1">Starting at</p>
+        <p data-id="161" class="font-display text-gold font-bold mb-1" style="font-size:2.2rem;">$20</p>
+        <p data-id="162" class="text-text-muted text-xs mb-5">Notarization for apostille prep</p>
+        <ul data-id="163" class="flex-1 space-y-2.5 mb-6">
+          <li data-id="164" class="flex items-start gap-2.5 text-sm"><span data-id="165" class="text-gold font-bold">✓</span> Document notarization prep</li>
+          <li data-id="166" class="flex items-start gap-2.5 text-sm"><span data-id="167" class="text-gold font-bold">✓</span> Guidance on submission process</li>
+          <li data-id="168" class="flex items-start gap-2.5 text-sm"><span data-id="169" class="text-gold font-bold">✓</span> Birth, marriage, legal documents</li>
+          <li data-id="170" class="flex items-start gap-2.5 text-sm"><span data-id="171" class="text-gold font-bold">✓</span> International use documents</li>
+          <li data-id="172" class="flex items-start gap-2.5 text-sm"><span data-id="173" class="text-gold font-bold">✓</span> Fast turnaround</li>
+        </ul>
+        <button data-id="174" class="btn-transition w-full bg-gold text-navy font-bold py-3 rounded-lg cursor-pointer hover:bg-gold-dark text-sm">Book Now</button>
+      </div>
+    </div>
+
+    <!-- Note callout -->
+    <div data-id="175" class="fade-in-up bg-gold-light border-l-4 border-gold rounded-lg p-5 max-w-5xl mx-auto">
+      <p data-id="176" class="text-navy text-sm leading-relaxed">📌 <strong data-id="177">Note:</strong> Oklahoma notary fees are set by state law. All pricing listed is starting rate. Travel fees and rush charges are quoted transparently before any service begins. Contact us for an exact quote.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ===== DOCUMENT PREPARATION ===== -->
+<section data-id="178" id="doc-prep" class="bg-white py-20 px-4 md:px-8">
+  <div data-id="179" class="max-w-7xl mx-auto">
+    <!-- Section header -->
+    <div data-id="180" class="text-center mb-14">
+      <div data-id="181" class="fade-in-up inline-flex items-center justify-center w-12 h-12 rounded-full bg-gold text-navy font-display font-bold text-lg mb-4">02</div>
+      <h2 data-id="182" class="fade-in-up font-display text-navy font-bold mb-3" style="font-size:clamp(1.8rem,4vw,2.8rem);">Document Preparation</h2>
+      <div data-id="183" class="fade-in-up w-[60px] h-[3px] bg-gold rounded mx-auto mb-5"></div>
+      <p data-id="184" class="fade-in-up text-text-muted font-body max-w-[600px] mx-auto leading-relaxed">Professional document preparation for individuals and businesses. Accurate, confidential, and completed on time.</p>
+    </div>
+
+    <!-- Two-column layout -->
+    <div data-id="185" class="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-10">
+      <!-- Left: Pricing table -->
+      <div data-id="186" class="fade-in-up bg-white rounded-2xl border-l-4 border-gold shadow-lg overflow-hidden" style="box-shadow:0 4px 24px rgba(0,0,0,0.08);">
+        <div data-id="187" class="p-6 pb-2">
+          <h3 data-id="188" class="font-display text-navy text-xl font-semibold mb-4">Document Preparation Pricing</h3>
+        </div>
+        <div data-id="189" class="overflow-x-auto">
+          <table data-id="190" class="pricing-table w-full text-sm">
+            <thead data-id="191">
+              <tr data-id="192">
+                <th data-id="193">Service</th>
+                <th data-id="194">Turnaround</th>
+                <th data-id="195">Starting Price</th>
+              </tr>
+            </thead>
+            <tbody data-id="196">
+              <tr data-id="197"><td data-id="198">Simple 1-Page Document</td><td data-id="199">1–2 Business Days</td><td data-id="200" class="text-gold font-bold">$25</td></tr>
+              <tr data-id="201"><td data-id="202">Standard Document (2–5 pages)</td><td data-id="203">2–3 Business Days</td><td data-id="204" class="text-gold font-bold">$45</td></tr>
+              <tr data-id="205"><td data-id="206">Complex Document Package</td><td data-id="207">3–5 Business Days</td><td data-id="208" class="text-gold font-bold">$85</td></tr>
+              <tr data-id="209"><td data-id="210">Affidavit Preparation</td><td data-id="211">1–2 Business Days</td><td data-id="212" class="text-gold font-bold">$35</td></tr>
+              <tr data-id="213"><td data-id="214">Power of Attorney Document</td><td data-id="215">2–3 Business Days</td><td data-id="216" class="text-gold font-bold">$55</td></tr>
+              <tr data-id="217"><td data-id="218">Estate Document Organizer</td><td data-id="219">3–5 Business Days</td><td data-id="220" class="text-gold font-bold">$95</td></tr>
+              <tr data-id="221"><td data-id="222">Rush Service (24–48 hours)</td><td data-id="223">24–48 Hours</td><td data-id="224" class="text-gold font-bold">+$35 add-on</td></tr>
+              <tr data-id="225"><td data-id="226">NDA / Confidentiality Agreement</td><td data-id="227">By Request</td><td data-id="228" class="text-gold font-bold">Included Free</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- Right: What's included -->
+      <div data-id="229" class="fade-in-up bg-white rounded-2xl shadow-lg p-7 flex flex-col" style="box-shadow:0 4px 24px rgba(0,0,0,0.08);">
+        <h3 data-id="230" class="font-display text-navy text-xl font-semibold mb-6">Every Service Includes:</h3>
+        <ul data-id="231" class="flex-1 space-y-3.5 mb-8">
+          <li data-id="232" class="flex items-start gap-3 text-sm"><span data-id="233" class="text-gold font-bold text-base">✓</span> Free initial consultation</li>
+          <li data-id="234" class="flex items-start gap-3 text-sm"><span data-id="235" class="text-gold font-bold text-base">✓</span> Detailed review before delivery</li>
+          <li data-id="236" class="flex items-start gap-3 text-sm"><span data-id="237" class="text-gold font-bold text-base">✓</span> Up to 2 rounds of standard revisions</li>
+          <li data-id="238" class="flex items-start gap-3 text-sm"><span data-id="239" class="text-gold font-bold text-base">✓</span> Secure file handling &amp; confidentiality</li>
+          <li data-id="240" class="flex items-start gap-3 text-sm"><span data-id="241" class="text-gold font-bold text-base">✓</span> NDA available upon request</li>
+          <li data-id="242" class="flex items-start gap-3 text-sm"><span data-id="243" class="text-gold font-bold text-base">✓</span> Delivery via email or secure link</li>
+          <li data-id="244" class="flex items-start gap-3 text-sm"><span data-id="245" class="text-gold font-bold text-base">✓</span> 24-hour response to all inquiries</li>
+        </ul>
+        <button data-id="246" class="btn-transition w-full bg-navy text-white font-bold py-3.5 rounded-lg cursor-pointer hover:bg-navy-dark text-sm">Request a Quote</button>
+      </div>
+    </div>
+
+    <!-- Testimonial -->
+    <div data-id="247" class="fade-in-up text-center max-w-3xl mx-auto mt-10">
+      <blockquote data-id="248" class="font-display text-gold italic text-lg md:text-xl leading-relaxed">"Parmida's document preparation was thorough, professional, and delivered ahead of schedule. Highly recommend!"</blockquote>
+      <p data-id="249" class="text-text-muted text-sm mt-3">— Small Business Owner, Oklahoma</p>
+    </div>
+  </div>
+</section>
+
+<!-- ===== ADMINISTRATIVE SUPPORT ===== -->
+<section data-id="250" id="admin" class="bg-light-gray py-20 px-4 md:px-8">
+  <div data-id="251" class="max-w-7xl mx-auto">
+    <!-- Section header -->
+    <div data-id="252" class="text-center mb-14">
+      <div data-id="253" class="fade-in-up inline-flex items-center justify-center w-12 h-12 rounded-full bg-gold text-navy font-display font-bold text-lg mb-4">03</div>
+      <h2 data-id="254" class="fade-in-up font-display text-navy font-bold mb-3" style="font-size:clamp(1.8rem,4vw,2.8rem);">Administrative Support</h2>
+      <div data-id="255" class="fade-in-up w-[60px] h-[3px] bg-gold rounded mx-auto mb-5"></div>
+      <p data-id="256" class="fade-in-up text-text-muted font-body max-w-[600px] mx-auto leading-relaxed">Reclaim your time and operate like a pro. Virtual and in-person administrative support tailored to busy professionals.</p>
+    </div>
+
+    <!-- Three tier cards -->
+    <div data-id="257" class="grid grid-cols-1 md:grid-cols-3 gap-7 mb-10">
+
+      <!-- Tier 1: Starter -->
+      <div data-id="258" class="fade-in-up pricing-card bg-white rounded-2xl border-t-4 border-gold shadow-md p-7 flex flex-col" style="box-shadow:0 4px 24px rgba(0,0,0,0.08);">
+        <p data-id="259" class="text-gold text-xs font-bold tracking-[0.15em] uppercase mb-2">STARTER</p>
+        <h3 data-id="260" class="font-display text-navy text-lg font-semibold mb-3">Project-Based Support</h3>
+        <p data-id="261" class="text-text-muted text-xs mb-1">Starting at</p>
+        <p data-id="262" class="font-display text-gold font-bold mb-1" style="font-size:2.2rem;">$50</p>
+        <p data-id="263" class="text-text-muted text-xs mb-4">Per project / one-time</p>
+        <p data-id="264" class="text-sm text-text-body leading-relaxed mb-5">Perfect for one-time tasks — a single document, a set of email templates, a client packet, or a data entry project.</p>
+        <ul data-id="265" class="flex-1 space-y-2.5 mb-6">
+          <li data-id="266" class="flex items-start gap-2.5 text-sm"><span data-id="267" class="text-gold font-bold">✓</span> Single task or small project</li>
+          <li data-id="268" class="flex items-start gap-2.5 text-sm"><span data-id="269" class="text-gold font-bold">✓</span> Delivered within 2–5 business days</li>
+          <li data-id="270" class="flex items-start gap-2.5 text-sm"><span data-id="271" class="text-gold font-bold">✓</span> Email delivery</li>
+          <li data-id="272" class="flex items-start gap-2.5 text-sm"><span data-id="273" class="text-gold font-bold">✓</span> 1 round of revisions included</li>
+          <li data-id="274" class="flex items-start gap-2.5 text-sm"><span data-id="275" class="text-gold font-bold">✓</span> No ongoing commitment</li>
+        </ul>
+        <button data-id="276" class="btn-transition w-full border-2 border-gold text-gold font-bold py-3 rounded-lg cursor-pointer hover:bg-gold hover:text-navy bg-transparent text-sm">Get Started</button>
+      </div>
+
+      <!-- Tier 2: Professional (Most Popular) -->
+      <div data-id="277" class="fade-in-up pricing-card bg-white rounded-2xl border-t-4 border-gold shadow-lg p-7 flex flex-col relative" style="box-shadow:0 6px 32px rgba(0,0,0,0.12);">
+        <div data-id="278" class="absolute top-0 right-0 bg-gold text-navy text-xs font-bold px-4 py-1.5" style="border-radius:0 16px 0 12px;">Most Popular</div>
+        <p data-id="279" class="text-gold text-xs font-bold tracking-[0.15em] uppercase mb-2">PROFESSIONAL</p>
+        <h3 data-id="280" class="font-display text-navy text-lg font-semibold mb-3">Monthly Retainer — Basic</h3>
+        <p data-id="281" class="font-display text-gold font-bold mb-1" style="font-size:2.2rem;">$250<span data-id="282" class="text-base font-normal text-text-muted">/month</span></p>
+        <p data-id="283" class="text-text-muted text-xs mb-4">Up to 10 hours/month</p>
+        <p data-id="284" class="text-sm text-text-body leading-relaxed mb-5">Ideal for solopreneurs and small business owners who need consistent, reliable administrative support every month.</p>
+        <ul data-id="285" class="flex-1 space-y-2.5 mb-6">
+          <li data-id="286" class="flex items-start gap-2.5 text-sm"><span data-id="287" class="text-gold font-bold">✓</span> Up to 10 hours of admin support</li>
+          <li data-id="288" class="flex items-start gap-2.5 text-sm"><span data-id="289" class="text-gold font-bold">✓</span> Document drafting &amp; formatting</li>
+          <li data-id="290" class="flex items-start gap-2.5 text-sm"><span data-id="291" class="text-gold font-bold">✓</span> Email templates &amp; correspondence</li>
+          <li data-id="292" class="flex items-start gap-2.5 text-sm"><span data-id="293" class="text-gold font-bold">✓</span> Data entry &amp; record management</li>
+          <li data-id="294" class="flex items-start gap-2.5 text-sm"><span data-id="295" class="text-gold font-bold">✓</span> Priority scheduling</li>
+          <li data-id="296" class="flex items-start gap-2.5 text-sm"><span data-id="297" class="text-gold font-bold">✓</span> Dedicated point of contact</li>
+          <li data-id="298" class="flex items-start gap-2.5 text-sm"><span data-id="299" class="text-gold font-bold">✓</span> Monthly check-in call</li>
+        </ul>
+        <button data-id="300" class="btn-transition w-full bg-gold text-navy font-bold py-3 rounded-lg cursor-pointer hover:bg-gold-dark text-sm">Choose Plan</button>
+      </div>
+
+      <!-- Tier 3: Premium -->
+      <div data-id="301" class="fade-in-up pricing-card bg-white rounded-2xl border-t-4 border-gold shadow-md p-7 flex flex-col" style="box-shadow:0 4px 24px rgba(0,0,0,0.08);">
+        <p data-id="302" class="text-gold text-xs font-bold tracking-[0.15em] uppercase mb-2">PREMIUM</p>
+        <h3 data-id="303" class="font-display text-navy text-lg font-semibold mb-3">Monthly Retainer — Premium</h3>
+        <p data-id="304" class="font-display text-gold font-bold mb-1" style="font-size:2.2rem;">$450<span data-id="305" class="text-base font-normal text-text-muted">/month</span></p>
+        <p data-id="306" class="text-text-muted text-xs mb-4">Up to 20 hours/month</p>
+        <p data-id="307" class="text-sm text-text-body leading-relaxed mb-5">For established businesses that need robust, ongoing administrative support to keep operations running smoothly.</p>
+        <ul data-id="308" class="flex-1 space-y-2.5 mb-6">
+          <li data-id="309" class="flex items-start gap-2.5 text-sm"><span data-id="310" class="text-gold font-bold">✓</span> Up to 20 hours of admin support</li>
+          <li data-id="311" class="flex items-start gap-2.5 text-sm"><span data-id="312" class="text-gold font-bold">✓</span> All Professional plan features</li>
+          <li data-id="313" class="flex items-start gap-2.5 text-sm"><span data-id="314" class="text-gold font-bold">✓</span> SOP creation &amp; documentation</li>
+          <li data-id="315" class="flex items-start gap-2.5 text-sm"><span data-id="316" class="text-gold font-bold">✓</span> Client onboarding packet setup</li>
+          <li data-id="317" class="flex items-start gap-2.5 text-sm"><span data-id="318" class="text-gold font-bold">✓</span> Appointment coordination</li>
+          <li data-id="319" class="flex items-start gap-2.5 text-sm"><span data-id="320" class="text-gold font-bold">✓</span> Weekly progress updates</li>
+          <li data-id="321" class="flex items-start gap-2.5 text-sm"><span data-id="322" class="text-gold font-bold">✓</span> Bi-weekly strategy call</li>
+          <li data-id="323" class="flex items-start gap-2.5 text-sm"><span data-id="324" class="text-gold font-bold">✓</span> Rush turnaround available</li>
+        </ul>
+        <button data-id="325" class="btn-transition w-full border-2 border-gold text-gold font-bold py-3 rounded-lg cursor-pointer hover:bg-gold hover:text-navy bg-transparent text-sm">Choose Plan</button>
+      </div>
+    </div>
+
+    <!-- Consultation CTA -->
+    <div data-id="326" class="fade-in-up text-center mt-10">
+      <p data-id="327" class="text-gold italic font-display text-base md:text-lg mb-5">✨ Not sure which plan fits? Schedule a free 15-minute consultation and we'll find the perfect solution together.</p>
+      <button data-id="328" class="btn-transition bg-navy text-white font-bold py-3.5 px-8 rounded-lg cursor-pointer hover:bg-navy-dark text-sm">Book Free Consultation</button>
+    </div>
+  </div>
+</section>
+
+<!-- ===== DIGITAL PRODUCTS SHOP ===== -->
+<section data-id="329" id="shop" class="bg-navy dot-pattern py-20 px-4 md:px-8 relative">
+  <div data-id="330" class="max-w-7xl mx-auto relative z-10">
+    <!-- Section header -->
+    <div data-id="331" class="text-center mb-14">
+      <div data-id="332" class="fade-in-up inline-flex items-center justify-center w-12 h-12 rounded-full bg-gold text-navy font-display font-bold text-lg mb-4">04</div>
+      <h2 data-id="333" class="fade-in-up font-display text-white font-bold mb-3" style="font-size:clamp(1.8rem,4vw,2.8rem);">Digital Products Shop</h2>
+      <div data-id="334" class="fade-in-up w-[60px] h-[3px] bg-gold rounded mx-auto mb-5"></div>
+      <p data-id="335" class="fade-in-up text-white/70 font-body max-w-[600px] mx-auto leading-relaxed">Done-for-you templates, forms, and toolkits — built by a real notary for real professionals. Instant download. Fully editable.</p>
+    </div>
+
+    <!-- Product category cards 2x2 -->
+    <div data-id="336" class="grid grid-cols-1 md:grid-cols-2 gap-7 max-w-5xl mx-auto mb-12">
+
+      <!-- Product 1 -->
+      <div data-id="337" class="fade-in-up pricing-card bg-white rounded-2xl border-t-4 border-gold p-7" style="box-shadow:0 4px 24px rgba(0,0,0,0.08);">
+        <div data-id="338" class="text-3xl mb-3">🖊️</div>
+        <h3 data-id="339" class="font-display text-navy text-lg font-semibold mb-2">Notary Business Templates</h3>
+        <p data-id="340" class="text-gold font-bold text-lg mb-2">$2.99 – $12.99</p>
+        <p data-id="341" class="text-sm text-text-body leading-relaxed mb-3">Client intake forms, appointment scripts, journal logs, rate cards, and complete starter bundles.</p>
+        <span data-id="342" class="inline-block text-xs font-semibold text-gold bg-gold/10 px-3 py-1 rounded-full mb-4">⭐ Bestselling Category</span>
+        <br data-id="343">
+        <a data-id="344" href="#" class="text-gold font-semibold text-sm hover:underline cursor-pointer">Shop Now →</a>
+      </div>
+
+      <!-- Product 2 -->
+      <div data-id="345" class="fade-in-up pricing-card bg-white rounded-2xl border-t-4 border-gold p-7" style="box-shadow:0 4px 24px rgba(0,0,0,0.08);">
+        <div data-id="346" class="text-3xl mb-3">📋</div>
+        <h3 data-id="347" class="font-display text-navy text-lg font-semibold mb-2">Administrative Templates</h3>
+        <p data-id="348" class="text-gold font-bold text-lg mb-2">$4.99 – $9.99</p>
+        <p data-id="349" class="text-sm text-text-body leading-relaxed mb-3">VA onboarding packets, client welcome kits, SOP templates, meeting agendas, and business email packs.</p>
+        <span data-id="350" class="inline-block text-xs font-semibold text-gold bg-gold/10 px-3 py-1 rounded-full mb-4">🔥 Most Popular</span>
+        <br data-id="351">
+        <a data-id="352" href="#" class="text-gold font-semibold text-sm hover:underline cursor-pointer">Shop Now →</a>
+      </div>
+
+      <!-- Product 3 -->
+      <div data-id="353" class="fade-in-up pricing-card bg-white rounded-2xl border-t-4 border-gold p-7" style="box-shadow:0 4px 24px rgba(0,0,0,0.08);">
+        <div data-id="354" class="text-3xl mb-3">📁</div>
+        <h3 data-id="355" class="font-display text-navy text-lg font-semibold mb-2">Document Preparation Guides</h3>
+        <p data-id="356" class="text-gold font-bold text-lg mb-2">$2.99 – $8.99</p>
+        <p data-id="357" class="text-sm text-text-body leading-relaxed mb-3">Affidavit guides, power of attorney checklists, estate organizers, and client document checklists.</p>
+        <span data-id="358" class="inline-block text-xs font-semibold text-gold bg-gold/10 px-3 py-1 rounded-full mb-4">✨ Highly Rated</span>
+        <br data-id="359">
+        <a data-id="360" href="#" class="text-gold font-semibold text-sm hover:underline cursor-pointer">Shop Now →</a>
+      </div>
+
+      <!-- Product 4 -->
+      <div data-id="361" class="fade-in-up pricing-card bg-white rounded-2xl border-t-4 border-gold p-7" style="box-shadow:0 4px 24px rgba(0,0,0,0.08);">
+        <div data-id="362" class="text-3xl mb-3">📣</div>
+        <h3 data-id="363" class="font-display text-navy text-lg font-semibold mb-2">Notary Marketing Templates</h3>
+        <p data-id="364" class="text-gold font-bold text-lg mb-2">$3.99 – $9.99</p>
+        <p data-id="365" class="text-sm text-text-body leading-relaxed mb-3">Social media post packs (30 Canva templates), flyers, brochures, and signing agent bio scripts.</p>
+        <span data-id="366" class="inline-block text-xs font-semibold text-gold bg-gold/10 px-3 py-1 rounded-full mb-4">📈 Grow Your Business</span>
+        <br data-id="367">
+        <a data-id="368" href="#" class="text-gold font-semibold text-sm hover:underline cursor-pointer">Shop Now →</a>
+      </div>
+    </div>
+
+    <!-- Shop CTA -->
+    <div data-id="369" class="fade-in-up text-center">
+      <p data-id="370" class="text-white/80 text-sm mb-5">All products are available for instant download on Payhip and Gumroad.</p>
+      <div data-id="371" class="flex flex-wrap justify-center gap-4 mb-4">
+        <button data-id="372" class="btn-transition bg-gold text-navy font-bold py-3 px-7 rounded-lg cursor-pointer hover:bg-gold-dark text-sm">Shop on Payhip →</button>
+        <button data-id="373" class="btn-transition border-2 border-white text-white font-bold py-3 px-7 rounded-lg cursor-pointer hover:bg-white hover:text-navy bg-transparent text-sm">Shop on Gumroad →</button>
+      </div>
+      <p data-id="374" class="text-white/40 text-xs">All sales final. Products licensed for single-business use.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ===== BUNDLE & SAVINGS ===== -->
+<section data-id="375" id="bundles-section" class="bg-white py-20 px-4 md:px-8">
+  <div data-id="376" class="max-w-7xl mx-auto">
+    <div data-id="377" class="text-center mb-14">
+      <h2 data-id="378" class="fade-in-up font-display text-navy font-bold mb-3" style="font-size:clamp(1.8rem,4vw,2.8rem);">Save More with Service Bundles</h2>
+      <div data-id="379" class="fade-in-up w-[60px] h-[3px] bg-gold rounded mx-auto mb-5"></div>
+      <p data-id="380" class="fade-in-up text-text-muted font-body max-w-[600px] mx-auto leading-relaxed">Combine services and products for maximum value — the smart choice for growing professionals.</p>
+    </div>
+
+    <div data-id="381" class="grid grid-cols-1 md:grid-cols-3 gap-7 max-w-6xl mx-auto mb-8">
+
+      <!-- Bundle 1 -->
+      <div data-id="382" class="fade-in-up pricing-card bg-light-gray rounded-2xl border-l-4 border-gold shadow-md p-7 flex flex-col" style="box-shadow:0 4px 24px rgba(0,0,0,0.08);">
+        <span data-id="383" class="inline-block text-xs font-bold text-navy bg-gold/20 px-3 py-1 rounded-full mb-3 w-fit">🎯 NEW NOTARY</span>
+        <h3 data-id="384" class="font-display text-navy text-lg font-semibold mb-4">New Notary Launch Bundle</h3>
+        <ul data-id="385" class="space-y-2 mb-5 text-sm text-text-body">
+          <li data-id="386" class="flex items-start gap-2"><span data-id="387" class="text-gold">•</span> Mobile Notary appointment (1 signing)</li>
+          <li data-id="388" class="flex items-start gap-2"><span data-id="389" class="text-gold">•</span> Notary Business Starter Kit (digital download)</li>
+          <li data-id="390" class="flex items-start gap-2"><span data-id="391" class="text-gold">•</span> Client Intake Form template</li>
+          <li data-id="392" class="flex items-start gap-2"><span data-id="393" class="text-gold">•</span> Notary Journal Log</li>
+        </ul>
+        <div data-id="394" class="mb-5">
+          <p data-id="395" class="strike-price">Regular Value: ~$55</p>
+          <p data-id="396" class="font-display text-gold font-bold" style="font-size:2rem;">$39</p>
+          <span data-id="397" class="inline-block text-xs font-bold text-navy bg-gold px-3 py-1 rounded-full mt-1">Save $16</span>
+        </div>
+        <button data-id="398" class="btn-transition mt-auto w-full bg-navy text-white font-bold py-3 rounded-lg cursor-pointer hover:bg-navy-dark text-sm">Get This Bundle</button>
+      </div>
+
+      <!-- Bundle 2 (Featured) -->
+      <div data-id="399" class="fade-in-up pricing-card bg-light-gray rounded-2xl border-2 border-gold shadow-lg p-7 flex flex-col relative" style="box-shadow:0 6px 32px rgba(0,0,0,0.12);transform:scale(1.02);">
+        <span data-id="400" class="inline-block text-xs font-bold text-navy bg-gold/20 px-3 py-1 rounded-full mb-3 w-fit">⭐ BEST VALUE</span>
+        <h3 data-id="401" class="font-display text-navy text-lg font-semibold mb-4">Business Pro Bundle</h3>
+        <ul data-id="402" class="space-y-2 mb-5 text-sm text-text-body">
+          <li data-id="403" class="flex items-start gap-2"><span data-id="404" class="text-gold">•</span> 1 hour administrative support project</li>
+          <li data-id="405" class="flex items-start gap-2"><span data-id="406" class="text-gold">•</span> VA Onboarding Packet template</li>
+          <li data-id="407" class="flex items-start gap-2"><span data-id="408" class="text-gold">•</span> Business Email Templates Pack (15 emails)</li>
+          <li data-id="409" class="flex items-start gap-2"><span data-id="410" class="text-gold">•</span> SOP Template</li>
+          <li data-id="411" class="flex items-start gap-2"><span data-id="412" class="text-gold">•</span> Client Welcome Packet</li>
+        </ul>
+        <div data-id="413" class="mb-5">
+          <p data-id="414" class="strike-price">Regular Value: ~$120</p>
+          <p data-id="415" class="font-display text-gold font-bold" style="font-size:2rem;">$85</p>
+          <span data-id="416" class="inline-block text-xs font-bold text-navy bg-gold px-3 py-1 rounded-full mt-1">Save $35</span>
+        </div>
+        <button data-id="417" class="btn-transition mt-auto w-full bg-gold text-navy font-bold py-3 rounded-lg cursor-pointer hover:bg-gold-dark text-sm">Get This Bundle</button>
+      </div>
+
+      <!-- Bundle 3 -->
+      <div data-id="418" class="fade-in-up pricing-card bg-light-gray rounded-2xl border-l-4 border-gold shadow-md p-7 flex flex-col" style="box-shadow:0 4px 24px rgba(0,0,0,0.08);">
+        <span data-id="419" class="inline-block text-xs font-bold text-navy bg-gold/20 px-3 py-1 rounded-full mb-3 w-fit">📋 POPULAR COMBO</span>
+        <h3 data-id="420" class="font-display text-navy text-lg font-semibold mb-4">Document &amp; Notary Combo</h3>
+        <ul data-id="421" class="space-y-2 mb-5 text-sm text-text-body">
+          <li data-id="422" class="flex items-start gap-2"><span data-id="423" class="text-gold">•</span> Standard document preparation (1 document)</li>
+          <li data-id="424" class="flex items-start gap-2"><span data-id="425" class="text-gold">•</span> Notarization of the same document</li>
+          <li data-id="426" class="flex items-start gap-2"><span data-id="427" class="text-gold">•</span> Estate Document Organizer (digital download)</li>
+          <li data-id="428" class="flex items-start gap-2"><span data-id="429" class="text-gold">•</span> Power of Attorney checklist</li>
+        </ul>
+        <div data-id="430" class="mb-5">
+          <p data-id="431" class="strike-price">Regular Value: ~$100</p>
+          <p data-id="432" class="font-display text-gold font-bold" style="font-size:2rem;">$75</p>
+          <span data-id="433" class="inline-block text-xs font-bold text-navy bg-gold px-3 py-1 rounded-full mt-1">Save $25</span>
+        </div>
+        <button data-id="434" class="btn-transition mt-auto w-full bg-navy text-white font-bold py-3 rounded-lg cursor-pointer hover:bg-navy-dark text-sm">Get This Bundle</button>
+      </div>
+    </div>
+
+    <p data-id="435" class="fade-in-up text-center text-gold italic text-sm max-w-3xl mx-auto">* Bundle pricing is subject to document type and travel distance. Contact us to confirm your bundle before ordering.</p>
+  </div>
+</section>
+
+<!-- ===== BOOK / CONTACT CTA ===== -->
+<section data-id="436" id="contact" class="bg-navy py-20 px-4 md:px-8 relative overflow-hidden">
+  <div data-id="437" class="shimmer-overlay"></div>
+  <div data-id="438" class="relative z-10 max-w-4xl mx-auto text-center">
+    <p data-id="439" class="fade-in-up text-gold text-xs font-semibold tracking-[0.3em] uppercase mb-4">READY TO GET STARTED?</p>
+    <h2 data-id="440" class="fade-in-up font-display text-white font-bold mb-5" style="font-size:clamp(1.8rem,4vw,2.8rem);">Let's Work Together</h2>
+    <p data-id="441" class="fade-in-up text-white/80 text-base md:text-lg max-w-[620px] mx-auto mb-8 leading-relaxed">Whether you need a notarization, document help, admin support, or a done-for-you template — we're here for you.</p>
+
+    <div data-id="442" class="fade-in-up flex flex-wrap justify-center gap-3 mb-10">
+      <span data-id="443" class="border border-gold/50 text-white text-xs md:text-sm px-4 py-2 rounded-full">📍 Spencer, Oklahoma</span>
+      <span data-id="444" class="border border-gold/50 text-white text-xs md:text-sm px-4 py-2 rounded-full">📧 solutions@pbymaria.com</span>
+      <span data-id="445" class="border border-gold/50 text-white text-xs md:text-sm px-4 py-2 rounded-full">⏱️ Response within 24 hours</span>
+      <span data-id="446" class="border border-gold/50 text-white text-xs md:text-sm px-4 py-2 rounded-full">📱 Virtual &amp; In-Person Available</span>
+    </div>
+
+    <div data-id="447" class="fade-in-up flex flex-wrap justify-center gap-4">
+      <button data-id="448" class="btn-transition bg-gold text-navy font-bold py-3.5 px-8 rounded-lg cursor-pointer hover:bg-gold-dark text-sm min-h-[44px]">Book a Service</button>
+      <button data-id="449" class="btn-transition border-2 border-white text-white font-bold py-3.5 px-8 rounded-lg cursor-pointer hover:bg-white hover:text-navy bg-transparent text-sm min-h-[44px]">Shop Templates</button>
+      <button data-id="450" class="btn-transition border-2 border-gold text-gold font-bold py-3.5 px-8 rounded-lg cursor-pointer hover:bg-gold hover:text-navy bg-transparent text-sm min-h-[44px]">Contact Us</button>
+    </div>
+  </div>
+</section>
+</main>
+
+<!-- ===== FOOTER ===== -->
+<footer data-id="451" class="bg-navy border-t-2 border-gold py-10 px-4 md:px-8">
+  <div data-id="452" class="max-w-7xl mx-auto flex flex-col md:flex-row items-center justify-between gap-6 text-center md:text-left">
+    <!-- Logo -->
+    <div data-id="453" class="flex items-center gap-3">
+      <div data-id="454" class="flex items-center justify-center w-[44px] h-[44px] rounded-lg bg-gold/10 border border-gold/30">
+        <span data-id="455" class="font-display text-gold text-xl font-bold leading-none">PM</span>
+      </div>
+    </div>
+    <!-- Center -->
+    <div data-id="456">
+      <p data-id="457" class="text-white/70 text-xs mb-1">© 2026 Solutions by P Maria. All Rights Reserved.</p>
+      <p data-id="458" class="text-gold italic font-display text-sm">Empowering Professionals. One Document at a Time.</p>
+      <p data-id="459" class="text-white/40 text-xs mt-2">Made by Copilot</p>
+    </div>
+    <!-- Footer nav -->
+    <div data-id="460" class="flex flex-wrap justify-center gap-4">
+      <a data-id="461" href="#hero-section" class="text-gold text-xs font-semibold hover:underline">About</a>
+      <a data-id="462" href="#notary" class="text-gold text-xs font-semibold hover:underline">Services</a>
+      <a data-id="463" href="#shop" class="text-gold text-xs font-semibold hover:underline">Shop</a>
+      <a data-id="464" href="#bundles-section" class="text-gold text-xs font-semibold hover:underline">FAQ</a>
+      <a data-id="465" href="#contact" class="text-gold text-xs font-semibold hover:underline">Contact</a>
+    </div>
+  </div>
+</footer>
+
+<script>
+  // ===== Lucide Icons (progressive enhancement) =====
+  if (typeof lucide !== "undefined" && typeof lucide.createIcons === "function") {
+    lucide.createIcons();
+  }
+
+  // ===== Hamburger Menu Toggle =====
+  const hamburgerBtn = document.getElementById('hamburger-btn');
+  const mobileMenuPanel = document.getElementById('mobile-menu-panel');
+  if (hamburgerBtn && mobileMenuPanel) {
+    hamburgerBtn.addEventListener('click', function() {
+      hamburgerBtn.classList.toggle('hamburger-active');
+      mobileMenuPanel.classList.toggle('open');
+    });
+    // Close on nav link click
+    document.querySelectorAll('.mobile-nav-link').forEach(function(link) {
+      link.addEventListener('click', function() {
+        hamburgerBtn.classList.remove('hamburger-active');
+        mobileMenuPanel.classList.remove('open');
+      });
+    });
+  }
+
+  // ===== Sticky Navbar Shadow on Scroll =====
+  const navbar = document.getElementById('navbar-main');
+  if (navbar) {
+    window.addEventListener('scroll', function() {
+      if (window.scrollY > 10) {
+        navbar.classList.add('nav-scrolled');
+      } else {
+        navbar.classList.remove('nav-scrolled');
+      }
+    });
+  }
+
+  // ===== Intersection Observer: Fade-in-up =====
+  const fadeEls = document.querySelectorAll('.fade-in-up');
+  if ('IntersectionObserver' in window) {
+    const observer = new IntersectionObserver(function(entries) {
+      entries.forEach(function(entry, idx) {
+        if (entry.isIntersecting) {
+          // Stagger using data attribute or index
+          const siblings = entry.target.parentElement ? Array.from(entry.target.parentElement.children).filter(function(c) { return c.classList.contains('fade-in-up'); }) : [];
+          const sibIdx = siblings.indexOf(entry.target);
+          const delay = sibIdx >= 0 ? sibIdx * 80 : 0;
+          setTimeout(function() {
+            entry.target.classList.add('visible');
+          }, delay);
+          observer.unobserve(entry.target);
+        }
+      });
+    }, { threshold: 0.12, rootMargin: '0px 0px -40px 0px' });
+    fadeEls.forEach(function(el) { observer.observe(el); });
+  } else {
+    // Fallback: show everything
+    fadeEls.forEach(function(el) { el.classList.add('visible'); });
+  }
+</script>
+</body>
+</html>

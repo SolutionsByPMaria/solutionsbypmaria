@@ -1,0 +1,738 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Solutions by P Maria – About Me Page</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://unpkg.com/lucide@latest" defer></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        navy: { DEFAULT: '#1B3A6B', dark: '#122850', light: '#244B8A' },
+                        gold: { DEFAULT: '#C9A84C', dark: '#B08F3A', light: '#D4BB6E', pale: '#F0E6C8' },
+                        gray: { light: '#F5F6FA', DEFAULT: '#E8E9EE', dark: '#6B7280' },
+                    },
+                    fontFamily: {
+                        display: ['"Playfair Display"', 'Georgia', 'serif'],
+                        body: ['"Inter"', 'system-ui', 'sans-serif'],
+                    },
+                },
+            },
+        };
+    </script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Playfair+Display:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500&display=swap');
+
+        :root {
+            --navy: #1B3A6B;
+            --navy-dark: #122850;
+            --navy-light: #244B8A;
+            --gold: #C9A84C;
+            --gold-dark: #B08F3A;
+            --gold-light: #D4BB6E;
+            --gold-pale: #F0E6C8;
+            --gray-light: #F5F6FA;
+            --white: #FFFFFF;
+        }
+
+        * { box-sizing: border-box; }
+
+        html {
+            scroll-behavior: smooth;
+            scroll-padding-top: 80px;
+        }
+
+        body {
+            font-family: 'Inter', system-ui, sans-serif;
+            color: #333;
+            margin: 0;
+            overflow-x: hidden;
+        }
+
+        h1, h2, h3, h4, h5 {
+            font-family: 'Playfair Display', Georgia, serif;
+        }
+
+        /* Hero geometric pattern */
+        .hero-pattern {
+            position: absolute;
+            inset: 0;
+            opacity: 0.07;
+            background-image:
+                linear-gradient(45deg, var(--gold) 1px, transparent 1px),
+                linear-gradient(-45deg, var(--gold) 1px, transparent 1px);
+            background-size: 40px 40px;
+        }
+
+        /* Floating gold dots */
+        .floating-dots {
+            position: absolute;
+            inset: 0;
+            overflow: hidden;
+            pointer-events: none;
+        }
+
+        .dot {
+            position: absolute;
+            width: 6px;
+            height: 6px;
+            background: var(--gold);
+            border-radius: 50%;
+            opacity: 0;
+            animation: floatDot linear infinite;
+        }
+
+        .dot:nth-child(1) { left: 10%; animation-duration: 14s; animation-delay: 0s; }
+        .dot:nth-child(2) { left: 25%; animation-duration: 18s; animation-delay: 2s; width: 4px; height: 4px; }
+        .dot:nth-child(3) { left: 40%; animation-duration: 12s; animation-delay: 4s; width: 8px; height: 8px; }
+        .dot:nth-child(4) { left: 55%; animation-duration: 16s; animation-delay: 1s; }
+        .dot:nth-child(5) { left: 70%; animation-duration: 20s; animation-delay: 3s; width: 5px; height: 5px; }
+        .dot:nth-child(6) { left: 85%; animation-duration: 15s; animation-delay: 5s; width: 7px; height: 7px; }
+        .dot:nth-child(7) { left: 15%; animation-duration: 17s; animation-delay: 6s; width: 4px; height: 4px; }
+        .dot:nth-child(8) { left: 60%; animation-duration: 13s; animation-delay: 7s; width: 5px; height: 5px; }
+        .dot:nth-child(9) { left: 90%; animation-duration: 19s; animation-delay: 2.5s; }
+        .dot:nth-child(10) { left: 35%; animation-duration: 16s; animation-delay: 4.5s; width: 6px; height: 6px; }
+        .dot:nth-child(11) { left: 78%; animation-duration: 14s; animation-delay: 1.5s; width: 4px; height: 4px; }
+        .dot:nth-child(12) { left: 48%; animation-duration: 21s; animation-delay: 6.5s; width: 5px; height: 5px; }
+
+        @keyframes floatDot {
+            0% { transform: translateY(100vh) scale(0); opacity: 0; }
+            10% { opacity: 0.4; }
+            50% { opacity: 0.25; }
+            90% { opacity: 0.3; }
+            100% { transform: translateY(-20vh) scale(1.2); opacity: 0; }
+        }
+
+        /* Scroll animations */
+        .reveal {
+            opacity: 0;
+            transform: translateY(32px);
+            transition: opacity 0.8s cubic-bezier(0.22, 1, 0.36, 1), transform 0.8s cubic-bezier(0.22, 1, 0.36, 1);
+        }
+
+        .reveal.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* Card hover */
+        .card-hover {
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .card-hover:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 12px 32px rgba(27, 58, 107, 0.12);
+        }
+
+        /* Gold divider */
+        .gold-divider {
+            width: 60px;
+            height: 3px;
+            background: var(--gold);
+            margin: 0 auto;
+            border-radius: 2px;
+        }
+
+        .gold-divider-left {
+            width: 4px;
+            background: linear-gradient(to bottom, var(--gold), var(--gold-light));
+            border-radius: 2px;
+            position: absolute;
+            left: 0;
+            top: 0;
+            bottom: 0;
+        }
+
+        /* Button styles */
+        .btn-gold {
+            background: var(--gold);
+            color: var(--navy);
+            font-weight: 600;
+            padding: 14px 32px;
+            border-radius: 6px;
+            border: 2px solid var(--gold);
+            transition: all 0.3s ease;
+            display: inline-block;
+            text-decoration: none;
+            font-family: 'Inter', sans-serif;
+            font-size: 0.95rem;
+            cursor: pointer;
+            min-height: 44px;
+            min-width: 44px;
+        }
+
+        .btn-gold:hover {
+            background: var(--gold-dark);
+            border-color: var(--gold-dark);
+        }
+
+        .btn-outline {
+            background: transparent;
+            color: var(--white);
+            font-weight: 600;
+            padding: 14px 32px;
+            border-radius: 6px;
+            border: 2px solid var(--white);
+            transition: all 0.3s ease;
+            display: inline-block;
+            text-decoration: none;
+            font-family: 'Inter', sans-serif;
+            font-size: 0.95rem;
+            cursor: pointer;
+            min-height: 44px;
+            min-width: 44px;
+        }
+
+        .btn-outline:hover {
+            background: rgba(255,255,255, 0.12);
+        }
+
+        /* Navbar */
+        .navbar {
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            background: rgba(27, 58, 107, 0.97);
+            transition: box-shadow 0.3s ease;
+        }
+
+        .navbar.scrolled {
+            box-shadow: 0 2px 24px rgba(0,0,0,0.18);
+        }
+
+        .nav-link {
+            color: rgba(255,255,255,0.85);
+            font-weight: 500;
+            font-size: 0.9rem;
+            transition: color 0.25s ease;
+            text-decoration: none;
+            padding: 8px 4px;
+        }
+
+        .nav-link:hover { color: var(--gold); }
+
+        /* Stars */
+        .stars { color: var(--gold); letter-spacing: 2px; }
+
+        /* Tag badge */
+        .product-tag {
+            position: absolute;
+            top: 12px;
+            right: 12px;
+            background: var(--gold-pale);
+            color: var(--navy);
+            font-size: 0.75rem;
+            font-weight: 600;
+            padding: 4px 10px;
+            border-radius: 20px;
+        }
+
+        /* Social button */
+        .social-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            padding: 10px 20px;
+            border: 1px solid rgba(201,168,76,0.4);
+            border-radius: 6px;
+            color: var(--gold);
+            font-size: 0.85rem;
+            font-weight: 500;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            cursor: pointer;
+            min-height: 44px;
+        }
+
+        .social-btn:hover {
+            background: rgba(201,168,76,0.1);
+            border-color: var(--gold);
+        }
+
+        /* Scrollbar */
+        ::-webkit-scrollbar { width: 8px; }
+        ::-webkit-scrollbar-track { background: var(--gray-light); }
+        ::-webkit-scrollbar-thumb { background: var(--navy); border-radius: 4px; }
+
+        /* Mobile menu overlay */
+        .mobile-menu-overlay {
+            background: rgba(27, 58, 107, 0.98);
+        }
+
+        /* About image styling — fixed layout */
+        .about-image {
+            width: 100%;
+            height: 420px;
+            object-fit: cover;
+            object-position: center;
+            border-radius: 16px;
+            box-shadow: 0 0 0 4px #C9A84C, 0 0 0 8px #1B3A6B, 0 12px 40px rgba(0,0,0,0.15);
+            display: block;
+        }
+
+        /* Avatar block container */
+        #avatar-block-e6pz {
+            width: 100%;
+            max-width: 460px;
+            flex-shrink: 0;
+        }
+
+        /* Navbar logo image */
+        .navbar-logo-img {
+            height: 52px;
+            width: auto;
+            object-fit: contain;
+            vertical-align: middle;
+            display: inline-block;
+        }
+
+        /* Hero logo image */
+        .hero-logo-img {
+            height: 100px;
+            width: auto;
+            display: block;
+            margin-left: auto;
+            margin-right: auto;
+            margin-bottom: 20px;
+            filter: drop-shadow(0 2px 8px rgba(201,168,76,0.4));
+        }
+
+        /* Footer logo image */
+        .footer-logo-img {
+            height: 44px;
+            width: auto;
+            object-fit: contain;
+            opacity: 0.9;
+            display: inline-block;
+            vertical-align: middle;
+        }
+
+        @media (max-width: 768px) {
+            .about-image {
+                height: 280px;
+            }
+
+            #avatar-block-e6pz {
+                max-width: 100%;
+            }
+
+            .navbar-logo-img {
+                height: 42px;
+            }
+
+            .hero-logo-img {
+                height: 80px;
+            }
+
+            .footer-logo-img {
+                height: 36px;
+            }
+        }
+    </style>
+</head>
+<body data-id="0" class="bg-white">
+    <app-icon data-id="1" hidden data-icon="file-text" data-palette="Blue"></app-icon>
+
+    <!-- ======================== NAVBAR ======================== -->
+    <header data-id="2" id="navbar-r7kx" class="navbar fixed top-0 left-0 right-0 z-50">
+        <div data-id="3" class="max-w-7xl mx-auto px-4 md:px-8 flex items-center justify-between h-[68px]">
+            <a data-id="4" href="#" id="logo-link-a3bm" style="text-decoration:none; display:inline-flex; align-items:center;">
+                <img data-id="5" src="https://copilot.microsoft.com/th/id/BCO.350f7f9d-12db-4287-ba3d-8ee47e21d651.png" alt="Solutions by P Maria logo" class="navbar-logo-img" />
+            </a>
+            <nav data-id="6" id="desktop-nav-qw9z" class="hidden md:flex items-center gap-8">
+                <a data-id="7" href="#about" class="nav-link">About</a>
+                <a data-id="8" href="#services" class="nav-link">Services</a>
+                <a data-id="9" href="#shop" class="nav-link">Shop</a>
+                <a data-id="10" href="#contact" class="nav-link">Contact</a>
+            </nav>
+            <button data-id="11" id="mobile-menu-btn-j4kl" class="md:hidden p-2 text-white" aria-label="Open menu">
+                <i data-id="12" data-lucide="menu" class="w-6 h-6"></i>
+            </button>
+        </div>
+    </header>
+
+    <!-- Mobile Menu -->
+    <nav data-id="13" id="mobile-menu-p8mn" class="mobile-menu-overlay hidden fixed inset-0 z-[60] flex flex-col items-center justify-center gap-8">
+        <button data-id="14" id="mobile-menu-close-v2qr" class="absolute top-5 right-5 p-2 text-white" aria-label="Close menu">
+            <i data-id="15" data-lucide="x" class="w-7 h-7"></i>
+        </button>
+        <a data-id="16" href="#about" class="text-white text-2xl font-display mobile-nav-link" style="text-decoration:none;">About</a>
+        <a data-id="17" href="#services" class="text-white text-2xl font-display mobile-nav-link" style="text-decoration:none;">Services</a>
+        <a data-id="18" href="#shop" class="text-white text-2xl font-display mobile-nav-link" style="text-decoration:none;">Shop</a>
+        <a data-id="19" href="#contact" class="text-white text-2xl font-display mobile-nav-link" style="text-decoration:none;">Contact</a>
+    </nav>
+
+    <main data-id="20">
+        <!-- ======================== HERO SECTION ======================== -->
+        <section data-id="21" id="hero-s3kx" class="relative min-h-screen flex items-center justify-center overflow-hidden" style="background: linear-gradient(165deg, #122850 0%, #1B3A6B 50%, #244B8A 100%);">
+            <div data-id="22" class="hero-pattern"></div>
+            <div data-id="23" class="floating-dots">
+                <div data-id="24" class="dot"></div><div data-id="25" class="dot"></div><div data-id="26" class="dot"></div>
+                <div data-id="27" class="dot"></div><div data-id="28" class="dot"></div><div data-id="29" class="dot"></div>
+                <div data-id="30" class="dot"></div><div data-id="31" class="dot"></div><div data-id="32" class="dot"></div>
+                <div data-id="33" class="dot"></div><div data-id="34" class="dot"></div><div data-id="35" class="dot"></div>
+            </div>
+            <div data-id="36" class="relative z-10 text-center px-5 max-w-3xl mx-auto">
+                <img data-id="37" src="https://copilot.microsoft.com/th/id/BCO.350f7f9d-12db-4287-ba3d-8ee47e21d651.png" alt="Solutions by P Maria logo" class="hero-logo-img" />
+                <h1 data-id="38" id="hero-heading-d4lp" class="font-display text-4xl md:text-5xl lg:text-6xl font-bold text-white leading-tight mb-5">
+                    Hi, I'm Princess Maria
+                </h1>
+                <p data-id="39" id="hero-subtitle-r8nq" class="text-gold font-display text-lg md:text-xl lg:text-2xl font-medium mb-6 tracking-wide">
+                    Administrative Professional &nbsp;|&nbsp; Certified Notary &nbsp;|&nbsp; Document Specialist
+                </p>
+                <p data-id="40" id="hero-tagline-w2kv" class="text-white/75 text-base md:text-lg max-w-xl mx-auto mb-10 leading-relaxed font-light">
+                    Empowering professionals with polished, ready-to-use solutions — built by a practitioner, not a designer.
+                </p>
+                <div data-id="41" class="flex flex-col sm:flex-row items-center justify-center gap-4">
+                    <a data-id="42" href="#services" id="cta-services-b5mx" class="btn-gold">Explore My Services</a>
+                    <a data-id="43" href="#shop" id="cta-shop-c9ny" class="btn-outline">Shop My Templates</a>
+                </div>
+            </div>
+            <!-- Bottom fade -->
+            <div data-id="44" class="absolute bottom-0 left-0 right-0 h-24 bg-gradient-to-t from-white to-transparent"></div>
+        </section>
+
+        <!-- ======================== ABOUT ME STORY ======================== -->
+        <section data-id="45" id="about" class="py-20 md:py-28 bg-white">
+            <div data-id="46" class="max-w-6xl mx-auto px-5 md:px-8">
+                <div data-id="47" class="reveal flex flex-col md:flex-row items-center gap-12 md:gap-16">
+                    <!-- About Image -->
+                    <div data-id="48" id="avatar-block-e6pz">
+                        <img data-id="49" src="https://copilot.microsoft.com/th/id/BCO.0174f214-ef4c-4f8d-b56c-0fa2e979d087.png" alt="Solutions by P Maria – Office and digital products" class="about-image" />
+                    </div>
+                    <!-- Story Text -->
+                    <div data-id="50" id="story-text-f7qa" class="relative pl-0 md:pl-8">
+                        <div data-id="51" class="hidden md:block gold-divider-left"></div>
+                        <h2 data-id="52" class="font-display text-2xl md:text-3xl lg:text-4xl font-bold text-navy mb-6">
+                            The Story Behind Solutions&nbsp;by&nbsp;P&nbsp;Maria
+                        </h2>
+                        <div data-id="53" class="space-y-5 text-gray-700 leading-relaxed text-base md:text-[1.05rem]">
+                            <p data-id="54">Solutions by P Maria was built from real experience — not a business school textbook. As a certified notary, administrative professional, and document preparation specialist based in Spencer, Oklahoma, I've spent years helping individuals, businesses, and legal professionals navigate the paperwork that powers their world.</p>
+                            <p data-id="55">I know firsthand how overwhelming it can be to show up professionally when you're building something from the ground up. That's why I created a digital product shop filled with done-for-you templates, forms, and toolkits — designed specifically for notaries, virtual assistants, and service-based entrepreneurs who need to look polished fast.</p>
+                            <p data-id="56">Every product I sell, I've personally used or needed. That's my promise to you: <strong data-id="57" class="text-navy">no fluff, no guesswork — just practical, professional tools that work in the real world.</strong></p>
+                        </div>
+                        <!-- Mobile gold accent bar -->
+                        <div data-id="58" class="md:hidden w-16 h-1 bg-gold rounded mt-6"></div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ======================== SERVICES SECTION ======================== -->
+        <section data-id="59" id="services" class="py-20 md:py-28 bg-gray-light">
+            <div data-id="60" class="max-w-6xl mx-auto px-5 md:px-8">
+                <div data-id="61" class="reveal text-center mb-14">
+                    <h2 data-id="62" id="services-heading-g8rb" class="font-display text-2xl md:text-3xl lg:text-4xl font-bold text-navy mb-4">What I Do</h2>
+                    <div data-id="63" class="gold-divider"></div>
+                </div>
+                <div data-id="64" class="grid grid-cols-1 md:grid-cols-3 gap-6 md:gap-8">
+                    <!-- Card 1 -->
+                    <div data-id="65" id="service-card-1-h9sc" class="reveal card-hover bg-white rounded-xl p-8 shadow-sm border-t-4 border-gold">
+                        <div data-id="66" class="text-4xl mb-5">📋</div>
+                        <h3 data-id="67" class="font-display text-xl font-semibold text-navy mb-3">Administrative Support</h3>
+                        <p data-id="68" class="text-gray-600 leading-relaxed text-sm">From organizing operations to managing documents and correspondence — I bring order to the chaos of running a business.</p>
+                    </div>
+                    <!-- Card 2 -->
+                    <div data-id="69" id="service-card-2-j1td" class="reveal card-hover bg-white rounded-xl p-8 shadow-sm border-t-4 border-gold" style="transition-delay: 0.1s;">
+                        <div data-id="70" class="text-4xl mb-5">🖊️</div>
+                        <h3 data-id="71" class="font-display text-xl font-semibold text-navy mb-3">Notary & Signing Services</h3>
+                        <p data-id="72" class="text-gray-600 leading-relaxed text-sm">Certified notary serving Oklahoma with professional, accurate, and reliable document notarization and loan signing agent services.</p>
+                    </div>
+                    <!-- Card 3 -->
+                    <div data-id="73" id="service-card-3-k2ue" class="reveal card-hover bg-white rounded-xl p-8 shadow-sm border-t-4 border-gold" style="transition-delay: 0.2s;">
+                        <div data-id="74" class="text-4xl mb-5">📁</div>
+                        <h3 data-id="75" class="font-display text-xl font-semibold text-navy mb-3">Document Preparation</h3>
+                        <p data-id="76" class="text-gray-600 leading-relaxed text-sm">Helping individuals and businesses prepare accurate, complete documents — from affidavits to estate organizers and more.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ======================== DIGITAL SHOP SPOTLIGHT ======================== -->
+        <section data-id="77" id="shop" class="py-20 md:py-28 bg-gray-light" style="background: #F5F6FA;">
+            <div data-id="78" class="max-w-6xl mx-auto px-5 md:px-8">
+                <div data-id="79" class="reveal text-center mb-5">
+                    <h2 data-id="80" id="shop-heading-l3vf" class="font-display text-2xl md:text-3xl lg:text-4xl font-bold text-navy mb-4">Shop My Digital Products</h2>
+                    <div data-id="81" class="gold-divider mb-5"></div>
+                    <p data-id="82" class="text-gray-600 text-base md:text-lg max-w-xl mx-auto mb-12">Done-for-you templates built by a real notary, for real professionals.</p>
+                </div>
+                <div data-id="83" class="grid grid-cols-1 sm:grid-cols-2 gap-6 md:gap-8 mb-12">
+                    <!-- Product 1 -->
+                    <div data-id="84" id="product-1-m4wg" class="reveal card-hover relative bg-white rounded-xl p-7 shadow-sm">
+                        <span data-id="85" class="product-tag">⭐ Bestseller</span>
+                        <h3 data-id="86" class="font-display text-lg font-semibold text-navy mb-2 pr-24">Notary Business Starter Bundle</h3>
+                        <p data-id="87" class="text-gray-600 text-sm leading-relaxed mb-4">Everything a new notary needs to launch professionally.</p>
+                        <a data-id="88" href="#" class="text-gold font-semibold text-sm inline-flex items-center gap-1 hover:text-gold-dark transition-colors" style="text-decoration:none;">View Product <span data-id="89" class="ml-1">→</span></a>
+                    </div>
+                    <!-- Product 2 -->
+                    <div data-id="90" id="product-2-n5xh" class="reveal card-hover relative bg-white rounded-xl p-7 shadow-sm" style="transition-delay: 0.1s;">
+                        <span data-id="91" class="product-tag">🔥 Popular</span>
+                        <h3 data-id="92" class="font-display text-lg font-semibold text-navy mb-2 pr-24">Client Intake Form Template</h3>
+                        <p data-id="93" class="text-gray-600 text-sm leading-relaxed mb-4">Capture client info like a pro from day one.</p>
+                        <a data-id="94" href="#" class="text-gold font-semibold text-sm inline-flex items-center gap-1 hover:text-gold-dark transition-colors" style="text-decoration:none;">View Product <span data-id="95" class="ml-1">→</span></a>
+                    </div>
+                    <!-- Product 3 -->
+                    <div data-id="96" id="product-3-o6yi" class="reveal card-hover relative bg-white rounded-xl p-7 shadow-sm" style="transition-delay: 0.15s;">
+                        <span data-id="97" class="product-tag">✨ New</span>
+                        <h3 data-id="98" class="font-display text-lg font-semibold text-navy mb-2 pr-24">Virtual Assistant Onboarding Packet</h3>
+                        <p data-id="99" class="text-gray-600 text-sm leading-relaxed mb-4">Onboard new clients smoothly with a polished first impression.</p>
+                        <a data-id="100" href="#" class="text-gold font-semibold text-sm inline-flex items-center gap-1 hover:text-gold-dark transition-colors" style="text-decoration:none;">View Product <span data-id="101" class="ml-1">→</span></a>
+                    </div>
+                    <!-- Product 4 -->
+                    <div data-id="102" id="product-4-p7zj" class="reveal card-hover relative bg-white rounded-xl p-7 shadow-sm" style="transition-delay: 0.2s;">
+                        <span data-id="103" class="product-tag">📋 Essential</span>
+                        <h3 data-id="104" class="font-display text-lg font-semibold text-navy mb-2 pr-24">Loan Signing Agent Checklist</h3>
+                        <p data-id="105" class="text-gray-600 text-sm leading-relaxed mb-4">Never miss a step at the signing table again.</p>
+                        <a data-id="106" href="#" class="text-gold font-semibold text-sm inline-flex items-center gap-1 hover:text-gold-dark transition-colors" style="text-decoration:none;">View Product <span data-id="107" class="ml-1">→</span></a>
+                    </div>
+                </div>
+                <div data-id="108" class="reveal text-center">
+                    <a data-id="109" href="#" id="browse-shop-q8ak" class="btn-gold inline-flex items-center gap-2">Browse Full Shop <span data-id="110">→</span></a>
+                </div>
+            </div>
+        </section>
+
+        <!-- ======================== WHY WORK WITH ME ======================== -->
+        <section data-id="111" id="values-r9bl" class="py-20 md:py-28" style="background: linear-gradient(170deg, #122850 0%, #1B3A6B 100%);">
+            <div data-id="112" class="max-w-6xl mx-auto px-5 md:px-8">
+                <div data-id="113" class="reveal text-center mb-14">
+                    <h2 data-id="114" class="font-display text-2xl md:text-3xl lg:text-4xl font-bold text-white mb-4">Why Solutions by P Maria?</h2>
+                    <div data-id="115" class="gold-divider"></div>
+                </div>
+                <div data-id="116" class="grid grid-cols-1 md:grid-cols-3 gap-8 md:gap-10">
+                    <!-- Value 1 -->
+                    <div data-id="117" id="value-1-s1cm" class="reveal text-center">
+                        <div data-id="118" class="text-4xl mb-4">✅</div>
+                        <h3 data-id="119" class="font-display text-xl font-semibold text-gold mb-3">Real Experience</h3>
+                        <p data-id="120" class="text-white/75 text-sm leading-relaxed">I'm not guessing what you need. I've lived it. Every product and service comes from hands-on professional experience.</p>
+                    </div>
+                    <!-- Value 2 -->
+                    <div data-id="121" id="value-2-t2dn" class="reveal text-center" style="transition-delay: 0.1s;">
+                        <div data-id="122" class="text-4xl mb-4">🎯</div>
+                        <h3 data-id="123" class="font-display text-xl font-semibold text-gold mb-3">Practical & Polished</h3>
+                        <p data-id="124" class="text-white/75 text-sm leading-relaxed">No filler. No fluff. Just clean, professional tools and services designed to make you look your best.</p>
+                    </div>
+                    <!-- Value 3 -->
+                    <div data-id="125" id="value-3-u3eo" class="reveal text-center" style="transition-delay: 0.2s;">
+                        <div data-id="126" class="text-4xl mb-4">💡</div>
+                        <h3 data-id="127" class="font-display text-xl font-semibold text-gold mb-3">Built for Busy Professionals</h3>
+                        <p data-id="128" class="text-white/75 text-sm leading-relaxed">Whether you're a notary, a VA, or a solopreneur — my products and services are built around your reality.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ======================== TESTIMONIALS ======================== -->
+        <section data-id="129" id="testimonials-v4fp" class="py-20 md:py-28 bg-white">
+            <div data-id="130" class="max-w-6xl mx-auto px-5 md:px-8">
+                <div data-id="131" class="reveal text-center mb-14">
+                    <h2 data-id="132" class="font-display text-2xl md:text-3xl lg:text-4xl font-bold text-navy mb-4">What Clients Are Saying</h2>
+                    <div data-id="133" class="gold-divider"></div>
+                </div>
+                <div data-id="134" class="grid grid-cols-1 md:grid-cols-3 gap-6 md:gap-8">
+                    <!-- Testimonial 1 -->
+                    <div data-id="135" id="testimonial-1-w5gq" class="reveal card-hover bg-gray-light rounded-xl p-7">
+                        <div data-id="136" class="stars text-lg mb-4">★★★★★</div>
+                        <p data-id="137" class="italic text-gray-700 text-sm leading-relaxed mb-5">"Princess's intake form template saved me hours of work. I launched my notary business looking completely professional from day one."</p>
+                        <div data-id="138" class="flex items-center gap-3">
+                            <div data-id="139" class="w-10 h-10 rounded-full bg-navy flex items-center justify-center text-gold font-display font-bold text-sm">N</div>
+                            <div data-id="140">
+                                <p data-id="141" class="font-semibold text-navy text-sm">New Notary</p>
+                                <p data-id="142" class="text-gray-500 text-xs">Oklahoma</p>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- Testimonial 2 -->
+                    <div data-id="143" id="testimonial-2-x6hr" class="reveal card-hover bg-gray-light rounded-xl p-7" style="transition-delay: 0.1s;">
+                        <div data-id="144" class="stars text-lg mb-4">★★★★★</div>
+                        <p data-id="145" class="italic text-gray-700 text-sm leading-relaxed mb-5">"The loan signing checklist is something every signing agent needs. Clear, complete, and beautifully designed."</p>
+                        <div data-id="146" class="flex items-center gap-3">
+                            <div data-id="147" class="w-10 h-10 rounded-full bg-navy flex items-center justify-center text-gold font-display font-bold text-sm">M</div>
+                            <div data-id="148">
+                                <p data-id="149" class="font-semibold text-navy text-sm">Mobile Notary</p>
+                                <p data-id="150" class="text-gray-500 text-xs">Texas</p>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- Testimonial 3 -->
+                    <div data-id="151" id="testimonial-3-y7is" class="reveal card-hover bg-gray-light rounded-xl p-7" style="transition-delay: 0.2s;">
+                        <div data-id="152" class="stars text-lg mb-4">★★★★★</div>
+                        <p data-id="153" class="italic text-gray-700 text-sm leading-relaxed mb-5">"I hired Solutions by P Maria for document prep and the experience was seamless. She's thorough, professional, and quick."</p>
+                        <div data-id="154" class="flex items-center gap-3">
+                            <div data-id="155" class="w-10 h-10 rounded-full bg-navy flex items-center justify-center text-gold font-display font-bold text-sm">S</div>
+                            <div data-id="156">
+                                <p data-id="157" class="font-semibold text-navy text-sm">Small Business Owner</p>
+                                <p data-id="158" class="text-gray-500 text-xs">Oklahoma</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ======================== CONTACT / CONNECT ======================== -->
+        <section data-id="159" id="contact" class="py-20 md:py-28" style="background: linear-gradient(170deg, #1B3A6B 0%, #122850 100%);">
+            <div data-id="160" class="max-w-5xl mx-auto px-5 md:px-8">
+                <div data-id="161" class="reveal text-center mb-14">
+                    <h2 data-id="162" class="font-display text-2xl md:text-3xl lg:text-4xl font-bold text-white mb-4">Let's Work Together</h2>
+                    <div data-id="163" class="gold-divider mb-5"></div>
+                    <p data-id="164" class="text-white/70 text-base md:text-lg max-w-xl mx-auto">Have a question, need a custom template, or ready to book a service? I'd love to hear from you.</p>
+                </div>
+                <div data-id="165" class="reveal grid grid-cols-1 md:grid-cols-3 gap-8 mb-12">
+                    <!-- Location -->
+                    <div data-id="166" id="contact-location-z8jt" class="text-center">
+                        <div data-id="167" class="w-14 h-14 rounded-full bg-gold/15 flex items-center justify-center mx-auto mb-4">
+                            <i data-id="168" data-lucide="map-pin" class="w-6 h-6 text-gold"></i>
+                        </div>
+                        <h4 data-id="169" class="text-white font-semibold text-sm mb-1">Location</h4>
+                        <p data-id="170" class="text-white/65 text-sm">Spencer, Oklahoma</p>
+                    </div>
+                    <!-- Email -->
+                    <div data-id="171" id="contact-email-a9ku" class="text-center">
+                        <div data-id="172" class="w-14 h-14 rounded-full bg-gold/15 flex items-center justify-center mx-auto mb-4">
+                            <i data-id="173" data-lucide="mail" class="w-6 h-6 text-gold"></i>
+                        </div>
+                        <h4 data-id="174" class="text-white font-semibold text-sm mb-1">Email</h4>
+                        <p data-id="175" class="text-white/65 text-sm">solutions@pbymaria.com</p>
+                    </div>
+                    <!-- Shop -->
+                    <div data-id="176" id="contact-shop-b1lv" class="text-center">
+                        <div data-id="177" class="w-14 h-14 rounded-full bg-gold/15 flex items-center justify-center mx-auto mb-4">
+                            <i data-id="178" data-lucide="globe" class="w-6 h-6 text-gold"></i>
+                        </div>
+                        <h4 data-id="179" class="text-white font-semibold text-sm mb-1">Shop</h4>
+                        <p data-id="180" class="text-white/65 text-sm">payhip.com/solutionsbymaria</p>
+                    </div>
+                </div>
+                <div data-id="181" class="reveal text-center mb-10">
+                    <a data-id="182" href="mailto:solutions@pbymaria.com" id="send-msg-btn-c2mw" class="btn-gold inline-flex items-center gap-2">
+                        <i data-id="183" data-lucide="send" class="w-4 h-4"></i>
+                        Send a Message
+                    </a>
+                </div>
+                <!-- Social Links -->
+                <div data-id="184" class="reveal flex flex-wrap items-center justify-center gap-4">
+                    <a data-id="185" href="#" class="social-btn"><i data-id="186" data-lucide="camera" class="w-4 h-4"></i> Instagram</a>
+                    <a data-id="187" href="#" class="social-btn"><i data-id="188" data-lucide="facebook" class="w-4 h-4"></i> Facebook</a>
+                    <a data-id="189" href="#" class="social-btn"><span data-id="190" class="text-base leading-none">P</span> Pinterest</a>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- ======================== FOOTER ======================== -->
+    <footer data-id="191" id="footer-d3nx" class="bg-navy-dark py-8" style="background: #0F2240; border-top: 2px solid var(--gold);">
+        <div data-id="192" class="max-w-6xl mx-auto px-5 md:px-8">
+            <div data-id="193" class="flex flex-col md:flex-row items-center justify-between gap-4 text-center md:text-left">
+                <div data-id="194" class="flex items-center gap-3">
+                    <img data-id="195" src="https://copilot.microsoft.com/th/id/BCO.350f7f9d-12db-4287-ba3d-8ee47e21d651.png" alt="Solutions by P Maria logo" class="footer-logo-img" />
+                    <p data-id="196" class="text-white/50 text-xs">© 2026 Solutions by P Maria. All Rights Reserved.</p>
+                </div>
+                <p data-id="197" class="text-gold/60 text-xs font-display italic">Empowering Professionals. One Document at a Time.</p>
+                <div data-id="198" class="flex items-center gap-6">
+                    <a data-id="199" href="#about" class="text-white/50 text-xs hover:text-gold transition-colors" style="text-decoration:none;">About</a>
+                    <a data-id="200" href="#shop" class="text-white/50 text-xs hover:text-gold transition-colors" style="text-decoration:none;">Shop</a>
+                    <a data-id="201" href="#contact" class="text-white/50 text-xs hover:text-gold transition-colors" style="text-decoration:none;">Contact</a>
+                </div>
+            </div>
+            <p data-id="202" class="text-center text-white/30 text-xs mt-5">Made by Copilot</p>
+        </div>
+    </footer>
+
+    <script>
+        // Icons — progressive enhancement
+        if (typeof lucide !== "undefined" && typeof lucide.createIcons === "function") {
+            lucide.createIcons();
+        }
+
+        // ---- Mobile Menu Toggle ----
+        const mobileMenuBtn = document.getElementById('mobile-menu-btn-j4kl');
+        const mobileMenu = document.getElementById('mobile-menu-p8mn');
+        const mobileMenuClose = document.getElementById('mobile-menu-close-v2qr');
+
+        if (mobileMenuBtn && mobileMenu && mobileMenuClose) {
+            mobileMenuBtn.addEventListener('click', function () {
+                mobileMenu.classList.remove('hidden');
+                document.body.style.overflow = 'hidden';
+            });
+
+            mobileMenuClose.addEventListener('click', function () {
+                mobileMenu.classList.add('hidden');
+                document.body.style.overflow = '';
+            });
+
+            // Close menu when a nav link is tapped
+            mobileMenu.querySelectorAll('.mobile-nav-link').forEach(function (link) {
+                link.addEventListener('click', function () {
+                    mobileMenu.classList.add('hidden');
+                    document.body.style.overflow = '';
+                });
+            });
+        }
+
+        // ---- Navbar scroll shadow ----
+        const navbar = document.getElementById('navbar-r7kx');
+        if (navbar) {
+            window.addEventListener('scroll', function () {
+                if (window.scrollY > 20) {
+                    navbar.classList.add('scrolled');
+                } else {
+                    navbar.classList.remove('scrolled');
+                }
+            }, { passive: true });
+        }
+
+        // ---- Intersection Observer — Reveal on Scroll ----
+        const revealElements = document.querySelectorAll('.reveal');
+
+        if ('IntersectionObserver' in window) {
+            const revealObserver = new IntersectionObserver(function (entries) {
+                entries.forEach(function (entry) {
+                    if (entry.isIntersecting) {
+                        entry.target.classList.add('visible');
+                        revealObserver.unobserve(entry.target);
+                    }
+                });
+            }, {
+                threshold: 0.12,
+                rootMargin: '0px 0px -40px 0px'
+            });
+
+            revealElements.forEach(function (el) {
+                revealObserver.observe(el);
+            });
+        } else {
+            // Fallback: show everything immediately
+            revealElements.forEach(function (el) {
+                el.classList.add('visible');
+            });
+        }
+
+        // ---- Active nav link highlight on scroll ----
+        const sections = document.querySelectorAll('section[id]');
+        const navLinks = document.querySelectorAll('#desktop-nav-qw9z .nav-link');
+
+        if (sections.length && navLinks.length) {
+            window.addEventListener('scroll', function () {
+                let current = '';
+                sections.forEach(function (section) {
+                    const sectionTop = section.offsetTop - 120;
+                    if (window.scrollY >= sectionTop) {
+                        current = section.getAttribute('id');
+                    }
+                });
+
+                navLinks.forEach(function (link) {
+                    link.style.color = '';
+                    if (link.getAttribute('href') === '#' + current) {
+                        link.style.color = 'var(--gold)';
+                    }
+                });
+            }, { passive: true });
+        }
+    </script>
+</body>
+</html>

@@ -1,0 +1,712 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Solutions by P Maria – Digital Products FAQ</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://unpkg.com/lucide@latest" defer></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Playfair+Display:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500&display=swap" rel="stylesheet" />
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        navy: '#1B3A6B',
+                        'navy-dark': '#142D54',
+                        'navy-light': '#234B87',
+                        gold: '#C9A84C',
+                        'gold-dark': '#B08F3A',
+                        'gold-light': '#D4BA6A',
+                        'light-gray': '#F5F6FA',
+                        'body-text': '#374151',
+                        'card-shadow': 'rgba(27, 58, 107, 0.08)',
+                    },
+                    fontFamily: {
+                        display: ['"Playfair Display"', 'serif'],
+                        body: ['"Inter"', 'sans-serif'],
+                    },
+                },
+            },
+        };
+    </script>
+    <style>
+        :root {
+            --navy: #1B3A6B;
+            --navy-dark: #142D54;
+            --gold: #C9A84C;
+            --gold-light: #D4BA6A;
+            --gold-dark: #B08F3A;
+            --white: #FFFFFF;
+            --light-gray: #F5F6FA;
+            --body-text: #374151;
+        }
+
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        html { scroll-behavior: smooth; scroll-padding-top: 80px; }
+        body { font-family: 'Inter', sans-serif; color: var(--body-text); background: var(--white); }
+
+        /* Fade-in animation */
+        .fade-section {
+            opacity: 0;
+            transform: translateY(32px);
+            transition: opacity 0.7s cubic-bezier(0.22, 1, 0.36, 1), transform 0.7s cubic-bezier(0.22, 1, 0.36, 1);
+        }
+        .fade-section.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* Floating gold dots */
+        @keyframes floatDot {
+            0%, 100% { transform: translateY(0) scale(1); opacity: 0.35; }
+            50% { transform: translateY(-18px) scale(1.15); opacity: 0.7; }
+        }
+        .dot {
+            position: absolute;
+            border-radius: 50%;
+            background: var(--gold);
+            pointer-events: none;
+        }
+        .dot-1 { width: 6px; height: 6px; top: 18%; left: 8%; animation: floatDot 4.5s ease-in-out infinite; }
+        .dot-2 { width: 4px; height: 4px; top: 60%; left: 15%; animation: floatDot 5.2s ease-in-out 0.8s infinite; }
+        .dot-3 { width: 8px; height: 8px; top: 30%; left: 85%; animation: floatDot 6s ease-in-out 1.2s infinite; }
+        .dot-4 { width: 5px; height: 5px; top: 70%; left: 90%; animation: floatDot 4s ease-in-out 0.4s infinite; }
+        .dot-5 { width: 7px; height: 7px; top: 12%; left: 50%; animation: floatDot 5.8s ease-in-out 1.8s infinite; }
+        .dot-6 { width: 3px; height: 3px; top: 80%; left: 40%; animation: floatDot 4.8s ease-in-out 2.5s infinite; }
+        .dot-7 { width: 5px; height: 5px; top: 45%; left: 25%; animation: floatDot 5.5s ease-in-out 1s infinite; }
+        .dot-8 { width: 6px; height: 6px; top: 55%; left: 70%; animation: floatDot 6.2s ease-in-out 0.3s infinite; }
+        .dot-9 { width: 4px; height: 4px; top: 25%; left: 65%; animation: floatDot 4.3s ease-in-out 2s infinite; }
+        .dot-10 { width: 7px; height: 7px; top: 85%; left: 60%; animation: floatDot 5s ease-in-out 1.5s infinite; }
+
+        /* Accordion */
+        .faq-card {
+            border-left: 4px solid transparent;
+            transition: border-color 0.3s ease, transform 0.25s ease, box-shadow 0.25s ease;
+        }
+        .faq-card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 24px rgba(27, 58, 107, 0.1);
+        }
+        .faq-card.active {
+            border-left-color: var(--gold);
+        }
+        .faq-answer {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.45s cubic-bezier(0.22, 1, 0.36, 1), padding 0.35s ease;
+            padding: 0 24px;
+        }
+        .faq-card.active .faq-answer {
+            max-height: 500px;
+            padding: 0 24px 20px 24px;
+        }
+        .faq-icon {
+            transition: transform 0.35s cubic-bezier(0.22, 1, 0.36, 1);
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 28px;
+            height: 28px;
+            min-width: 28px;
+            border-radius: 50%;
+            background: rgba(201, 168, 76, 0.12);
+            color: var(--gold);
+            font-size: 18px;
+            font-weight: 600;
+            line-height: 1;
+        }
+        .faq-card.active .faq-icon {
+            transform: rotate(45deg);
+            background: var(--gold);
+            color: var(--white);
+        }
+
+        /* Tab filtering */
+        .faq-item-wrapper {
+            transition: opacity 0.35s ease, max-height 0.4s ease;
+            opacity: 1;
+            max-height: 800px;
+            overflow: hidden;
+        }
+        .faq-item-wrapper.hidden-item {
+            opacity: 0;
+            max-height: 0;
+            margin: 0 !important;
+            padding: 0 !important;
+        }
+        .faq-topic-section {
+            transition: opacity 0.35s ease, max-height 0.5s ease;
+            overflow: hidden;
+        }
+        .faq-topic-section.hidden-section {
+            opacity: 0;
+            max-height: 0 !important;
+            margin: 0 !important;
+            padding: 0 !important;
+        }
+
+        /* Shimmer animation for CTA */
+        @keyframes shimmer {
+            0% { background-position: -200% 0; }
+            100% { background-position: 200% 0; }
+        }
+        .shimmer-bg {
+            background: linear-gradient(110deg, var(--navy) 0%, var(--navy) 40%, rgba(201,168,76,0.08) 50%, var(--navy) 60%, var(--navy) 100%);
+            background-size: 200% 100%;
+            animation: shimmer 6s ease-in-out infinite;
+        }
+
+        /* Topic tabs scrollable on mobile */
+        .tabs-container {
+            -webkit-overflow-scrolling: touch;
+            scrollbar-width: none;
+        }
+        .tabs-container::-webkit-scrollbar { display: none; }
+
+        /* Gold divider */
+        .gold-divider {
+            width: 80px;
+            height: 3px;
+            background: linear-gradient(90deg, transparent, var(--gold), transparent);
+            margin: 0 auto;
+        }
+
+        /* Nav link hover */
+        .nav-link {
+            position: relative;
+            transition: color 0.2s;
+        }
+        .nav-link::after {
+            content: '';
+            position: absolute;
+            bottom: -4px;
+            left: 0;
+            width: 0;
+            height: 2px;
+            background: var(--gold);
+            transition: width 0.3s ease;
+        }
+        .nav-link:hover::after { width: 100%; }
+    </style>
+</head>
+<body data-id="0" class="bg-white">
+    <app-icon data-id="1" hidden data-icon="file-text" data-palette="Blue"></app-icon>
+
+    <!-- STICKY NAVIGATION -->
+    <header data-id="2" id="navbar-h7k2" class="fixed top-0 left-0 w-full z-50 bg-navy border-b-2 border-gold" style="border-bottom-width: 2px;">
+        <div data-id="3" class="max-w-7xl mx-auto flex items-center justify-between px-4 md:px-8 py-3">
+            <a data-id="4" href="#" class="flex items-center gap-3 shrink-0">
+                <img data-id="5" src="https://copilot.microsoft.com/th/id/BCO.350f7f9d-12db-4287-ba3d-8ee47e21d651.png" alt="Solutions by P Maria Logo" style="height:52px;width:auto;" class="rounded" />
+            </a>
+            <nav data-id="6" id="desktop-nav-p9m1" class="hidden md:flex items-center gap-8">
+                <a data-id="7" href="#about" class="nav-link text-gold font-medium text-sm tracking-wide hover:text-gold-light">About</a>
+                <a data-id="8" href="#services" class="nav-link text-gold font-medium text-sm tracking-wide hover:text-gold-light">Services</a>
+                <a data-id="9" href="#shop" class="nav-link text-gold font-medium text-sm tracking-wide hover:text-gold-light">Shop</a>
+                <a data-id="10" href="#faq-section" class="nav-link text-gold font-medium text-sm tracking-wide hover:text-gold-light">FAQ</a>
+                <a data-id="11" href="#contact" class="nav-link text-gold font-medium text-sm tracking-wide hover:text-gold-light">Contact</a>
+            </nav>
+            <button data-id="12" id="mobile-menu-btn-x3v5" class="md:hidden p-2 text-gold" aria-label="Open menu">
+                <i data-id="13" data-lucide="menu" class="w-6 h-6"></i>
+            </button>
+        </div>
+    </header>
+
+    <!-- MOBILE MENU -->
+    <nav data-id="14" id="mobile-menu-r2k8" class="hidden fixed inset-0 bg-navy z-[60] flex flex-col items-center justify-center gap-8">
+        <button data-id="15" id="mobile-menu-close-t4n9" class="absolute top-5 right-5 p-2 text-gold" aria-label="Close menu">
+            <i data-id="16" data-lucide="x" class="w-7 h-7"></i>
+        </button>
+        <a data-id="17" href="#about" class="mobile-nav-link text-gold text-2xl font-display font-semibold tracking-wide">About</a>
+        <a data-id="18" href="#services" class="mobile-nav-link text-gold text-2xl font-display font-semibold tracking-wide">Services</a>
+        <a data-id="19" href="#shop" class="mobile-nav-link text-gold text-2xl font-display font-semibold tracking-wide">Shop</a>
+        <a data-id="20" href="#faq-section" class="mobile-nav-link text-gold text-2xl font-display font-semibold tracking-wide">FAQ</a>
+        <a data-id="21" href="#contact" class="mobile-nav-link text-gold text-2xl font-display font-semibold tracking-wide">Contact</a>
+    </nav>
+
+    <main data-id="22" class="pt-[76px]">
+
+        <!-- HERO SECTION -->
+        <section data-id="23" id="hero-s5f3" class="relative bg-navy py-20 md:py-28 overflow-hidden">
+            <div data-id="24" class="dot dot-1"></div><div data-id="25" class="dot dot-2"></div><div data-id="26" class="dot dot-3"></div>
+            <div data-id="27" class="dot dot-4"></div><div data-id="28" class="dot dot-5"></div><div data-id="29" class="dot dot-6"></div>
+            <div data-id="30" class="dot dot-7"></div><div data-id="31" class="dot dot-8"></div><div data-id="32" class="dot dot-9"></div>
+            <div data-id="33" class="dot dot-10"></div>
+            <div data-id="34" class="relative z-10 max-w-3xl mx-auto text-center px-5">
+                <p data-id="35" id="hero-label-q8w2" class="text-gold text-xs md:text-sm font-semibold tracking-[0.25em] uppercase mb-5">Digital Products Help Center</p>
+                <h1 data-id="36" id="hero-title-m4k7" class="font-display text-white text-3xl md:text-5xl lg:text-[3.4rem] font-bold leading-tight mb-5">Digital Products —<br data-id="37" class="hidden md:block" /> Everything You Need to Know</h1>
+                <p data-id="38" id="hero-sub-v2j6" class="text-white/80 text-base md:text-lg leading-relaxed max-w-2xl mx-auto mb-7">Find answers about downloading, customizing, refunds, and licensing our professional templates and toolkits.</p>
+                <div data-id="39" class="gold-divider mb-8"></div>
+                <div data-id="40" class="flex flex-wrap justify-center gap-3">
+                    <span data-id="41" class="inline-flex items-center gap-2 bg-gold/15 text-gold text-sm font-medium px-4 py-2 rounded-full border border-gold/30">📥 Downloads</span>
+                    <span data-id="42" class="inline-flex items-center gap-2 bg-gold/15 text-gold text-sm font-medium px-4 py-2 rounded-full border border-gold/30">✏️ Customization</span>
+                    <span data-id="43" class="inline-flex items-center gap-2 bg-gold/15 text-gold text-sm font-medium px-4 py-2 rounded-full border border-gold/30">💳 Refunds</span>
+                    <span data-id="44" class="inline-flex items-center gap-2 bg-gold/15 text-gold text-sm font-medium px-4 py-2 rounded-full border border-gold/30">📄 Licensing</span>
+                </div>
+            </div>
+        </section>
+
+        <!-- TOPIC TABS -->
+        <section data-id="45" id="tabs-section-c9d4" class="bg-white border-b border-gray-100 sticky top-[76px] z-40">
+            <div data-id="46" class="tabs-container max-w-4xl mx-auto px-4 py-4 flex gap-3 overflow-x-auto">
+                <button data-id="47" class="tab-btn whitespace-nowrap px-5 py-2.5 rounded-full text-sm font-semibold transition-all duration-200 bg-gold text-navy" data-filter="all">All Topics</button>
+                <button data-id="48" class="tab-btn whitespace-nowrap px-5 py-2.5 rounded-full text-sm font-medium transition-all duration-200 bg-white text-navy border border-navy/20" data-filter="download">📥 How to Download</button>
+                <button data-id="49" class="tab-btn whitespace-nowrap px-5 py-2.5 rounded-full text-sm font-medium transition-all duration-200 bg-white text-navy border border-navy/20" data-filter="customize">✏️ Customization</button>
+                <button data-id="50" class="tab-btn whitespace-nowrap px-5 py-2.5 rounded-full text-sm font-medium transition-all duration-200 bg-white text-navy border border-navy/20" data-filter="refund">💳 Refunds &amp; Policies</button>
+                <button data-id="51" class="tab-btn whitespace-nowrap px-5 py-2.5 rounded-full text-sm font-medium transition-all duration-200 bg-white text-navy border border-navy/20" data-filter="license">📄 Licensing &amp; Usage</button>
+            </div>
+        </section>
+
+        <!-- INTRO BANNER -->
+        <section data-id="52" id="intro-banner-a3h8" class="bg-light-gray py-14 md:py-16 fade-section">
+            <div data-id="53" class="max-w-5xl mx-auto px-5 grid grid-cols-1 md:grid-cols-3 gap-6">
+                <div data-id="54" id="card-instant-b2n1" class="bg-white rounded-xl p-7 border-t-4 border-gold shadow-sm text-center">
+                    <div data-id="55" class="text-3xl mb-3">🚀</div>
+                    <h3 data-id="56" class="font-display text-navy font-bold text-lg mb-2">Instant Delivery</h3>
+                    <p data-id="57" class="text-body-text text-sm leading-relaxed">Your download link is sent immediately after purchase — no waiting.</p>
+                </div>
+                <div data-id="58" id="card-editable-w7p3" class="bg-white rounded-xl p-7 border-t-4 border-gold shadow-sm text-center">
+                    <div data-id="59" class="text-3xl mb-3">✏️</div>
+                    <h3 data-id="60" class="font-display text-navy font-bold text-lg mb-2">Fully Editable</h3>
+                    <p data-id="61" class="text-body-text text-sm leading-relaxed">Most templates come in Word, Canva, or Excel for easy customization.</p>
+                </div>
+                <div data-id="62" id="card-secure-k5q9" class="bg-white rounded-xl p-7 border-t-4 border-gold shadow-sm text-center">
+                    <div data-id="63" class="text-3xl mb-3">🔒</div>
+                    <h3 data-id="64" class="font-display text-navy font-bold text-lg mb-2">Secure &amp; Licensed</h3>
+                    <p data-id="65" class="text-body-text text-sm leading-relaxed">All products are for personal/single-business use. No resale permitted.</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- MAIN FAQ SECTION -->
+        <section data-id="66" id="faq-section" class="bg-white py-16 md:py-20">
+            <div data-id="67" class="max-w-[860px] mx-auto px-5">
+
+                <!-- TOPIC 01 — DOWNLOAD -->
+                <div data-id="68" class="faq-topic-section mb-14 fade-section" data-topic="download" id="download">
+                    <div data-id="69" class="flex items-center gap-4 mb-3">
+                        <span data-id="70" class="inline-flex items-center justify-center w-10 h-10 rounded-full bg-gold text-navy font-bold text-sm font-body">01</span>
+                        <h2 data-id="71" class="font-display text-navy text-2xl md:text-3xl font-bold">📥 How to Download</h2>
+                    </div>
+                    <div data-id="72" class="w-16 h-[3px] bg-gold rounded-full mb-4 ml-14"></div>
+                    <p data-id="73" class="text-body-text text-sm md:text-base leading-relaxed mb-8 ml-14">Our digital products are delivered instantly — no shipping, no waiting. Here's everything you need to know about accessing your purchase quickly and easily.</p>
+
+                    <div data-id="74" class="space-y-4">
+                        <div data-id="75" class="faq-card faq-item-wrapper bg-white rounded-xl shadow-sm border border-gray-100 cursor-pointer" data-category="download">
+                            <div data-id="76" class="faq-question flex items-center justify-between gap-4 px-6 py-5">
+                                <span data-id="77" class="text-navy font-semibold text-sm md:text-base leading-snug">How do I receive my digital product after purchase?</span>
+                                <span data-id="78" class="faq-icon">+</span>
+                            </div>
+                            <div data-id="79" class="faq-answer text-body-text text-sm leading-relaxed">
+                                After your purchase is confirmed on Payhip or Gumroad, you will receive an automatic email containing your secure download link. Simply click the link in the email, and your file(s) will begin downloading immediately. Check your spam or junk folder if you don't see the email within a few minutes of purchase.
+                            </div>
+                        </div>
+                        <div data-id="80" class="faq-card faq-item-wrapper bg-white rounded-xl shadow-sm border border-gray-100 cursor-pointer" data-category="download">
+                            <div data-id="81" class="faq-question flex items-center justify-between gap-4 px-6 py-5">
+                                <span data-id="82" class="text-navy font-semibold text-sm md:text-base leading-snug">How long do I have to download my purchase?</span>
+                                <span data-id="83" class="faq-icon">+</span>
+                            </div>
+                            <div data-id="84" class="faq-answer text-body-text text-sm leading-relaxed">
+                                Your download link is available for an extended period after purchase — typically 30 days or more depending on the platform. We recommend downloading your files immediately after purchase and saving them to a secure location on your computer or cloud storage (Google Drive, Dropbox, etc.) so you always have access.
+                            </div>
+                        </div>
+                        <div data-id="85" class="faq-card faq-item-wrapper bg-white rounded-xl shadow-sm border border-gray-100 cursor-pointer" data-category="download">
+                            <div data-id="86" class="faq-question flex items-center justify-between gap-4 px-6 py-5">
+                                <span data-id="87" class="text-navy font-semibold text-sm md:text-base leading-snug">What file formats will I receive?</span>
+                                <span data-id="88" class="faq-icon">+</span>
+                            </div>
+                            <div data-id="89" class="faq-answer text-body-text text-sm leading-relaxed">
+                                The formats included vary by product and are clearly listed on each product listing page. Common formats include: PDF (ready-to-print, non-editable), Microsoft Word (.docx, fully editable), Microsoft Excel (.xlsx, for trackers and forms), and Canva (editable via free Canva account using an included template link). Many products include multiple formats in one download.
+                            </div>
+                        </div>
+                        <div data-id="90" class="faq-card faq-item-wrapper bg-white rounded-xl shadow-sm border border-gray-100 cursor-pointer" data-category="download">
+                            <div data-id="91" class="faq-question flex items-center justify-between gap-4 px-6 py-5">
+                                <span data-id="92" class="text-navy font-semibold text-sm md:text-base leading-snug">I didn't receive my download email — what should I do?</span>
+                                <span data-id="93" class="faq-icon">+</span>
+                            </div>
+                            <div data-id="94" class="faq-answer text-body-text text-sm leading-relaxed">
+                                First, check your spam, junk, or promotions folder — automated emails sometimes land there. If you still don't see it, log into your Payhip or Gumroad account directly and navigate to your purchase history — your download will be available there. If you're still having trouble, contact us at <strong data-id="95" class="text-navy">solutions@pbymaria.com</strong> with your order details and we'll resolve it promptly.
+                            </div>
+                        </div>
+                        <div data-id="96" class="faq-card faq-item-wrapper bg-white rounded-xl shadow-sm border border-gray-100 cursor-pointer" data-category="download">
+                            <div data-id="97" class="faq-question flex items-center justify-between gap-4 px-6 py-5">
+                                <span data-id="98" class="text-navy font-semibold text-sm md:text-base leading-snug">Can I download my purchase on my phone or tablet?</span>
+                                <span data-id="99" class="faq-icon">+</span>
+                            </div>
+                            <div data-id="100" class="faq-answer text-body-text text-sm leading-relaxed">
+                                Yes! You can download and open most of our products on a smartphone or tablet. PDF files open in any PDF viewer app. Word files open in Microsoft Word or Google Docs mobile apps. Canva templates can be accessed and edited directly through the free Canva mobile app. For the best editing experience, we recommend a desktop or laptop computer.
+                            </div>
+                        </div>
+                        <div data-id="101" class="faq-card faq-item-wrapper bg-white rounded-xl shadow-sm border border-gray-100 cursor-pointer" data-category="download">
+                            <div data-id="102" class="faq-question flex items-center justify-between gap-4 px-6 py-5">
+                                <span data-id="103" class="text-navy font-semibold text-sm md:text-base leading-snug">What if my download link has expired or is not working?</span>
+                                <span data-id="104" class="faq-icon">+</span>
+                            </div>
+                            <div data-id="105" class="faq-answer text-body-text text-sm leading-relaxed">
+                                If your download link has expired or isn't working, simply contact us at <strong data-id="106" class="text-navy">solutions@pbymaria.com</strong> with your name, email address used for purchase, and order confirmation number. We will verify your purchase and send you a fresh download link as quickly as possible — usually within 1 business day.
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- TOPIC 02 — CUSTOMIZATION -->
+                <div data-id="107" class="faq-topic-section mb-14 fade-section" data-topic="customize" id="customize">
+                    <div data-id="108" class="flex items-center gap-4 mb-3">
+                        <span data-id="109" class="inline-flex items-center justify-center w-10 h-10 rounded-full bg-gold text-navy font-bold text-sm font-body">02</span>
+                        <h2 data-id="110" class="font-display text-navy text-2xl md:text-3xl font-bold">✏️ Customization</h2>
+                    </div>
+                    <div data-id="111" class="w-16 h-[3px] bg-gold rounded-full mb-4 ml-14"></div>
+                    <p data-id="112" class="text-body-text text-sm md:text-base leading-relaxed mb-8 ml-14">Our templates are designed to be personalized — put your name, logo, and brand on them in minutes. Here's how to make every product uniquely yours.</p>
+
+                    <div data-id="113" class="space-y-4">
+                        <div data-id="114" class="faq-card faq-item-wrapper bg-white rounded-xl shadow-sm border border-gray-100 cursor-pointer" data-category="customize">
+                            <div data-id="115" class="faq-question flex items-center justify-between gap-4 px-6 py-5">
+                                <span data-id="116" class="text-navy font-semibold text-sm md:text-base leading-snug">Can I edit and customize the templates after I download them?</span>
+                                <span data-id="117" class="faq-icon">+</span>
+                            </div>
+                            <div data-id="118" class="faq-answer text-body-text text-sm leading-relaxed">
+                                Yes! Most of our products are fully editable so you can personalize them with your business name, logo, contact information, colors, and more. Editable formats include Microsoft Word (.docx), Microsoft Excel (.xlsx), and Canva. PDF-only products are designed as ready-to-use, print-and-go documents and cannot be edited. Each listing clearly states which formats are included.
+                            </div>
+                        </div>
+                        <div data-id="119" class="faq-card faq-item-wrapper bg-white rounded-xl shadow-sm border border-gray-100 cursor-pointer" data-category="customize">
+                            <div data-id="120" class="faq-question flex items-center justify-between gap-4 px-6 py-5">
+                                <span data-id="121" class="text-navy font-semibold text-sm md:text-base leading-snug">Do I need any special software to customize the templates?</span>
+                                <span data-id="122" class="faq-icon">+</span>
+                            </div>
+                            <div data-id="123" class="faq-answer text-body-text text-sm leading-relaxed">
+                                For Word templates: Microsoft Word (PC or Mac) or Google Docs (free). For Excel templates: Microsoft Excel or Google Sheets (free). For Canva templates: a free Canva account at canva.com — no paid subscription required for our templates. For PDF files: no editing is needed — simply print or fill in by hand or using PDF form fields if included.
+                            </div>
+                        </div>
+                        <div data-id="124" class="faq-card faq-item-wrapper bg-white rounded-xl shadow-sm border border-gray-100 cursor-pointer" data-category="customize">
+                            <div data-id="125" class="faq-question flex items-center justify-between gap-4 px-6 py-5">
+                                <span data-id="126" class="text-navy font-semibold text-sm md:text-base leading-snug">How do I access and edit a Canva template?</span>
+                                <span data-id="127" class="faq-icon">+</span>
+                            </div>
+                            <div data-id="128" class="faq-answer text-body-text text-sm leading-relaxed">
+                                After downloading your product, you will find a link inside the file or in your confirmation email that says "Access Canva Template" or similar. Click that link — it will open the template directly in Canva (you'll need a free account). Click "Use Template" to create your own editable copy. From there, simply click any text, image, or element to customize it. Your changes are saved automatically to your Canva account.
+                            </div>
+                        </div>
+                        <div data-id="129" class="faq-card faq-item-wrapper bg-white rounded-xl shadow-sm border border-gray-100 cursor-pointer" data-category="customize">
+                            <div data-id="130" class="faq-question flex items-center justify-between gap-4 px-6 py-5">
+                                <span data-id="131" class="text-navy font-semibold text-sm md:text-base leading-snug">Can I add my own logo and brand colors to the templates?</span>
+                                <span data-id="132" class="faq-icon">+</span>
+                            </div>
+                            <div data-id="133" class="faq-answer text-body-text text-sm leading-relaxed">
+                                Absolutely! All editable templates are designed with customization in mind. In Word: replace placeholder text and insert your logo via Insert &gt; Pictures. In Canva: click any element to edit text, change colors to match your brand palette, and upload your logo directly to the design. We recommend customizing every template with your business name, logo, and contact information before sharing with clients.
+                            </div>
+                        </div>
+                        <div data-id="134" class="faq-card faq-item-wrapper bg-white rounded-xl shadow-sm border border-gray-100 cursor-pointer" data-category="customize">
+                            <div data-id="135" class="faq-question flex items-center justify-between gap-4 px-6 py-5">
+                                <span data-id="136" class="text-navy font-semibold text-sm md:text-base leading-snug">Can I translate the templates into another language?</span>
+                                <span data-id="137" class="faq-icon">+</span>
+                            </div>
+                            <div data-id="138" class="faq-answer text-body-text text-sm leading-relaxed">
+                                Our templates are created in English, but you are welcome to translate editable versions (Word or Canva) for your own personal or business use. Simply edit the text fields and replace the English content with your preferred language. Please note that translated versions are still subject to our standard licensing terms and may not be resold or redistributed.
+                            </div>
+                        </div>
+                        <div data-id="139" class="faq-card faq-item-wrapper bg-white rounded-xl shadow-sm border border-gray-100 cursor-pointer" data-category="customize">
+                            <div data-id="140" class="faq-question flex items-center justify-between gap-4 px-6 py-5">
+                                <span data-id="141" class="text-navy font-semibold text-sm md:text-base leading-snug">What if a template doesn't look right or has a formatting issue after I edit it?</span>
+                                <span data-id="142" class="faq-icon">+</span>
+                            </div>
+                            <div data-id="143" class="faq-answer text-body-text text-sm leading-relaxed">
+                                Formatting issues can occasionally occur when opening Word files on different versions of Microsoft Office or Google Docs. If you experience this, try: (1) opening the file in Microsoft Word instead of Google Docs, (2) using the original downloaded file rather than a copy, or (3) contacting us with a screenshot of the issue. We will do our best to assist and send a corrected version if needed.
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- TOPIC 03 — REFUNDS -->
+                <div data-id="144" class="faq-topic-section mb-14 fade-section" data-topic="refund" id="refunds">
+                    <div data-id="145" class="flex items-center gap-4 mb-3">
+                        <span data-id="146" class="inline-flex items-center justify-center w-10 h-10 rounded-full bg-gold text-navy font-bold text-sm font-body">03</span>
+                        <h2 data-id="147" class="font-display text-navy text-2xl md:text-3xl font-bold">💳 Refunds &amp; Policies</h2>
+                    </div>
+                    <div data-id="148" class="w-16 h-[3px] bg-gold rounded-full mb-4 ml-14"></div>
+                    <p data-id="149" class="text-body-text text-sm md:text-base leading-relaxed mb-8 ml-14">We stand behind the quality of every product we create. Please read our policies carefully — because digital files are delivered instantly, our refund policy is designed to be fair to both parties.</p>
+
+                    <div data-id="150" class="space-y-4">
+                        <div data-id="151" class="faq-card faq-item-wrapper bg-white rounded-xl shadow-sm border border-gray-100 cursor-pointer" data-category="refund">
+                            <div data-id="152" class="faq-question flex items-center justify-between gap-4 px-6 py-5">
+                                <span data-id="153" class="text-navy font-semibold text-sm md:text-base leading-snug">Do you offer refunds on digital products?</span>
+                                <span data-id="154" class="faq-icon">+</span>
+                            </div>
+                            <div data-id="155" class="faq-answer text-body-text text-sm leading-relaxed">
+                                Due to the instant and permanent nature of digital downloads, all sales are final and we do not offer refunds or exchanges once a product has been downloaded or accessed. We encourage you to carefully review all product descriptions, format details, preview images, and our FAQ before purchasing. If you have questions about a product before buying, please contact us — we're happy to help you choose the right product.
+                            </div>
+                        </div>
+                        <div data-id="156" class="faq-card faq-item-wrapper bg-white rounded-xl shadow-sm border border-gray-100 cursor-pointer" data-category="refund">
+                            <div data-id="157" class="faq-question flex items-center justify-between gap-4 px-6 py-5">
+                                <span data-id="158" class="text-navy font-semibold text-sm md:text-base leading-snug">What if I accidentally purchased the wrong product?</span>
+                                <span data-id="159" class="faq-icon">+</span>
+                            </div>
+                            <div data-id="160" class="faq-answer text-body-text text-sm leading-relaxed">
+                                If you purchased the wrong product and have not yet downloaded or accessed the file, contact us at <strong data-id="161" class="text-navy">solutions@pbymaria.com</strong> within 24 hours of purchase with your order details. We will review on a case-by-case basis and may be able to issue a store credit or exchange for the correct product. Requests submitted after the file has been downloaded cannot be honored.
+                            </div>
+                        </div>
+                        <div data-id="162" class="faq-card faq-item-wrapper bg-white rounded-xl shadow-sm border border-gray-100 cursor-pointer" data-category="refund">
+                            <div data-id="163" class="faq-question flex items-center justify-between gap-4 px-6 py-5">
+                                <span data-id="164" class="text-navy font-semibold text-sm md:text-base leading-snug">What if my file is corrupted, defective, or not working?</span>
+                                <span data-id="165" class="faq-icon">+</span>
+                            </div>
+                            <div data-id="166" class="faq-answer text-body-text text-sm leading-relaxed">
+                                If you receive a file that is corrupted, incomplete, or technically defective — that is 100% our responsibility to fix. Contact us within 48 hours of your purchase at <strong data-id="167" class="text-navy">solutions@pbymaria.com</strong> with your order number and a description of the issue. We will send you a replacement file promptly at no additional charge. Technical issues caused by incompatible software on the buyer's end do not qualify as defective files.
+                            </div>
+                        </div>
+                        <div data-id="168" class="faq-card faq-item-wrapper bg-white rounded-xl shadow-sm border border-gray-100 cursor-pointer" data-category="refund">
+                            <div data-id="169" class="faq-question flex items-center justify-between gap-4 px-6 py-5">
+                                <span data-id="170" class="text-navy font-semibold text-sm md:text-base leading-snug">My product didn't meet my expectations — can I get a refund?</span>
+                                <span data-id="171" class="faq-icon">+</span>
+                            </div>
+                            <div data-id="172" class="faq-answer text-body-text text-sm leading-relaxed">
+                                We put tremendous care into every product we create and provide detailed descriptions and preview images for every listing. Because digital products cannot be "returned," we are unable to offer refunds based on subjective dissatisfaction. However, if you feel a product was materially misrepresented in its listing, please reach out — we take feedback seriously and will review your concern individually.
+                            </div>
+                        </div>
+                        <div data-id="173" class="faq-card faq-item-wrapper bg-white rounded-xl shadow-sm border border-gray-100 cursor-pointer" data-category="refund">
+                            <div data-id="174" class="faq-question flex items-center justify-between gap-4 px-6 py-5">
+                                <span data-id="175" class="text-navy font-semibold text-sm md:text-base leading-snug">Can I get a refund if I no longer need the product?</span>
+                                <span data-id="176" class="faq-icon">+</span>
+                            </div>
+                            <div data-id="177" class="faq-answer text-body-text text-sm leading-relaxed">
+                                Unfortunately, change-of-mind refunds are not available for digital products. Once a digital file has been purchased and the download link delivered, the transaction is considered complete. We recommend reviewing all product details, previews, and this FAQ thoroughly before completing your purchase to ensure it meets your needs.
+                            </div>
+                        </div>
+                        <div data-id="178" class="faq-card faq-item-wrapper bg-white rounded-xl shadow-sm border border-gray-100 cursor-pointer" data-category="refund">
+                            <div data-id="179" class="faq-question flex items-center justify-between gap-4 px-6 py-5">
+                                <span data-id="180" class="text-navy font-semibold text-sm md:text-base leading-snug">How do I contact you about a purchase issue?</span>
+                                <span data-id="181" class="faq-icon">+</span>
+                            </div>
+                            <div data-id="182" class="faq-answer text-body-text text-sm leading-relaxed">
+                                For any issue related to a purchase — technical problems, missing downloads, billing questions, or other concerns — email us at <strong data-id="183" class="text-navy">solutions@pbymaria.com</strong>. Please include: your full name, the email address used for purchase, your order or transaction number, and a description of the issue. We respond to all purchase-related inquiries within 1–2 business days and will do our best to make every experience a positive one.
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- TOPIC 04 — LICENSING -->
+                <div data-id="184" class="faq-topic-section mb-6 fade-section" data-topic="license" id="licensing">
+                    <div data-id="185" class="flex items-center gap-4 mb-3">
+                        <span data-id="186" class="inline-flex items-center justify-center w-10 h-10 rounded-full bg-gold text-navy font-bold text-sm font-body">04</span>
+                        <h2 data-id="187" class="font-display text-navy text-2xl md:text-3xl font-bold">📄 Licensing &amp; Usage</h2>
+                    </div>
+                    <div data-id="188" class="w-16 h-[3px] bg-gold rounded-full mb-4 ml-14"></div>
+                    <p data-id="189" class="text-body-text text-sm md:text-base leading-relaxed mb-8 ml-14">Understanding how you can and cannot use our products protects both you and our business. Here's a clear breakdown of your rights as a buyer.</p>
+
+                    <div data-id="190" class="space-y-4">
+                        <div data-id="191" class="faq-card faq-item-wrapper bg-white rounded-xl shadow-sm border border-gray-100 cursor-pointer" data-category="license">
+                            <div data-id="192" class="faq-question flex items-center justify-between gap-4 px-6 py-5">
+                                <span data-id="193" class="text-navy font-semibold text-sm md:text-base leading-snug">What license do I receive when I purchase a digital product?</span>
+                                <span data-id="194" class="faq-icon">+</span>
+                            </div>
+                            <div data-id="195" class="faq-answer text-body-text text-sm leading-relaxed">
+                                When you purchase a product from Solutions by P Maria, you receive a non-exclusive, non-transferable personal and single-business use license. This means you may use the template within your own business — including with your own clients — but you may not sell, share, gift, redistribute, or claim authorship of the original template design. The license covers one business entity per purchase.
+                            </div>
+                        </div>
+                        <div data-id="196" class="faq-card faq-item-wrapper bg-white rounded-xl shadow-sm border border-gray-100 cursor-pointer" data-category="license">
+                            <div data-id="197" class="faq-question flex items-center justify-between gap-4 px-6 py-5">
+                                <span data-id="198" class="text-navy font-semibold text-sm md:text-base leading-snug">Can I use the templates with my own clients?</span>
+                                <span data-id="199" class="faq-icon">+</span>
+                            </div>
+                            <div data-id="200" class="faq-answer text-body-text text-sm leading-relaxed">
+                                Yes! You are fully licensed to use our templates within your own business and with your clients. For example, if you are a virtual assistant, you may use our Client Welcome Packet template when onboarding your clients. If you are a notary, you may use our Intake Form with your clients. What you may not do is resell or redistribute the template itself as a standalone product to others.
+                            </div>
+                        </div>
+                        <div data-id="201" class="faq-card faq-item-wrapper bg-white rounded-xl shadow-sm border border-gray-100 cursor-pointer" data-category="license">
+                            <div data-id="202" class="faq-question flex items-center justify-between gap-4 px-6 py-5">
+                                <span data-id="203" class="text-navy font-semibold text-sm md:text-base leading-snug">Can I resell or redistribute the templates I purchase?</span>
+                                <span data-id="204" class="faq-icon">+</span>
+                            </div>
+                            <div data-id="205" class="faq-answer text-body-text text-sm leading-relaxed">
+                                No. Reselling, redistributing, sharing, uploading, or sublicensing any of our templates — whether modified or unmodified — is strictly prohibited under our license agreement. Each template is sold for use by a single buyer in their own business. If you are interested in a commercial or multi-seat license for team or organizational use, contact us to discuss custom licensing options.
+                            </div>
+                        </div>
+                        <div data-id="206" class="faq-card faq-item-wrapper bg-white rounded-xl shadow-sm border border-gray-100 cursor-pointer" data-category="license">
+                            <div data-id="207" class="faq-question flex items-center justify-between gap-4 px-6 py-5">
+                                <span data-id="208" class="text-navy font-semibold text-sm md:text-base leading-snug">Can I claim the template as my own design or brand it as my product?</span>
+                                <span data-id="209" class="faq-icon">+</span>
+                            </div>
+                            <div data-id="210" class="faq-answer text-body-text text-sm leading-relaxed">
+                                You may add your branding (logo, name, contact info, colors) to templates for use in your own business — but you may not claim to be the original creator or designer of the template, sell it as your own digital product, or present it as an original work you created. The underlying design, structure, and intellectual property remain the property of Solutions by P Maria.
+                            </div>
+                        </div>
+                        <div data-id="211" class="faq-card faq-item-wrapper bg-white rounded-xl shadow-sm border border-gray-100 cursor-pointer" data-category="license">
+                            <div data-id="212" class="faq-question flex items-center justify-between gap-4 px-6 py-5">
+                                <span data-id="213" class="text-navy font-semibold text-sm md:text-base leading-snug">Are there commercial licenses available for teams or agencies?</span>
+                                <span data-id="214" class="faq-icon">+</span>
+                            </div>
+                            <div data-id="215" class="faq-answer text-body-text text-sm leading-relaxed">
+                                Yes! If you represent an agency, team, organization, or training program that needs to use our templates across multiple people or businesses, we offer custom commercial licensing arrangements. Please contact us at <strong data-id="216" class="text-navy">solutions@pbymaria.com</strong> with details about your intended use, the number of users, and the products you're interested in. We will provide a custom quote and licensing agreement.
+                            </div>
+                        </div>
+                        <div data-id="217" class="faq-card faq-item-wrapper bg-white rounded-xl shadow-sm border border-gray-100 cursor-pointer" data-category="license">
+                            <div data-id="218" class="faq-question flex items-center justify-between gap-4 px-6 py-5">
+                                <span data-id="219" class="text-navy font-semibold text-sm md:text-base leading-snug">What happens if someone violates the license terms?</span>
+                                <span data-id="220" class="faq-icon">+</span>
+                            </div>
+                            <div data-id="221" class="faq-answer text-body-text text-sm leading-relaxed">
+                                Unauthorized use, resale, or redistribution of our products is a violation of our license agreement and may constitute copyright infringement under U.S. intellectual property law. We actively monitor for unauthorized listings of our products on resale platforms. Violations may result in a formal copyright infringement notice (DMCA takedown), legal action, and/or permanent account bans from our sales platforms. We ask that all buyers respect the time and expertise that goes into every product we create.
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </section>
+
+        <!-- SHOP CTA SECTION -->
+        <section data-id="222" id="shop" class="shimmer-bg py-16 md:py-20">
+            <div data-id="223" class="max-w-3xl mx-auto text-center px-5 fade-section">
+                <h2 data-id="224" id="cta-heading-d4w9" class="font-display text-white text-3xl md:text-4xl font-bold mb-4">Ready to Shop Our Digital Products?</h2>
+                <p data-id="225" id="cta-sub-e8r2" class="text-white/75 text-base md:text-lg leading-relaxed mb-8 max-w-xl mx-auto">Browse our full library of done-for-you templates for notaries, VAs, and solopreneurs.</p>
+                <div data-id="226" class="flex flex-wrap justify-center gap-4 mb-10">
+                    <span data-id="227" class="text-white/90 text-sm font-medium flex items-center gap-2">✅ Instant Download</span>
+                    <span data-id="228" class="text-white/90 text-sm font-medium flex items-center gap-2">✅ Fully Editable</span>
+                    <span data-id="229" class="text-white/90 text-sm font-medium flex items-center gap-2">✅ Professionally Designed</span>
+                </div>
+                <div data-id="230" class="flex flex-col sm:flex-row justify-center gap-4">
+                    <a data-id="231" href="#shop" id="cta-browse-f3g7" class="inline-flex items-center justify-center gap-2 bg-gold text-navy font-bold px-8 py-3.5 rounded-full text-sm hover:bg-gold-dark transition-colors duration-200 min-h-[44px]">
+                        <i data-id="232" data-lucide="shopping-bag" class="w-5 h-5"></i>
+                        Browse the Shop
+                    </a>
+                    <a data-id="233" href="#contact" id="cta-contact-h6j1" class="inline-flex items-center justify-center gap-2 border-2 border-white text-white font-bold px-8 py-3.5 rounded-full text-sm hover:bg-white/10 transition-colors duration-200 min-h-[44px]">
+                        <i data-id="234" data-lucide="mail" class="w-5 h-5"></i>
+                        Contact Us
+                    </a>
+                </div>
+            </div>
+        </section>
+
+        <!-- CONTACT anchor -->
+        <div data-id="235" id="contact"></div>
+
+    </main>
+
+    <!-- FOOTER -->
+    <footer data-id="236" id="footer-z9c3" class="bg-navy border-t-2 border-gold py-10 md:py-12">
+        <div data-id="237" class="max-w-7xl mx-auto px-5">
+            <div data-id="238" class="flex flex-col md:flex-row items-center justify-between gap-6">
+                <div data-id="239" class="flex items-center gap-3">
+                    <img data-id="240" src="https://copilot.microsoft.com/th/id/BCO.350f7f9d-12db-4287-ba3d-8ee47e21d651.png" alt="Solutions by P Maria Logo" style="height:40px;width:auto;" class="rounded" />
+                </div>
+                <div data-id="241" class="text-center">
+                    <p data-id="242" class="text-white/70 text-xs mb-1">&copy; 2026 Solutions by P Maria. All Rights Reserved.</p>
+                    <p data-id="243" class="text-gold italic text-xs font-display">Empowering Professionals. One Document at a Time.</p>
+                </div>
+                <nav data-id="244" class="flex items-center gap-6">
+                    <a data-id="245" href="#about" class="text-gold text-xs font-medium hover:text-gold-light transition-colors">About</a>
+                    <a data-id="246" href="#shop" class="text-gold text-xs font-medium hover:text-gold-light transition-colors">Shop</a>
+                    <a data-id="247" href="#faq-section" class="text-gold text-xs font-medium hover:text-gold-light transition-colors">FAQ</a>
+                    <a data-id="248" href="#contact" class="text-gold text-xs font-medium hover:text-gold-light transition-colors">Contact</a>
+                </nav>
+            </div>
+            <div data-id="249" class="text-center mt-6 pt-6 border-t border-white/10">
+                <p data-id="250" class="text-white/40 text-xs">Made by Copilot</p>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // Guard Lucide
+        if (typeof lucide !== "undefined" && typeof lucide.createIcons === "function") {
+            lucide.createIcons();
+        }
+
+        // ====== MOBILE MENU ======
+        const mobileMenuBtn = document.getElementById('mobile-menu-btn-x3v5');
+        const mobileMenu = document.getElementById('mobile-menu-r2k8');
+        const mobileMenuClose = document.getElementById('mobile-menu-close-t4n9');
+        const mobileNavLinks = document.querySelectorAll('.mobile-nav-link');
+
+        if (mobileMenuBtn && mobileMenu && mobileMenuClose) {
+            mobileMenuBtn.addEventListener('click', function () {
+                mobileMenu.classList.remove('hidden');
+                document.body.style.overflow = 'hidden';
+            });
+            mobileMenuClose.addEventListener('click', function () {
+                mobileMenu.classList.add('hidden');
+                document.body.style.overflow = '';
+            });
+            mobileNavLinks.forEach(function (link) {
+                link.addEventListener('click', function () {
+                    mobileMenu.classList.add('hidden');
+                    document.body.style.overflow = '';
+                });
+            });
+        }
+
+        // ====== ACCORDION ======
+        document.querySelectorAll('.faq-card').forEach(function (card) {
+            var questionRow = card.querySelector('.faq-question');
+            if (!questionRow) return;
+            questionRow.addEventListener('click', function () {
+                var parentSection = card.closest('.faq-topic-section');
+                var wasActive = card.classList.contains('active');
+                // Close all in same section
+                if (parentSection) {
+                    parentSection.querySelectorAll('.faq-card.active').forEach(function (c) {
+                        c.classList.remove('active');
+                    });
+                }
+                if (!wasActive) {
+                    card.classList.add('active');
+                }
+            });
+        });
+
+        // ====== TABS FILTER ======
+        var tabBtns = document.querySelectorAll('.tab-btn');
+        var topicSections = document.querySelectorAll('.faq-topic-section');
+
+        tabBtns.forEach(function (btn) {
+            btn.addEventListener('click', function () {
+                var filter = btn.getAttribute('data-filter');
+
+                // Update active tab style
+                tabBtns.forEach(function (b) {
+                    b.classList.remove('bg-gold', 'text-navy', 'font-semibold');
+                    b.classList.add('bg-white', 'text-navy', 'border', 'border-navy/20', 'font-medium');
+                });
+                btn.classList.remove('bg-white', 'border', 'border-navy/20', 'font-medium');
+                btn.classList.add('bg-gold', 'text-navy', 'font-semibold');
+
+                // Filter topic sections
+                topicSections.forEach(function (section) {
+                    var topic = section.getAttribute('data-topic');
+                    if (filter === 'all' || topic === filter) {
+                        section.classList.remove('hidden-section');
+                        section.style.maxHeight = section.scrollHeight + 2000 + 'px';
+                    } else {
+                        section.classList.add('hidden-section');
+                    }
+                });
+            });
+        });
+
+        // ====== INTERSECTION OBSERVER — FADE IN ======
+        var fadeObserver = new IntersectionObserver(function (entries) {
+            entries.forEach(function (entry) {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('visible');
+                    fadeObserver.unobserve(entry.target);
+                }
+            });
+        }, { threshold: 0.08, rootMargin: '0px 0px -40px 0px' });
+
+        document.querySelectorAll('.fade-section').forEach(function (el) {
+            fadeObserver.observe(el);
+        });
+
+        // ====== NAVBAR SHADOW ON SCROLL ======
+        var navbar = document.getElementById('navbar-h7k2');
+        window.addEventListener('scroll', function () {
+            if (window.scrollY > 10) {
+                navbar.classList.add('shadow-lg');
+            } else {
+                navbar.classList.remove('shadow-lg');
+            }
+        });
+    </script>
+</body>
+</html>

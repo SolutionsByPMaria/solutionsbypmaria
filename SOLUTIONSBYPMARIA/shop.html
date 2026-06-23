@@ -1,0 +1,840 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Solutions by P Maria – Shop Page</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<script src="https://unpkg.com/lucide@latest" defer></script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Playfair+Display:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500&display=swap" rel="stylesheet">
+<script>
+tailwind.config = {
+  theme: {
+    extend: {
+      colors: {
+        navy: { DEFAULT: '#1B3A6B', light: '#264d8a', dark: '#132a4f', 50: '#e8edf5' },
+        gold: { DEFAULT: '#C9A84C', light: '#d4ba6f', dark: '#b8953a', 50: '#faf6eb' },
+        graylight: '#F5F6FA',
+        graymuted: '#6b7280',
+      },
+      fontFamily: {
+        display: ['"Playfair Display"', 'serif'],
+        body: ['"Inter"', 'sans-serif'],
+      },
+    },
+  },
+};
+</script>
+<style>
+:root {
+  --navy: #1B3A6B;
+  --gold: #C9A84C;
+  --white: #FFFFFF;
+  --graylight: #F5F6FA;
+  --graymuted: #6b7280;
+  --shadow-card: 0 4px 20px rgba(0,0,0,0.07);
+  --shadow-card-hover: 0 12px 32px rgba(0,0,0,0.13);
+}
+html { scroll-behavior: smooth; }
+body { font-family: 'Inter', sans-serif; margin: 0; color: #1a1a2e; }
+
+/* Floating gold dots animation */
+@keyframes floatDot1 { 0%,100%{transform:translate(0,0) scale(1);opacity:0.35} 50%{transform:translate(40px,-60px) scale(1.3);opacity:0.6} }
+@keyframes floatDot2 { 0%,100%{transform:translate(0,0) scale(0.8);opacity:0.25} 50%{transform:translate(-50px,40px) scale(1.1);opacity:0.5} }
+@keyframes floatDot3 { 0%,100%{transform:translate(0,0) scale(1.1);opacity:0.3} 50%{transform:translate(30px,50px) scale(0.9);opacity:0.55} }
+@keyframes floatDot4 { 0%,100%{transform:translate(0,0) scale(0.9);opacity:0.2} 50%{transform:translate(-30px,-40px) scale(1.2);opacity:0.45} }
+@keyframes floatDot5 { 0%,100%{transform:translate(0,0) scale(1);opacity:0.28} 50%{transform:translate(60px,30px) scale(1.15);opacity:0.5} }
+.hero-dots .dot {
+  position: absolute; border-radius: 50%; background: #C9A84C; pointer-events: none;
+}
+.hero-dots .dot:nth-child(1){width:8px;height:8px;top:15%;left:10%;animation:floatDot1 7s ease-in-out infinite}
+.hero-dots .dot:nth-child(2){width:12px;height:12px;top:60%;left:25%;animation:floatDot2 9s ease-in-out infinite}
+.hero-dots .dot:nth-child(3){width:6px;height:6px;top:30%;right:15%;animation:floatDot3 8s ease-in-out infinite}
+.hero-dots .dot:nth-child(4){width:10px;height:10px;top:70%;right:30%;animation:floatDot4 10s ease-in-out infinite}
+.hero-dots .dot:nth-child(5){width:7px;height:7px;top:20%;left:55%;animation:floatDot5 6s ease-in-out infinite}
+.hero-dots .dot:nth-child(6){width:9px;height:9px;top:80%;left:60%;animation:floatDot1 11s ease-in-out infinite 1s}
+.hero-dots .dot:nth-child(7){width:5px;height:5px;top:45%;right:8%;animation:floatDot2 7.5s ease-in-out infinite 0.5s}
+.hero-dots .dot:nth-child(8){width:11px;height:11px;top:10%;right:40%;animation:floatDot3 9.5s ease-in-out infinite 2s}
+.hero-dots .dot:nth-child(9){width:6px;height:6px;top:55%;left:80%;animation:floatDot4 8.5s ease-in-out infinite 1.5s}
+.hero-dots .dot:nth-child(10){width:8px;height:8px;top:85%;left:40%;animation:floatDot5 10.5s ease-in-out infinite 0.8s}
+
+/* Diamond divider */
+.gold-divider { display:flex; align-items:center; justify-content:center; gap:12px; margin:20px 0; }
+.gold-divider .line { width:60px; height:1px; background:#C9A84C; }
+.gold-divider .diamond { width:10px; height:10px; background:#C9A84C; transform:rotate(45deg); }
+
+/* Product card */
+.product-card {
+  background:#fff; border-radius:16px; overflow:hidden;
+  box-shadow: var(--shadow-card); transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+.product-card:hover { transform:translateY(-6px); box-shadow: var(--shadow-card-hover); }
+
+/* Product cover mockup */
+.product-cover {
+  height:180px; background:var(--navy); position:relative; display:flex; align-items:center; justify-content:center; overflow:hidden;
+}
+.product-cover .doc-shape {
+  width:80px; height:100px; background:#fff; border-radius:4px; position:relative; display:flex; align-items:center; justify-content:center;
+  box-shadow:0 2px 10px rgba(0,0,0,0.15);
+}
+.product-cover .doc-shape .doc-icon { font-size:28px; }
+.product-cover .gold-line-top, .product-cover .gold-line-bottom {
+  position:absolute; left:50%; transform:translateX(-50%); height:2px; background:var(--gold); width:60%;
+}
+.product-cover .gold-line-top { top:16px; }
+.product-cover .gold-line-bottom { bottom:16px; }
+.product-cover .pm-mono {
+  position:absolute; bottom:8px; right:12px; font-family:'Playfair Display',serif; font-size:11px; color:var(--gold); font-weight:600; opacity:0.7; letter-spacing:1px;
+}
+.product-cover.bundle-cover .doc-shape { transform:rotate(-6deg); }
+.product-cover.bundle-cover .doc-shape-2 {
+  width:75px; height:95px; background:#fff; border-radius:4px; position:absolute; transform:rotate(6deg); opacity:0.5; box-shadow:0 2px 8px rgba(0,0,0,0.1);
+}
+.product-cover.bundle-cover .doc-shape-3 {
+  width:70px; height:90px; background:#fff; border-radius:4px; position:absolute; transform:rotate(14deg); opacity:0.3; box-shadow:0 2px 6px rgba(0,0,0,0.08);
+}
+
+/* Badge */
+.card-badge {
+  position:absolute; top:0; left:0; background:var(--gold); color:var(--navy); font-weight:700; font-size:11px;
+  padding:5px 10px; border-radius:0 0 8px 0; z-index:2; letter-spacing:0.3px;
+}
+
+/* Format pills */
+.format-pill {
+  display:inline-block; border:1px solid #d1d5db; color:#6b7280; font-size:11px; padding:2px 8px; border-radius:9999px; font-weight:500;
+}
+
+/* Line clamp */
+.line-clamp-2 {
+  display:-webkit-box; -webkit-line-clamp:2; -webkit-box-orient:vertical; overflow:hidden;
+}
+
+/* Category tabs scrollable */
+.cat-tabs { display:flex; gap:8px; overflow-x:auto; -webkit-overflow-scrolling:touch; scrollbar-width:none; }
+.cat-tabs::-webkit-scrollbar { display:none; }
+.cat-tab {
+  white-space:nowrap; padding:8px 18px; border-radius:9999px; font-size:14px; font-weight:500; cursor:pointer;
+  border:1.5px solid var(--navy); background:#fff; color:var(--navy); transition:all 0.25s ease; flex-shrink:0;
+}
+.cat-tab.active { background:var(--gold); color:var(--navy); border-color:var(--gold); }
+.cat-tab:hover:not(.active) { background:var(--navy); color:#fff; }
+
+/* Cart panel */
+.cart-overlay { position:fixed; inset:0; background:rgba(0,0,0,0.4); z-index:999; opacity:0; pointer-events:none; transition:opacity 0.3s ease; }
+.cart-overlay.open { opacity:1; pointer-events:auto; }
+.cart-panel {
+  position:fixed; top:0; right:0; width:360px; max-width:100vw; height:100vh; background:#fff; z-index:1000;
+  transform:translateX(100%); transition:transform 0.35s cubic-bezier(0.4,0,0.2,1); box-shadow:-4px 0 24px rgba(0,0,0,0.12);
+  display:flex; flex-direction:column;
+}
+.cart-panel.open { transform:translateX(0); }
+
+/* Modal */
+.modal-overlay { position:fixed; inset:0; background:rgba(0,0,0,0.5); z-index:1100; display:flex; align-items:center; justify-content:center; padding:16px; opacity:0; pointer-events:none; transition:opacity 0.3s ease; }
+.modal-overlay.open { opacity:1; pointer-events:auto; }
+.modal-card { background:#fff; border-radius:20px; max-width:480px; width:100%; max-height:90vh; overflow-y:auto; transform:scale(0.92); transition:transform 0.3s ease; }
+.modal-overlay.open .modal-card { transform:scale(1); }
+
+/* Testimonials scroll */
+@keyframes scrollTestimonials { 0%{transform:translateX(0)} 100%{transform:translateX(-50%)} }
+.testimonial-track { display:flex; gap:24px; animation:scrollTestimonials 30s linear infinite; width:max-content; }
+.testimonial-track:hover { animation-play-state:paused; }
+
+/* Fade-in animation */
+.fade-in-up { opacity:0; transform:translateY(30px); transition:opacity 0.6s ease, transform 0.6s ease; }
+.fade-in-up.visible { opacity:1; transform:translateY(0); }
+
+/* Stars */
+.stars { color:#C9A84C; font-size:14px; letter-spacing:1px; }
+
+/* Sticky toolbar */
+.shop-toolbar { position:sticky; top:72px; z-index:50; background:#fff; border-bottom:2px solid var(--gold); }
+@media(max-width:767px) { .shop-toolbar { top:64px; } }
+
+/* Navbar */
+.navbar { position:sticky; top:0; z-index:100; }
+
+/* Button added state */
+.btn-added { background:#22c55e !important; color:#fff !important; }
+
+/* Scrollbar for cart */
+.cart-items::-webkit-scrollbar { width:6px; }
+.cart-items::-webkit-scrollbar-thumb { background:#d1d5db; border-radius:3px; }
+
+/* Email input focus */
+.email-input:focus { outline:none; box-shadow:0 0 0 3px rgba(201,168,76,0.3); }
+</style>
+</head>
+<body data-id="0" class="bg-white font-body">
+<app-icon data-id="1" hidden data-icon="shopping-bag" data-palette="Dark"></app-icon>
+
+<!-- ===== NAVBAR ===== -->
+<nav data-id="2" class="navbar bg-navy border-b-2 border-gold" id="navbar-ab12" aria-label="Main navigation">
+  <div data-id="3" class="max-w-7xl mx-auto flex items-center justify-between px-4 md:px-6 h-[72px] md:h-[72px]">
+    <a data-id="4" href="#" class="flex-shrink-0">
+      <img data-id="5" src="https://copilot.microsoft.com/th/id/BCO.350f7f9d-12db-4287-ba3d-8ee47e21d651.png" alt="Solutions by P Maria logo" class="h-[52px] w-auto" />
+    </a>
+    <div data-id="6" class="hidden md:flex items-center gap-8">
+      <a data-id="7" href="#" class="text-gold font-medium hover:text-gold-light transition-colors text-sm tracking-wide">About</a>
+      <a data-id="8" href="#" class="text-gold font-medium hover:text-gold-light transition-colors text-sm tracking-wide">Services</a>
+      <a data-id="9" href="#shop" class="text-gold font-medium hover:text-gold-light transition-colors text-sm tracking-wide">Shop</a>
+      <a data-id="10" href="#" class="text-gold font-medium hover:text-gold-light transition-colors text-sm tracking-wide">FAQ</a>
+      <a data-id="11" href="#" class="text-gold font-medium hover:text-gold-light transition-colors text-sm tracking-wide">Contact</a>
+    </div>
+    <div data-id="12" class="flex items-center gap-4">
+      <button data-id="13" id="cart-btn-xk92" class="relative p-2 text-gold hover:text-gold-light transition-colors" aria-label="Open shopping cart">
+        <i data-id="14" data-lucide="shopping-cart" class="w-6 h-6"></i>
+        <span data-id="15" id="cart-badge-nn01" class="absolute -top-1 -right-1 bg-gold text-navy text-xs w-5 h-5 rounded-full flex items-center justify-center font-bold tabular-nums hidden">0</span>
+      </button>
+      <button data-id="16" id="mobile-menu-btn-rr34" class="md:hidden p-2 text-gold" aria-label="Open menu">
+        <i data-id="17" data-lucide="menu" class="w-6 h-6"></i>
+      </button>
+    </div>
+  </div>
+</nav>
+
+<!-- Mobile menu -->
+<nav data-id="18" id="mobile-menu-pa77" class="hidden fixed inset-0 bg-navy z-[200] flex flex-col p-6" aria-label="Mobile navigation">
+  <div data-id="19" class="flex justify-between items-center mb-10">
+    <img data-id="20" src="https://copilot.microsoft.com/th/id/BCO.350f7f9d-12db-4287-ba3d-8ee47e21d651.png" alt="Solutions by P Maria logo" class="h-10 w-auto" />
+    <button data-id="21" id="mobile-menu-close-qw56" class="p-2 text-gold" aria-label="Close menu">
+      <i data-id="22" data-lucide="x" class="w-7 h-7"></i>
+    </button>
+  </div>
+  <div data-id="23" class="flex flex-col gap-6">
+    <a data-id="24" href="#" class="text-gold text-xl font-display font-semibold tracking-wide">About</a>
+    <a data-id="25" href="#" class="text-gold text-xl font-display font-semibold tracking-wide">Services</a>
+    <a data-id="26" href="#shop" class="text-gold text-xl font-display font-semibold tracking-wide mobile-nav-link">Shop</a>
+    <a data-id="27" href="#" class="text-gold text-xl font-display font-semibold tracking-wide">FAQ</a>
+    <a data-id="28" href="#" class="text-gold text-xl font-display font-semibold tracking-wide">Contact</a>
+  </div>
+  <div data-id="29" class="mt-auto pt-8 border-t border-gold/20">
+    <p data-id="30" class="text-gold/60 text-sm font-body">© 2026 Solutions by P Maria</p>
+  </div>
+</nav>
+
+<!-- ===== HERO SECTION ===== -->
+<section data-id="31" class="relative bg-navy py-16 md:py-24 overflow-hidden" id="hero-se01">
+  <div data-id="32" class="hero-dots">
+    <div data-id="33" class="dot"></div><div data-id="34" class="dot"></div><div data-id="35" class="dot"></div><div data-id="36" class="dot"></div><div data-id="37" class="dot"></div>
+    <div data-id="38" class="dot"></div><div data-id="39" class="dot"></div><div data-id="40" class="dot"></div><div data-id="41" class="dot"></div><div data-id="42" class="dot"></div>
+  </div>
+  <div data-id="43" class="relative z-10 max-w-3xl mx-auto text-center px-4">
+    <p data-id="44" class="text-gold uppercase tracking-[4px] text-sm font-semibold mb-4">Digital Product Shop</p>
+    <h1 data-id="45" class="font-display text-3xl md:text-5xl lg:text-[3.4rem] text-white font-bold leading-tight mb-5">Done-For-You Templates &amp; Toolkits</h1>
+    <p data-id="46" class="text-white/80 text-base md:text-lg leading-relaxed max-w-xl mx-auto mb-6">Professional, polished, and ready to use — built by a real notary for real professionals. Instant download. Fully editable.</p>
+    <div data-id="47" class="gold-divider">
+      <div data-id="48" class="line"></div><div data-id="49" class="diamond"></div><div data-id="50" class="line"></div>
+    </div>
+    <div data-id="51" class="flex flex-wrap justify-center gap-4 md:gap-6 mt-6 mb-8">
+      <div data-id="52" class="flex items-center gap-2 text-gold font-semibold text-sm"><span data-id="53" class="text-lg">📦</span> 20+ Products</div>
+      <div data-id="54" class="flex items-center gap-2 text-gold font-semibold text-sm"><span data-id="55" class="text-lg">⚡</span> Instant Download</div>
+      <div data-id="56" class="flex items-center gap-2 text-gold font-semibold text-sm"><span data-id="57" class="text-lg">⭐</span> 5-Star Rated</div>
+    </div>
+    <div data-id="58" class="flex max-w-md mx-auto">
+      <div data-id="59" class="relative flex-1">
+        <i data-id="60" data-lucide="search" class="w-5 h-5 absolute left-3 top-1/2 -translate-y-1/2 text-graymuted"></i>
+        <input data-id="61" id="hero-search-in88" type="text" placeholder="Search products..." class="w-full pl-10 pr-4 py-3 rounded-l-full text-sm focus:outline-none focus:ring-2 focus:ring-navy border-2 border-r-0 border-white/20 bg-white text-navy" />
+      </div>
+      <button data-id="62" id="hero-search-btn-zz11" class="bg-gold hover:bg-gold-dark text-navy font-semibold px-6 rounded-r-full transition-colors text-sm" aria-label="Search">Search</button>
+    </div>
+  </div>
+</section>
+
+<!-- ===== SHOP TOOLBAR ===== -->
+<div data-id="63" class="shop-toolbar py-3 px-4 md:px-6" id="shop">
+  <div data-id="64" class="max-w-7xl mx-auto flex flex-col md:flex-row md:items-center gap-3">
+    <p data-id="65" id="product-count-tx44" class="text-sm text-graymuted font-medium whitespace-nowrap">Showing 23 of 23 products</p>
+    <div data-id="66" class="flex-1 flex justify-center">
+      <div data-id="67" class="cat-tabs" id="cat-tabs-ct55">
+        <button data-id="68" class="cat-tab active" data-cat="all">All Products</button>
+        <button data-id="69" class="cat-tab" data-cat="notary">🖊️ Notary Templates</button>
+        <button data-id="70" class="cat-tab" data-cat="admin">📋 Admin Templates</button>
+        <button data-id="71" class="cat-tab" data-cat="docs">📁 Document Guides</button>
+        <button data-id="72" class="cat-tab" data-cat="marketing">📣 Marketing Templates</button>
+        <button data-id="73" class="cat-tab" data-cat="bundles">🎁 Bundles</button>
+      </div>
+    </div>
+    <div data-id="74" class="flex-shrink-0">
+      <select data-id="75" id="sort-select-sr66" class="text-sm border border-gray-300 rounded-lg px-3 py-2 font-body text-navy focus:ring-2 focus:ring-gold focus:outline-none bg-white cursor-pointer">
+        <option data-id="76" value="featured">Featured</option>
+        <option data-id="77" value="price-asc">Price: Low to High</option>
+        <option data-id="78" value="price-desc">Price: High to Low</option>
+        <option data-id="79" value="newest">Newest</option>
+        <option data-id="80" value="bestselling">Best Selling</option>
+      </select>
+    </div>
+  </div>
+</div>
+
+<!-- ===== FEATURED PRODUCTS BANNER ===== -->
+<section data-id="81" class="bg-graylight py-10 px-4 md:px-6" id="featured">
+  <div data-id="82" class="max-w-7xl mx-auto">
+    <h2 data-id="83" class="font-display text-2xl md:text-3xl text-navy font-bold mb-6 text-center">⭐ Featured Products</h2>
+    <div data-id="84" class="grid grid-cols-1 md:grid-cols-3 gap-6" id="featured-grid-fg77">
+      <!-- Filled by JS -->
+    </div>
+  </div>
+</section>
+
+<!-- ===== MAIN PRODUCT GRID ===== -->
+<section data-id="85" class="py-12 px-4 md:px-6 bg-white" id="products-section-ps88">
+  <div data-id="86" class="max-w-7xl mx-auto">
+    <div data-id="87" class="grid gap-6" style="grid-template-columns:repeat(auto-fill,minmax(280px,1fr))" id="product-grid-pg99">
+      <!-- Filled by JS -->
+    </div>
+    <div data-id="88" id="empty-state-es00" class="hidden text-center py-16">
+      <p data-id="89" class="text-5xl mb-4">😔</p>
+      <p data-id="90" class="text-lg text-graymuted font-medium">No products found. Try a different search or category.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ===== TESTIMONIALS ===== -->
+<section data-id="91" class="bg-graylight py-12 overflow-hidden" id="testimonials">
+  <h2 data-id="92" class="font-display text-2xl md:text-3xl text-navy font-bold mb-8 text-center px-4">What Our Customers Say</h2>
+  <div data-id="93" class="relative">
+    <div data-id="94" class="testimonial-track" id="testimonial-track-tt11">
+      <!-- Doubled for infinite scroll effect -->
+    </div>
+  </div>
+</section>
+
+<!-- ===== SHOP POLICIES ===== -->
+<section data-id="95" class="bg-white py-12 px-4 md:px-6" id="policies">
+  <div data-id="96" class="max-w-5xl mx-auto grid grid-cols-1 md:grid-cols-3 gap-8 text-center">
+    <div data-id="97" class="fade-in-up">
+      <div data-id="98" class="text-4xl mb-3">⚡</div>
+      <h3 data-id="99" class="font-display text-lg text-navy font-semibold mb-2">Instant Delivery</h3>
+      <p data-id="100" class="text-graymuted text-sm leading-relaxed">Your download link is sent immediately after purchase — no waiting.</p>
+    </div>
+    <div data-id="101" class="fade-in-up">
+      <div data-id="102" class="text-4xl mb-3">🔒</div>
+      <h3 data-id="103" class="font-display text-lg text-navy font-semibold mb-2">Secure Checkout</h3>
+      <p data-id="104" class="text-graymuted text-sm leading-relaxed">Shop safely on Payhip or Gumroad — trusted platforms used by thousands of creators.</p>
+    </div>
+    <div data-id="105" class="fade-in-up">
+      <div data-id="106" class="text-4xl mb-3">💬</div>
+      <h3 data-id="107" class="font-display text-lg text-navy font-semibold mb-2">Support Available</h3>
+      <p data-id="108" class="text-graymuted text-sm leading-relaxed">Questions? Email solutions@pbymaria.com — we respond within 24 hours.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ===== EMAIL SIGNUP ===== -->
+<section data-id="109" class="bg-navy py-14 px-4 md:px-6" id="signup-sc22">
+  <div data-id="110" class="max-w-xl mx-auto text-center">
+    <h2 data-id="111" class="font-display text-2xl md:text-3xl text-white font-bold mb-3">Get 10% Off Your First Order</h2>
+    <p data-id="112" class="text-white/70 text-sm md:text-base mb-6 leading-relaxed">Join our list for exclusive discounts, new product alerts, and free resources.</p>
+    <div data-id="113" class="flex flex-col sm:flex-row gap-3 max-w-md mx-auto">
+      <input data-id="114" id="email-input-em33" type="email" placeholder="Enter your email address" class="email-input flex-1 px-4 py-3 rounded-full text-sm bg-white text-navy" />
+      <button data-id="115" id="subscribe-btn-sb44" class="bg-gold hover:bg-gold-dark text-navy font-semibold px-6 py-3 rounded-full transition-colors text-sm whitespace-nowrap">Subscribe</button>
+    </div>
+    <p data-id="116" class="text-white/40 text-xs mt-3">No spam. Unsubscribe anytime.</p>
+    <p data-id="117" id="subscribe-msg-sm55" class="text-gold text-sm mt-2 hidden font-medium"></p>
+  </div>
+</section>
+
+<!-- ===== FOOTER ===== -->
+<footer data-id="118" class="bg-navy border-t-2 border-gold py-10 px-4 md:px-6">
+  <div data-id="119" class="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-3 gap-8 items-start text-center md:text-left">
+    <div data-id="120">
+      <img data-id="121" src="https://copilot.microsoft.com/th/id/BCO.350f7f9d-12db-4287-ba3d-8ee47e21d651.png" alt="Solutions by P Maria logo" class="h-11 w-auto mx-auto md:mx-0 mb-3" />
+      <p data-id="122" class="text-gold/80 text-sm italic font-display">Empowering Professionals. One Document at a Time.</p>
+    </div>
+    <div data-id="123" class="flex items-center justify-center">
+      <p data-id="124" class="text-white/60 text-xs">© 2026 Solutions by P Maria. All Rights Reserved.</p>
+    </div>
+    <div data-id="125" class="flex flex-wrap justify-center md:justify-end gap-x-5 gap-y-2">
+      <a data-id="126" href="#" class="text-gold text-sm hover:text-gold-light transition-colors">About</a>
+      <a data-id="127" href="#" class="text-gold text-sm hover:text-gold-light transition-colors">Services</a>
+      <a data-id="128" href="#shop" class="text-gold text-sm hover:text-gold-light transition-colors">Shop</a>
+      <a data-id="129" href="#" class="text-gold text-sm hover:text-gold-light transition-colors">FAQ</a>
+      <a data-id="130" href="#" class="text-gold text-sm hover:text-gold-light transition-colors">Contact</a>
+      <a data-id="131" href="#" class="text-gold text-sm hover:text-gold-light transition-colors">Payhip Store</a>
+      <a data-id="132" href="#" class="text-gold text-sm hover:text-gold-light transition-colors">Gumroad Store</a>
+    </div>
+  </div>
+  <div data-id="133" class="text-center mt-8 pt-6 border-t border-gold/20">
+    <p data-id="134" class="text-white/40 text-xs">Made by Copilot</p>
+  </div>
+</footer>
+
+<!-- ===== CART OVERLAY + PANEL ===== -->
+<div data-id="135" id="cart-overlay-co66" class="cart-overlay"></div>
+<aside data-id="136" id="cart-panel-cp77" class="cart-panel" aria-label="Shopping cart">
+  <div data-id="137" class="flex items-center justify-between p-5 border-b border-gray-100">
+    <h3 data-id="138" class="font-display text-xl text-navy font-bold">Your Cart</h3>
+    <button data-id="139" id="cart-close-btn-cc88" class="p-2 text-graymuted hover:text-navy transition-colors" aria-label="Close cart">
+      <i data-id="140" data-lucide="x" class="w-6 h-6"></i>
+    </button>
+  </div>
+  <div data-id="141" id="cart-items-ci99" class="cart-items flex-1 overflow-y-auto p-5">
+    <!-- Cart items rendered by JS -->
+  </div>
+  <div data-id="142" id="cart-footer-cf00" class="p-5 border-t border-gray-100">
+    <div data-id="143" class="flex justify-between items-center mb-4">
+      <span data-id="144" class="font-semibold text-navy">Subtotal</span>
+      <span data-id="145" id="cart-subtotal-cs11" class="font-display text-xl text-gold font-bold tabular-nums">$0.00</span>
+    </div>
+    <button data-id="146" id="checkout-payhip-btn-hp22" class="w-full bg-gold hover:bg-gold-dark text-navy font-semibold py-3 rounded-xl mb-2 transition-colors text-sm">Checkout on Payhip</button>
+    <button data-id="147" id="checkout-gumroad-btn-gr33" class="w-full border-2 border-navy text-navy hover:bg-navy hover:text-white font-semibold py-3 rounded-xl transition-colors text-sm">Checkout on Gumroad</button>
+    <button data-id="148" id="continue-shopping-btn-cs44" class="w-full text-center text-graymuted text-sm mt-3 hover:text-navy transition-colors py-2">← Continue Shopping</button>
+  </div>
+</aside>
+
+<!-- ===== PRODUCT MODAL ===== -->
+<div data-id="149" id="modal-overlay-mo55" class="modal-overlay">
+  <div data-id="150" class="modal-card" id="modal-card-mc66">
+    <div data-id="151" class="relative">
+      <div data-id="152" id="modal-cover-mk77" class="product-cover rounded-t-[20px]">
+        <div data-id="153" class="gold-line-top"></div>
+        <div data-id="154" class="doc-shape"><span data-id="155" class="doc-icon" id="modal-doc-icon-di88"></span></div>
+        <div data-id="156" class="gold-line-bottom"></div>
+        <span data-id="157" class="pm-mono">PM</span>
+      </div>
+      <button data-id="158" id="modal-close-btn-mb99" class="absolute top-3 right-3 bg-white/90 hover:bg-white rounded-full p-2 text-navy transition-colors" aria-label="Close modal">
+        <i data-id="159" data-lucide="x" class="w-5 h-5"></i>
+      </button>
+    </div>
+    <div data-id="160" class="p-6">
+      <h3 data-id="161" id="modal-name-mn00" class="font-display text-xl text-navy font-bold mb-1"></h3>
+      <div data-id="162" id="modal-rating-mr11" class="stars mb-2"></div>
+      <div data-id="163" id="modal-price-mp22" class="mb-3"></div>
+      <p data-id="164" id="modal-desc-md33" class="text-graymuted text-sm leading-relaxed mb-4"></p>
+      <div data-id="165" id="modal-formats-mf44" class="flex flex-wrap gap-2 mb-4"></div>
+      <div data-id="166" id="modal-includes-mi55" class="mb-5"></div>
+      <div data-id="167" class="flex gap-3">
+        <a data-id="168" id="modal-payhip-link-pl66" href="#" class="flex-1 bg-gold hover:bg-gold-dark text-navy font-semibold py-3 rounded-xl text-center transition-colors text-sm">Buy on Payhip →</a>
+        <a data-id="169" id="modal-gumroad-link-gl77" href="#" class="flex-1 bg-navy hover:bg-navy-light text-white font-semibold py-3 rounded-xl text-center transition-colors text-sm">Buy on Gumroad →</a>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+// ========== DATA ==========
+const products = [
+  {id:1,name:"Notary Business Starter Bundle",category:"notary",price:12.99,badge:"⭐ BESTSELLER",featured:true,rating:5.0,reviews:47,formats:["PDF","Word","Canva"],description:"Everything a new notary needs to launch professionally — intake forms, scripts, rate cards, and more.",icon:"🖊️",includes:["Client Intake Form","Appointment Script","Fee Schedule Template","Welcome Email Template","Notary Bio Template"],isNew:false,bestSelling:true},
+  {id:2,name:"Client Intake Form Template",category:"notary",price:3.99,badge:"🔥 POPULAR",featured:false,rating:4.9,reviews:38,formats:["PDF","Word"],description:"Capture every client detail professionally from day one. Clean, branded, and ready to use.",icon:"🖊️",includes:null,isNew:false,bestSelling:true},
+  {id:3,name:"Notary Journal Log Template",category:"notary",price:2.99,badge:null,featured:false,rating:4.8,reviews:21,formats:["PDF","Excel"],description:"Track every notarial act with this organized, Oklahoma-compliant journal log template.",icon:"🖊️",includes:null,isNew:false,bestSelling:false},
+  {id:4,name:"Mobile Notary Appointment Script",category:"notary",price:4.99,badge:"✨ NEW",featured:false,rating:5.0,reviews:12,formats:["PDF","Word"],description:"Know exactly what to say at every signing with this professional appointment script and checklist.",icon:"🖊️",includes:null,isNew:true,bestSelling:false},
+  {id:5,name:"Loan Signing Agent Checklist",category:"notary",price:3.99,badge:"📋 ESSENTIAL",featured:true,rating:4.9,reviews:29,formats:["PDF"],description:"Never miss a step at the signing table again. Complete loan package checklist for every signing.",icon:"🖊️",includes:null,isNew:false,bestSelling:true},
+  {id:6,name:"Notary Fee Schedule Template",category:"notary",price:2.99,badge:null,featured:false,rating:4.7,reviews:18,formats:["PDF","Canva"],description:"Present your rates professionally with a branded fee schedule you can customize in minutes.",icon:"🖊️",includes:null,isNew:false,bestSelling:false},
+  {id:7,name:"Virtual Assistant Onboarding Packet",category:"admin",price:9.99,badge:"⭐ BESTSELLER",featured:true,rating:5.0,reviews:33,formats:["PDF","Word","Canva"],description:"Onboard new clients like a seasoned pro. Includes welcome letter, contract overview, intake form & policy sheet.",icon:"📋",includes:["Welcome Letter","Contract Overview","Intake Form","Policy Sheet"],isNew:false,bestSelling:true},
+  {id:8,name:"Client Welcome Kit Template",category:"admin",price:7.99,badge:"🔥 POPULAR",featured:false,rating:4.9,reviews:26,formats:["PDF","Canva"],description:"Make an unforgettable first impression with a polished, branded client welcome kit.",icon:"📋",includes:null,isNew:false,bestSelling:true},
+  {id:9,name:"Business Email Templates Pack",category:"admin",price:8.99,badge:null,featured:false,rating:4.8,reviews:22,formats:["Word","PDF"],description:"15 professional email templates for every business situation — follow-ups, invoices, reminders & more.",icon:"📋",includes:null,isNew:false,bestSelling:false},
+  {id:10,name:"SOP Template — Standard Operating Procedures",category:"admin",price:6.99,badge:"✨ NEW",featured:false,rating:4.9,reviews:14,formats:["Word","PDF"],description:"Document your business processes clearly with this plug-and-play SOP template kit.",icon:"📋",includes:null,isNew:true,bestSelling:false},
+  {id:11,name:"Meeting Agenda & Notes Template",category:"admin",price:2.99,badge:null,featured:false,rating:4.7,reviews:17,formats:["Word","PDF"],description:"Run efficient, professional meetings with this clean agenda and notes template.",icon:"📋",includes:null,isNew:false,bestSelling:false},
+  {id:12,name:"Project Tracker Spreadsheet",category:"admin",price:4.99,badge:"📊 POPULAR",featured:false,rating:4.8,reviews:19,formats:["Excel","Google Sheets"],description:"Stay on top of every client project with this color-coded, easy-to-use project tracker.",icon:"📋",includes:null,isNew:false,bestSelling:true},
+  {id:13,name:"Estate Document Organizer",category:"docs",price:8.99,badge:"📋 ESSENTIAL",featured:false,rating:4.9,reviews:24,formats:["PDF","Word","Excel"],description:"Help clients organize all their vital estate documents in one comprehensive, easy-to-follow organizer.",icon:"📁",includes:null,isNew:false,bestSelling:false},
+  {id:14,name:"Power of Attorney Guide & Checklist",category:"docs",price:5.99,badge:null,featured:false,rating:4.8,reviews:16,formats:["PDF"],description:"A clear, step-by-step guide on the POA process with a preparation checklist for clients.",icon:"📁",includes:null,isNew:false,bestSelling:false},
+  {id:15,name:"Affidavit Preparation Checklist",category:"docs",price:3.99,badge:null,featured:false,rating:4.7,reviews:11,formats:["PDF"],description:"Make sure every affidavit is complete, correct, and ready for notarization with this thorough checklist.",icon:"📁",includes:null,isNew:false,bestSelling:false},
+  {id:16,name:"Document Preparation Client Checklist",category:"docs",price:2.99,badge:"✨ NEW",featured:false,rating:5.0,reviews:8,formats:["PDF","Word"],description:"A complete checklist to walk clients through gathering everything needed for their document appointment.",icon:"📁",includes:null,isNew:true,bestSelling:false},
+  {id:17,name:"Notary Social Media Pack — 30 Canva Templates",category:"marketing",price:9.99,badge:"🔥 HOT",featured:false,rating:4.9,reviews:31,formats:["Canva"],description:"30 professionally designed, fully editable Canva social media templates for notary businesses. Instagram & Facebook ready.",icon:"📣",includes:null,isNew:false,bestSelling:true},
+  {id:18,name:"Notary Business Flyer Template",category:"marketing",price:3.99,badge:null,featured:false,rating:4.8,reviews:13,formats:["Canva","PDF"],description:"A stunning, print-ready flyer template to promote your notary services locally and online.",icon:"📣",includes:null,isNew:false,bestSelling:false},
+  {id:19,name:"Signing Agent Bio Template",category:"marketing",price:4.99,badge:"✨ NEW",featured:false,rating:5.0,reviews:9,formats:["Word","PDF"],description:"A polished, professional signing agent bio template to submit to title companies and signing services.",icon:"📣",includes:null,isNew:true,bestSelling:false},
+  {id:20,name:"Notary Email Newsletter Template",category:"marketing",price:4.99,badge:null,featured:false,rating:4.7,reviews:7,formats:["Canva","Word"],description:"Stay connected with clients using this elegant, branded monthly email newsletter template.",icon:"📣",includes:null,isNew:false,bestSelling:false},
+  {id:21,name:"New Notary Launch Bundle",category:"bundles",price:39.00,originalPrice:55.00,savings:"Save $16",badge:"🎯 BUNDLE DEAL",featured:false,rating:5.0,reviews:18,formats:["PDF","Word","Canva"],description:"The complete launch kit — Client Intake Form, Appointment Script, Notary Journal Log, Fee Schedule, and Loan Signing Checklist all in one discounted bundle.",icon:"🎁",includes:["Client Intake Form","Appointment Script","Notary Journal Log","Fee Schedule","Loan Signing Checklist"],isNew:false,bestSelling:true},
+  {id:22,name:"Business Pro Admin Bundle",category:"bundles",price:29.99,originalPrice:45.00,savings:"Save $15",badge:"⭐ BEST VALUE",featured:false,rating:5.0,reviews:22,formats:["PDF","Word","Canva"],description:"VA Onboarding Packet, Client Welcome Kit, Business Email Templates Pack, SOP Template, and Project Tracker — everything a professional VA needs.",icon:"🎁",includes:["VA Onboarding Packet","Client Welcome Kit","Business Email Templates Pack","SOP Template","Project Tracker"],isNew:false,bestSelling:true},
+  {id:23,name:"Document & Notary Combo Bundle",category:"bundles",price:19.99,originalPrice:28.00,savings:"Save $8",badge:"💡 SMART PICK",featured:false,rating:4.9,reviews:15,formats:["PDF","Word"],description:"Estate Document Organizer, POA Guide, Affidavit Checklist, and Client Document Checklist — your complete document prep toolkit.",icon:"🎁",includes:["Estate Document Organizer","POA Guide","Affidavit Checklist","Client Document Checklist"],isNew:false,bestSelling:false}
+];
+
+const testimonials = [
+  {text:"The notary starter bundle is everything I needed to launch my business. Worth every penny!",author:"New Notary, OK"},
+  {text:"Downloaded and had my intake form ready in 10 minutes. Incredibly professional.",author:"Mobile Notary, TX"},
+  {text:"The VA onboarding packet made me look so polished to my first client. Game changer!",author:"Virtual Assistant, FL"},
+  {text:"The social media pack saved me hours of design work. Love the gold and navy aesthetic!",author:"Signing Agent, OK"},
+  {text:"Business pro bundle is the best investment I made for my VA business. So comprehensive.",author:"Business Owner, GA"}
+];
+
+// ========== CART ==========
+let cart = JSON.parse(localStorage.getItem('pm_cart') || '[]');
+
+function saveCart() { localStorage.setItem('pm_cart', JSON.stringify(cart)); }
+
+function addToCart(productId) {
+  const existing = cart.find(i => i.id === productId);
+  if (existing) { existing.qty++; } else { cart.push({ id: productId, qty: 1 }); }
+  saveCart();
+  updateCartUI();
+}
+
+function removeFromCart(productId) {
+  cart = cart.filter(i => i.id !== productId);
+  saveCart();
+  updateCartUI();
+}
+
+function updateCartUI() {
+  const badge = document.getElementById('cart-badge-nn01');
+  const totalItems = cart.reduce((s, i) => s + i.qty, 0);
+  if (totalItems > 0) {
+    badge.textContent = totalItems;
+    badge.classList.remove('hidden');
+  } else {
+    badge.classList.add('hidden');
+  }
+
+  const container = document.getElementById('cart-items-ci99');
+  const footer = document.getElementById('cart-footer-cf00');
+  if (cart.length === 0) {
+    container.innerHTML = '<div class="flex flex-col items-center justify-center h-full text-center"><p class="text-4xl mb-3">🛍️</p><p class="text-graymuted font-medium">Your cart is empty.</p><p class="text-graymuted text-sm">Start shopping!</p></div>';
+    footer.style.display = 'none';
+    return;
+  }
+  footer.style.display = 'block';
+  let html = '';
+  let subtotal = 0;
+  cart.forEach(item => {
+    const p = products.find(pr => pr.id === item.id);
+    if (!p) return;
+    subtotal += p.price * item.qty;
+    html += `<div class="flex items-start gap-3 py-3 border-b border-gray-100">
+      <div class="w-10 h-10 rounded-lg bg-navy flex items-center justify-center text-lg flex-shrink-0">${p.icon}</div>
+      <div class="flex-1 min-w-0">
+        <p class="text-sm font-semibold text-navy truncate">${p.name}</p>
+        <p class="text-sm text-gold font-display font-bold tabular-nums">$${p.price.toFixed(2)}${item.qty > 1 ? ' × ' + item.qty : ''}</p>
+      </div>
+      <button class="cart-remove-btn p-1 text-graymuted hover:text-red-500 transition-colors flex-shrink-0" data-remove-id="${p.id}" aria-label="Remove ${p.name} from cart">
+        <i data-lucide="x" class="w-4 h-4"></i>
+      </button>
+    </div>`;
+  });
+  container.innerHTML = html;
+  document.getElementById('cart-subtotal-cs11').textContent = '$' + subtotal.toFixed(2);
+
+  // Re-init icons in cart
+  if (typeof lucide !== 'undefined' && typeof lucide.createIcons === 'function') {
+    lucide.createIcons();
+  }
+
+  // Bind remove buttons
+  container.querySelectorAll('.cart-remove-btn').forEach(btn => {
+    btn.addEventListener('click', function() {
+      removeFromCart(parseInt(this.dataset.removeId));
+    });
+  });
+}
+
+// ========== RENDER PRODUCT CARD ==========
+function createProductCard(p, isFeatured) {
+  const isBundle = p.category === 'bundles';
+  const coverClass = isBundle ? 'product-cover bundle-cover' : 'product-cover';
+  let coverInner = '';
+  if (isBundle) {
+    coverInner = `<div class="doc-shape-3"></div><div class="doc-shape-2"></div><div class="doc-shape"><span class="doc-icon">${p.icon}</span></div>`;
+  } else {
+    coverInner = `<div class="doc-shape"><span class="doc-icon">${p.icon}</span></div>`;
+  }
+  const badgeHtml = p.badge ? `<span class="card-badge">${p.badge}</span>` : '';
+  const starsHtml = '★'.repeat(Math.floor(p.rating)) + (p.rating % 1 >= 0.5 ? '½' : '');
+  const formatsHtml = p.formats.map(f => `<span class="format-pill">${f}</span>`).join('');
+
+  let priceHtml = '';
+  if (isBundle && p.originalPrice) {
+    priceHtml = `<span class="line-through text-graymuted text-sm mr-2">$${p.originalPrice.toFixed(2)}</span><span class="font-display text-xl text-gold font-bold tabular-nums">$${p.price.toFixed(2)}</span><span class="ml-2 text-xs bg-green-100 text-green-700 px-2 py-0.5 rounded-full font-semibold">${p.savings}</span>`;
+  } else {
+    priceHtml = `<span class="font-display text-xl text-gold font-bold tabular-nums">$${p.price.toFixed(2)}</span>`;
+  }
+
+  const cardSizeClass = isFeatured ? 'product-card featured-card' : 'product-card fade-in-up';
+
+  return `<div class="${cardSizeClass}" data-category="${p.category}" data-id="${p.id}" data-price="${p.price}" data-featured="${p.featured}" data-bestselling="${p.bestSelling}" data-new="${p.isNew}" data-name="${p.name.toLowerCase()}" data-desc="${p.description.toLowerCase()}">
+    <div class="${coverClass}">
+      <div class="gold-line-top"></div>
+      ${coverInner}
+      <div class="gold-line-bottom"></div>
+      <span class="pm-mono">PM</span>
+      ${badgeHtml}
+    </div>
+    <div class="p-4">
+      <div class="flex flex-wrap gap-1.5 mb-2">${formatsHtml}</div>
+      <h3 class="font-display text-navy font-semibold text-[1.05rem] leading-snug mb-1">${p.name}</h3>
+      <div class="flex items-center gap-1.5 mb-2">
+        <span class="stars">${starsHtml}</span>
+        <span class="text-xs text-graymuted font-medium">${p.rating}</span>
+        <span class="text-xs text-graymuted">(${p.reviews})</span>
+      </div>
+      <p class="text-graymuted text-sm leading-relaxed line-clamp-2 mb-3">${p.description}</p>
+      <div class="mb-3">${priceHtml}</div>
+      <div class="flex gap-2">
+        <button class="add-to-cart-btn flex-1 bg-gold hover:bg-gold-dark text-navy font-semibold py-2.5 rounded-xl text-sm transition-all" data-add-id="${p.id}">Add to Cart</button>
+        <button class="buy-now-btn flex-1 bg-navy hover:bg-navy-light text-white font-semibold py-2.5 rounded-xl text-sm transition-colors" data-buy-id="${p.id}">Buy Now</button>
+      </div>
+    </div>
+  </div>`;
+}
+
+// ========== RENDER FEATURED ==========
+function renderFeatured() {
+  const featured = products.filter(p => p.featured);
+  const grid = document.getElementById('featured-grid-fg77');
+  grid.innerHTML = featured.map(p => createProductCard(p, true)).join('');
+  bindCardButtons(grid);
+}
+
+// ========== RENDER PRODUCTS ==========
+let currentCategory = 'all';
+let currentSearch = '';
+let currentSort = 'featured';
+
+function getFilteredProducts() {
+  let filtered = [...products];
+  if (currentCategory !== 'all') {
+    filtered = filtered.filter(p => p.category === currentCategory);
+  }
+  if (currentSearch) {
+    const q = currentSearch.toLowerCase();
+    filtered = filtered.filter(p => p.name.toLowerCase().includes(q) || p.description.toLowerCase().includes(q));
+  }
+  // Sort
+  switch (currentSort) {
+    case 'price-asc': filtered.sort((a, b) => a.price - b.price); break;
+    case 'price-desc': filtered.sort((a, b) => b.price - a.price); break;
+    case 'newest': filtered.sort((a, b) => (b.isNew ? 1 : 0) - (a.isNew ? 1 : 0)); break;
+    case 'bestselling': filtered.sort((a, b) => (b.bestSelling ? 1 : 0) - (a.bestSelling ? 1 : 0) || b.reviews - a.reviews); break;
+    case 'featured':
+    default: filtered.sort((a, b) => (b.featured ? 1 : 0) - (a.featured ? 1 : 0) || b.reviews - a.reviews); break;
+  }
+  return filtered;
+}
+
+function renderProducts() {
+  const filtered = getFilteredProducts();
+  const grid = document.getElementById('product-grid-pg99');
+  const empty = document.getElementById('empty-state-es00');
+  const counter = document.getElementById('product-count-tx44');
+
+  counter.textContent = `Showing ${filtered.length} of ${products.length} products`;
+
+  if (filtered.length === 0) {
+    grid.style.display = 'none';
+    empty.classList.remove('hidden');
+    return;
+  }
+  grid.style.display = '';
+  empty.classList.add('hidden');
+  grid.innerHTML = filtered.map(p => createProductCard(p, false)).join('');
+  bindCardButtons(grid);
+
+  // Re-trigger fade-in observer
+  grid.querySelectorAll('.fade-in-up').forEach((el, i) => {
+    el.style.transitionDelay = `${(i % 3) * 0.1}s`;
+    fadeObserver.observe(el);
+  });
+
+  if (typeof lucide !== 'undefined' && typeof lucide.createIcons === 'function') {
+    lucide.createIcons();
+  }
+}
+
+// ========== BIND CARD BUTTONS ==========
+function bindCardButtons(container) {
+  container.querySelectorAll('.add-to-cart-btn').forEach(btn => {
+    btn.addEventListener('click', function() {
+      const id = parseInt(this.dataset.addId);
+      addToCart(id);
+      this.textContent = 'Added! ✓';
+      this.classList.add('btn-added');
+      const b = this;
+      setTimeout(() => { b.textContent = 'Add to Cart'; b.classList.remove('btn-added'); }, 1500);
+    });
+  });
+  container.querySelectorAll('.buy-now-btn').forEach(btn => {
+    btn.addEventListener('click', function() {
+      const id = parseInt(this.dataset.buyId);
+      openModal(id);
+    });
+  });
+}
+
+// ========== MODAL ==========
+function openModal(productId) {
+  const p = products.find(pr => pr.id === productId);
+  if (!p) return;
+  document.getElementById('modal-name-mn00').textContent = p.name;
+  document.getElementById('modal-doc-icon-di88').textContent = p.icon;
+  const starsHtml = '★'.repeat(Math.floor(p.rating)) + (p.rating % 1 >= 0.5 ? '½' : '');
+  document.getElementById('modal-rating-mr11').innerHTML = `${starsHtml} <span class="text-xs text-graymuted ml-1">${p.rating} (${p.reviews} reviews)</span>`;
+  let priceHtml = '';
+  if (p.originalPrice) {
+    priceHtml = `<span class="line-through text-graymuted text-sm mr-2">$${p.originalPrice.toFixed(2)}</span><span class="font-display text-2xl text-gold font-bold">$${p.price.toFixed(2)}</span><span class="ml-2 text-xs bg-green-100 text-green-700 px-2 py-0.5 rounded-full font-semibold">${p.savings}</span>`;
+  } else {
+    priceHtml = `<span class="font-display text-2xl text-gold font-bold">$${p.price.toFixed(2)}</span>`;
+  }
+  document.getElementById('modal-price-mp22').innerHTML = priceHtml;
+  document.getElementById('modal-desc-md33').textContent = p.description;
+  document.getElementById('modal-formats-mf44').innerHTML = p.formats.map(f => `<span class="format-pill">${f}</span>`).join('');
+  const includesEl = document.getElementById('modal-includes-mi55');
+  if (p.includes && p.includes.length > 0) {
+    includesEl.innerHTML = `<p class="text-sm font-semibold text-navy mb-2">What's Included:</p><ul class="space-y-1">${p.includes.map(i => `<li class="text-sm text-graymuted flex items-start gap-2"><span class="text-gold mt-0.5">✓</span>${i}</li>`).join('')}</ul>`;
+  } else {
+    includesEl.innerHTML = '';
+  }
+  // Handle bundle cover
+  const coverEl = document.getElementById('modal-cover-mk77');
+  if (p.category === 'bundles') {
+    coverEl.classList.add('bundle-cover');
+  } else {
+    coverEl.classList.remove('bundle-cover');
+  }
+  document.getElementById('modal-overlay-mo55').classList.add('open');
+  document.body.style.overflow = 'hidden';
+}
+
+function closeModal() {
+  document.getElementById('modal-overlay-mo55').classList.remove('open');
+  document.body.style.overflow = '';
+}
+
+// ========== TESTIMONIALS ==========
+function renderTestimonials() {
+  const track = document.getElementById('testimonial-track-tt11');
+  const cardHtml = testimonials.map(t => `<div class="bg-white rounded-2xl p-6 shadow-sm min-w-[300px] max-w-[340px] flex-shrink-0">
+    <div class="stars mb-2">★★★★★</div>
+    <p class="text-sm text-navy leading-relaxed mb-3">"${t.text}"</p>
+    <p class="text-xs text-graymuted font-semibold">— ${t.author}</p>
+  </div>`).join('');
+  track.innerHTML = cardHtml + cardHtml;
+}
+
+// ========== INTERSECTION OBSERVER ==========
+const fadeObserver = new IntersectionObserver((entries) => {
+  entries.forEach(entry => {
+    if (entry.isIntersecting) {
+      entry.target.classList.add('visible');
+      fadeObserver.unobserve(entry.target);
+    }
+  });
+}, { threshold: 0.1 });
+
+// ========== INIT ==========
+function init() {
+  // Icons
+  if (typeof lucide !== 'undefined' && typeof lucide.createIcons === 'function') {
+    lucide.createIcons();
+  }
+
+  renderFeatured();
+  renderProducts();
+  renderTestimonials();
+  updateCartUI();
+
+  // Observe fade-in elements
+  document.querySelectorAll('.fade-in-up').forEach((el, i) => {
+    el.style.transitionDelay = `${(i % 3) * 0.1}s`;
+    fadeObserver.observe(el);
+  });
+
+  // ===== EVENT LISTENERS =====
+
+  // Mobile menu
+  document.getElementById('mobile-menu-btn-rr34').addEventListener('click', function() {
+    document.getElementById('mobile-menu-pa77').classList.remove('hidden');
+    document.body.style.overflow = 'hidden';
+  });
+  document.getElementById('mobile-menu-close-qw56').addEventListener('click', function() {
+    document.getElementById('mobile-menu-pa77').classList.add('hidden');
+    document.body.style.overflow = '';
+  });
+  // Close mobile menu on link click
+  document.querySelectorAll('#mobile-menu-pa77 a').forEach(link => {
+    link.addEventListener('click', function() {
+      document.getElementById('mobile-menu-pa77').classList.add('hidden');
+      document.body.style.overflow = '';
+    });
+  });
+
+  // Cart panel
+  document.getElementById('cart-btn-xk92').addEventListener('click', function() {
+    document.getElementById('cart-panel-cp77').classList.add('open');
+    document.getElementById('cart-overlay-co66').classList.add('open');
+    document.body.style.overflow = 'hidden';
+  });
+  function closeCart() {
+    document.getElementById('cart-panel-cp77').classList.remove('open');
+    document.getElementById('cart-overlay-co66').classList.remove('open');
+    document.body.style.overflow = '';
+  }
+  document.getElementById('cart-close-btn-cc88').addEventListener('click', closeCart);
+  document.getElementById('cart-overlay-co66').addEventListener('click', closeCart);
+  document.getElementById('continue-shopping-btn-cs44').addEventListener('click', closeCart);
+
+  // Checkout buttons (just close cart as demo)
+  document.getElementById('checkout-payhip-btn-hp22').addEventListener('click', function() {
+    alert('Redirecting to Payhip checkout...');
+  });
+  document.getElementById('checkout-gumroad-btn-gr33').addEventListener('click', function() {
+    alert('Redirecting to Gumroad checkout...');
+  });
+
+  // Category tabs
+  document.querySelectorAll('#cat-tabs-ct55 .cat-tab').forEach(tab => {
+    tab.addEventListener('click', function() {
+      document.querySelectorAll('#cat-tabs-ct55 .cat-tab').forEach(t => t.classList.remove('active'));
+      this.classList.add('active');
+      currentCategory = this.dataset.cat;
+      renderProducts();
+    });
+  });
+
+  // Sort
+  document.getElementById('sort-select-sr66').addEventListener('change', function() {
+    currentSort = this.value;
+    renderProducts();
+  });
+
+  // Search from hero
+  const heroSearch = document.getElementById('hero-search-in88');
+  function doSearch() {
+    currentSearch = heroSearch.value.trim();
+    renderProducts();
+    document.getElementById('shop').scrollIntoView({ behavior: 'smooth' });
+  }
+  document.getElementById('hero-search-btn-zz11').addEventListener('click', doSearch);
+  heroSearch.addEventListener('keydown', function(e) {
+    if (e.key === 'Enter') doSearch();
+  });
+  // Live search on typing
+  heroSearch.addEventListener('input', function() {
+    currentSearch = this.value.trim();
+    renderProducts();
+  });
+
+  // Modal close
+  document.getElementById('modal-close-btn-mb99').addEventListener('click', closeModal);
+  document.getElementById('modal-overlay-mo55').addEventListener('click', function(e) {
+    if (e.target === this) closeModal();
+  });
+
+  // Subscribe
+  document.getElementById('subscribe-btn-sb44').addEventListener('click', function() {
+    const email = document.getElementById('email-input-em33').value.trim();
+    const msg = document.getElementById('subscribe-msg-sm55');
+    if (!email || !email.includes('@')) {
+      msg.textContent = 'Please enter a valid email address.';
+      msg.classList.remove('hidden');
+      msg.style.color = '#ef4444';
+      return;
+    }
+    msg.textContent = '🎉 You\'re in! Check your email for your 10% off code.';
+    msg.style.color = '#C9A84C';
+    msg.classList.remove('hidden');
+    document.getElementById('email-input-em33').value = '';
+  });
+}
+
+// Wait for DOM
+if (document.readyState === 'loading') {
+  document.addEventListener('DOMContentLoaded', init);
+} else {
+  init();
+}
+</script>
+</body>
+</html>
