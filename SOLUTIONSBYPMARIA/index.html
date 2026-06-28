@@ -1,1057 +1,227 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Solutions by P Maria – Home</title>
-    <script src="https://cdn.tailwindcss.com"></script>
-    <script src="https://unpkg.com/lucide@latest" defer></script>
-    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400;1,600&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
-    <script>
-      tailwind.config = {
-        theme: {
-          extend: {
-            colors: {
-              navy: '#1B3A6B',
-              'navy-dark': '#132B52',
-              'navy-light': '#24528F',
-              gold: '#C9A84C',
-              'gold-dark': '#B08F35',
-              'gold-light': '#D4BC72',
-              'light-gray': '#F5F6FA',
-              'body-text': '#374151',
-              'gold-tint': '#FFFDF4',
-            },
-            fontFamily: {
-              display: ['"Playfair Display"', 'serif'],
-              body: ['"Inter"', 'sans-serif'],
-            },
-          },
-        },
-      };
-    </script>
-    <style>
-      :root {
-        --navy: #1B3A6B;
-        --navy-dark: #132B52;
-        --navy-light: #24528F;
-        --gold: #C9A84C;
-        --gold-dark: #B08F35;
-        --gold-light: #D4BC72;
-        --white: #FFFFFF;
-        --light-gray: #F5F6FA;
-        --body-text: #374151;
-        --gold-tint: #FFFDF4;
-      }
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>SolutionsByPMaria • Administrative Support & Notary Services</title>
 
-      html { scroll-behavior: smooth; }
-      * { box-sizing: border-box; }
-      body { font-family: 'Inter', sans-serif; margin: 0; padding: 0; overflow-x: hidden; }
+<style>
+/* ------------------------------
+   BRANDING & GLOBAL STYLES
+--------------------------------*/
+:root {
+  --cream: #f7f5f2;
+  --sand: #e8e2da;
+  --gold: #c9a86a;
+  --charcoal: #2f2f2f;
+  --text: #3a3a3a;
+  --radius: 10px;
+}
 
-      /* ── Nav link hover underline ── */
-      .nav-link { position: relative; text-decoration: none; transition: color 0.3s; }
-      .nav-link::after {
-        content: ''; position: absolute; bottom: -4px; left: 0; width: 0; height: 2px;
-        background: var(--gold); transition: width 0.35s ease;
-      }
-      .nav-link:hover::after { width: 100%; }
+body {
+  margin: 0;
+  font-family: "Inter", sans-serif;
+  background: var(--cream);
+  color: var(--text);
+  line-height: 1.6;
+}
 
-      /* ── Hero diagonal texture ── */
-      .hero-texture {
-        background-image: repeating-linear-gradient(
-          45deg,
-          rgba(201,168,76,0.06) 0px, rgba(201,168,76,0.06) 0.5px,
-          transparent 0.5px, transparent 40px
-        );
-      }
+h1, h2, h3 {
+  font-family: "Playfair Display", serif;
+  color: var(--charcoal);
+}
 
-      /* ── Floating particles ── */
-      .particle {
-        position: absolute; border-radius: 50%; background: var(--gold);
-        pointer-events: none; animation: float var(--dur) ease-in-out infinite alternate;
-      }
-      @keyframes float {
-        0%, 100% { transform: translateY(0); }
-        50% { transform: translateY(-20px); }
-      }
+section {
+  padding: clamp(2rem, 6vw, 5rem);
+}
 
-      /* ── Hero card float ── */
-      @keyframes cardFloat {
-        0%, 100% { transform: translateY(0); }
-        50% { transform: translateY(-10px); }
-      }
-      .card-float { animation: cardFloat 4s ease-in-out infinite alternate; }
+/* ------------------------------
+   HEADER
+--------------------------------*/
+header {
+  background: var(--cream);
+  padding: 1.5rem 2rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-bottom: 1px solid var(--sand);
+}
 
-      /* ── Scroll bounce indicator ── */
-      @keyframes bounce {
-        0%, 100% { transform: translateY(0); }
-        50% { transform: translateY(8px); }
-      }
-      .scroll-bounce { animation: bounce 1.8s ease-in-out infinite; }
+nav a {
+  margin-left: 1.5rem;
+  text-decoration: none;
+  color: var(--charcoal);
+  font-weight: 500;
+}
 
-      /* ── Marquee ── */
-      @keyframes marquee {
-        0% { transform: translateX(0); }
-        100% { transform: translateX(-50%); }
-      }
-      .marquee-track { animation: marquee 30s linear infinite; }
-      .marquee-track:hover { animation-play-state: paused; }
+/* ------------------------------
+   HERO SECTION
+--------------------------------*/
+.hero {
+  text-align: center;
+  padding: clamp(4rem, 10vw, 8rem) 2rem;
+  background: var(--sand);
+}
 
-      /* ── Shimmer CTA ── */
-      @keyframes shimmer {
-        0% { background-position: -200% center; }
-        100% { background-position: 200% center; }
-      }
-      .shimmer-overlay {
-        position: absolute; inset: 0; border-radius: 24px; pointer-events: none;
-        background: linear-gradient(90deg, transparent 30%, rgba(201,168,76,0.07) 50%, transparent 70%);
-        background-size: 200% 100%;
-        animation: shimmer 3s ease-in-out infinite;
-      }
+.hero h1 {
+  font-size: clamp(2rem, 5vw, 3.5rem);
+  margin-bottom: 1rem;
+}
 
-      /* ── Scroll Animations ── */
-      .anim-fade-up { opacity: 0; transform: translateY(30px); transition: opacity 0.6s ease, transform 0.6s ease; }
-      .anim-fade-up.visible { opacity: 1; transform: translateY(0); }
-      .anim-slide-left { opacity: 0; transform: translateX(-40px); transition: opacity 0.7s ease, transform 0.7s ease; }
-      .anim-slide-left.visible { opacity: 1; transform: translateX(0); }
-      .anim-slide-right { opacity: 0; transform: translateX(40px); transition: opacity 0.7s ease, transform 0.7s ease; }
-      .anim-slide-right.visible { opacity: 1; transform: translateX(0); }
+.hero p {
+  font-size: clamp(1rem, 2vw, 1.25rem);
+  max-width: 700px;
+  margin: 0 auto 2rem;
+}
 
-      /* ── Service card hover ── */
-      .service-card {
-        transition: transform 0.3s ease, box-shadow 0.3s ease;
-      }
-      .service-card:hover {
-        transform: translateY(-6px);
-        box-shadow: 0 16px 48px rgba(27,58,107,0.13);
-      }
+.cta-btn {
+  background: var(--gold);
+  color: white;
+  padding: 0.9rem 2rem;
+  border-radius: var(--radius);
+  text-decoration: none;
+  font-weight: 600;
+}
 
-      /* ── Product card hover ── */
-      .product-card {
-        transition: transform 0.3s ease, box-shadow 0.3s ease;
-      }
-      .product-card:hover {
-        transform: translateY(-5px);
-        box-shadow: 0 16px 48px rgba(27,58,107,0.15);
-      }
+/* ------------------------------
+   SERVICES
+--------------------------------*/
+.services-grid {
+  display: grid;
+  gap: 2rem;
+  grid-template-columns: 1fr;
+}
 
-      /* ── Nav card hover ── */
-      .nav-card {
-        border: 2px solid transparent;
-        transition: transform 0.3s ease, box-shadow 0.3s ease, border-color 0.3s ease;
-        cursor: pointer;
-      }
-      .nav-card:hover {
-        transform: translateY(-5px);
-        border-color: var(--gold);
-        box-shadow: 0 12px 36px rgba(27,58,107,0.12);
-      }
+@media (min-width: 700px) {
+  .services-grid {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
 
-      /* ── Testimonial card ── */
-      .testimonial-card {
-        position: relative;
-        transition: transform 0.3s ease, box-shadow 0.3s ease;
-      }
-      .testimonial-card:hover {
-        transform: translateY(-4px);
-        box-shadow: 0 12px 40px rgba(27,58,107,0.12);
-      }
+.service-card {
+  background: white;
+  padding: 2rem;
+  border-radius: var(--radius);
+  border: 1px solid var(--sand);
+  box-shadow: 0 4px 10px rgba(0,0,0,0.05);
+}
 
-      /* ── Dot pattern ── */
-      .dot-pattern {
-        background-image: radial-gradient(circle, rgba(201,168,76,0.04) 1px, transparent 1px);
-        background-size: 24px 24px;
-      }
+.service-card h3 {
+  margin-top: 0;
+}
 
-      /* ── Stagger delays ── */
-      .stagger-1 { transition-delay: 0.1s !important; }
-      .stagger-2 { transition-delay: 0.2s !important; }
-      .stagger-3 { transition-delay: 0.3s !important; }
-      .stagger-4 { transition-delay: 0.4s !important; }
-      .stagger-5 { transition-delay: 0.5s !important; }
-      .stagger-6 { transition-delay: 0.6s !important; }
+.service-card p {
+  margin-bottom: 1.5rem;
+}
 
-      /* ── Social icon ── */
-      .social-icon {
-        display: inline-flex; align-items: center; justify-content: center;
-        width: 36px; height: 36px; border-radius: 50%; background: rgba(255,255,255,0.12);
-        color: white; font-size: 0.85rem; transition: background 0.3s, color 0.3s;
-        text-decoration: none;
-      }
-      .social-icon:hover { background: var(--gold); color: var(--navy); }
+.service-card a {
+  color: var(--gold);
+  font-weight: 600;
+  text-decoration: none;
+}
 
-      /* ── Footer link ── */
-      .footer-link { color: rgba(255,255,255,0.8); text-decoration: none; transition: color 0.3s; display: block; padding: 3px 0; font-size: 0.9rem; }
-      .footer-link:hover { color: var(--gold); }
+/* ------------------------------
+   ABOUT
+--------------------------------*/
+.about {
+  background: var(--cream);
+  max-width: 900px;
+  margin: 0 auto;
+  text-align: center;
+}
 
-      /* ── Gold underline accent ── */
-      .gold-rule { width: 60px; height: 3px; background: var(--gold); margin: 16px auto 0; border-radius: 4px; }
-      .gold-rule-left { width: 60px; height: 3px; background: var(--gold); margin: 16px 0 0; border-radius: 4px; }
+.about p {
+  max-width: 700px;
+  margin: 0 auto;
+}
 
-      /* ── Mobile menu ── */
-      .mobile-menu { transform: translateX(100%); transition: transform 0.35s ease; }
-      .mobile-menu.open { transform: translateX(0); }
+/* ------------------------------
+   CONTACT
+--------------------------------*/
+.contact {
+  background: var(--sand);
+  text-align: center;
+}
 
-      /* ── Quote mark ── */
-      .quote-mark {
-        position: absolute; top: 16px; left: 20px;
-        font-family: 'Playfair Display', serif; font-size: 3rem;
-        color: var(--gold); opacity: 0.25; line-height: 1; pointer-events: none;
-      }
+.contact a {
+  background: var(--gold);
+  color: white;
+  padding: 1rem 2rem;
+  border-radius: var(--radius);
+  text-decoration: none;
+  font-weight: 600;
+}
 
-      /* ── Step number ── */
-      .step-num {
-        display: flex; align-items: center; justify-content: center;
-        width: 36px; height: 36px; min-width: 36px; border-radius: 50%; font-weight: 700; font-size: 0.95rem;
-      }
-
-      /* ── Line clamp ── */
-      .line-clamp-2 { display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
-    </style>
+/* ------------------------------
+   FOOTER
+--------------------------------*/
+footer {
+  background: var(--charcoal);
+  color: white;
+  padding: 2rem;
+  text-align: center;
+  font-size: 0.9rem;
+}
+</style>
 </head>
-<body data-id="0" class="bg-white text-body-text font-body">
 
-<app-icon data-id="1" hidden data-icon="stamp" data-palette="Dark"></app-icon>
+<body>
 
-<!-- ═══════════════════════════════════════════ -->
-<!-- SECTION 1 — STICKY NAVIGATION BAR          -->
-<!-- ═══════════════════════════════════════════ -->
-<header data-id="2" id="navbar-header-k3m9" class="fixed top-0 left-0 w-full z-50 bg-navy transition-shadow duration-300" style="border-bottom: 2px solid var(--gold);">
-  <div data-id="3" class="max-w-7xl mx-auto px-4 md:px-6 flex items-center justify-between h-[68px]">
-    <!-- Logo -->
-    <a data-id="4" href="#home" class="flex-shrink-0">
-      <img data-id="5" src="https://ts2.mm.bing.net/th?id=OIP.FQirKTfc0xDy3YUW_c_C4QHaF7&pid=15.1&o=7&rm=3" alt="Solutions by P Maria Logo" class="h-14 w-auto" />
-    </a>
-    <!-- Desktop Nav -->
-    <nav data-id="6" id="desktop-nav-a8z2" class="hidden md:flex items-center gap-6 lg:gap-8">
-      <a data-id="7" href="#home" class="nav-link text-gold font-semibold" style="font-size:0.95rem;letter-spacing:0.3px;">Home</a>
-      <a data-id="8" href="#about" class="nav-link text-gold font-semibold" style="font-size:0.95rem;letter-spacing:0.3px;">About</a>
-      <a data-id="9" href="#services" class="nav-link text-gold font-semibold" style="font-size:0.95rem;letter-spacing:0.3px;">Services</a>
-      <a data-id="10" href="#products" class="nav-link text-gold font-semibold" style="font-size:0.95rem;letter-spacing:0.3px;">Shop</a>
-      <a data-id="11" href="#testimonials" class="nav-link text-gold font-semibold" style="font-size:0.95rem;letter-spacing:0.3px;">FAQ</a>
-      <a data-id="12" href="#contact" class="nav-link text-gold font-semibold" style="font-size:0.95rem;letter-spacing:0.3px;">Contact</a>
-      <a data-id="13" href="#contact" id="book-now-btn-d4x1" class="bg-gold text-navy font-bold rounded-full px-5 py-2 text-sm hover:bg-gold-dark transition-colors" style="border-radius:50px;">Book Now</a>
-    </nav>
-    <!-- Mobile hamburger -->
-    <button data-id="14" id="mobile-menu-btn-r7p3" class="md:hidden p-2 text-gold" aria-label="Open menu">
-      <i data-id="15" data-lucide="menu" class="w-7 h-7"></i>
-    </button>
-  </div>
+<header>
+  <h2>SolutionsByPMaria</h2>
+  <nav>
+    <a href="#services">Services</a>
+    <a href="#about">About</a>
+    <a href="#contact">Contact</a>
+  </nav>
 </header>
 
-<!-- Mobile Nav Panel -->
-<nav data-id="16" id="mobile-menu-q5k8" class="mobile-menu fixed top-0 right-0 w-72 h-full bg-navy z-[60] flex flex-col p-6 pt-5 shadow-2xl" style="border-left: 2px solid var(--gold);">
-  <button data-id="17" id="mobile-menu-close-w2j4" class="self-end p-2 text-gold mb-6" aria-label="Close menu">
-    <i data-id="18" data-lucide="x" class="w-7 h-7"></i>
-  </button>
-  <a data-id="19" href="#home" class="text-gold font-semibold text-lg py-3 border-b border-gold/20 mobile-nav-link">Home</a>
-  <a data-id="20" href="#about" class="text-gold font-semibold text-lg py-3 border-b border-gold/20 mobile-nav-link">About</a>
-  <a data-id="21" href="#services" class="text-gold font-semibold text-lg py-3 border-b border-gold/20 mobile-nav-link">Services</a>
-  <a data-id="22" href="#products" class="text-gold font-semibold text-lg py-3 border-b border-gold/20 mobile-nav-link">Shop</a>
-  <a data-id="23" href="#testimonials" class="text-gold font-semibold text-lg py-3 border-b border-gold/20 mobile-nav-link">FAQ</a>
-  <a data-id="24" href="#contact" class="text-gold font-semibold text-lg py-3 border-b border-gold/20 mobile-nav-link">Contact</a>
-  <a data-id="25" href="#contact" class="bg-gold text-navy font-bold rounded-full px-6 py-3 text-center mt-6 hover:bg-gold-dark transition-colors">Book Now</a>
-</nav>
-<!-- Overlay -->
-<div data-id="26" id="mobile-overlay-u9e1" class="fixed inset-0 bg-black/50 z-[55] hidden"></div>
+<section class="hero">
+  <h1>Quiet, Reliable, Professional Support</h1>
+  <p>Providing structured administrative assistance, dependable workflow management, and Oklahoma notary services — designed for busy professionals who value clarity, organization, and peace.</p>
+  <a class="cta-btn" href="#contact">Book Services</a>
+</section>
 
+<section id="services">
+  <h2 style="text-align:center;">Services</h2>
+  <div class="services-grid">
 
-<!-- ═══════════════════════════════════════════ -->
-<!-- SECTION 2 — HERO SECTION                   -->
-<!-- ═══════════════════════════════════════════ -->
-<section data-id="27" id="home" class="relative min-h-screen bg-navy hero-texture flex items-center overflow-hidden" style="padding-top:68px;">
-  <!-- Floating Particles -->
-  <div data-id="28" class="particle" style="width:6px;height:6px;top:12%;left:8%;opacity:0.15;--dur:8s;"></div>
-  <div data-id="29" class="particle" style="width:12px;height:12px;top:22%;left:18%;opacity:0.1;--dur:12s;"></div>
-  <div data-id="30" class="particle" style="width:4px;height:4px;top:55%;left:5%;opacity:0.2;--dur:7s;"></div>
-  <div data-id="31" class="particle" style="width:16px;height:16px;top:70%;left:25%;opacity:0.08;--dur:15s;"></div>
-  <div data-id="32" class="particle" style="width:8px;height:8px;top:35%;left:60%;opacity:0.18;--dur:9s;"></div>
-  <div data-id="33" class="particle" style="width:5px;height:5px;top:15%;left:72%;opacity:0.25;--dur:6s;"></div>
-  <div data-id="34" class="particle" style="width:10px;height:10px;top:80%;left:70%;opacity:0.12;--dur:14s;"></div>
-  <div data-id="35" class="particle" style="width:7px;height:7px;top:45%;left:90%;opacity:0.2;--dur:10s;"></div>
-  <div data-id="36" class="particle" style="width:14px;height:14px;top:10%;left:85%;opacity:0.09;--dur:18s;"></div>
-  <div data-id="37" class="particle" style="width:4px;height:4px;top:60%;left:45%;opacity:0.3;--dur:7s;"></div>
-  <div data-id="38" class="particle" style="width:9px;height:9px;top:90%;left:55%;opacity:0.14;--dur:11s;"></div>
-  <div data-id="39" class="particle" style="width:6px;height:6px;top:30%;left:38%;opacity:0.22;--dur:13s;"></div>
-  <div data-id="40" class="particle" style="width:11px;height:11px;top:75%;left:88%;opacity:0.1;--dur:20s;"></div>
-  <div data-id="41" class="particle" style="width:5px;height:5px;top:50%;left:15%;opacity:0.18;--dur:16s;"></div>
-
-  <div data-id="42" class="max-w-7xl mx-auto px-4 md:px-6 lg:px-8 w-full py-12 md:py-0">
-    <div data-id="43" class="flex flex-col lg:flex-row items-center gap-10 lg:gap-16">
-      <!-- LEFT — Text Content -->
-      <div data-id="44" class="flex-1 text-center lg:text-left">
-        <span data-id="45" class="inline-block bg-white/10 text-gold text-xs font-semibold px-4 py-2 rounded-full mb-6 tracking-wide">✨ Notary · Document Prep · Admin Support · Digital Templates</span>
-        <h1 data-id="46" class="font-display text-white font-bold leading-tight mb-0" style="font-size:clamp(2.4rem, 5vw, 4rem); line-height:1.2;">
-          Professional Solutions,<br data-id="47">Built for the Real World.
-        </h1>
-        <div data-id="48" class="mx-auto lg:mx-0" style="width:80px;height:3px;background:var(--gold);margin-top:20px;margin-bottom:20px;border-radius:4px;"></div>
-        <p data-id="49" class="text-white/90 max-w-xl mx-auto lg:mx-0 mb-8" style="font-size:clamp(1rem, 2vw, 1.2rem); line-height:1.7;">
-          Solutions by P Maria delivers expert notary services, professional document preparation, administrative support, and done-for-you digital templates — all from a real practitioner who's been in your shoes.
-        </p>
-        <div data-id="50" class="flex flex-wrap justify-center lg:justify-start gap-4 mb-6">
-          <a data-id="51" href="#contact" class="bg-gold text-navy font-bold rounded-xl px-8 py-3.5 text-base hover:bg-gold-dark transition-colors inline-block">Book a Service</a>
-          <a data-id="52" href="#products" class="border-2 border-white text-white font-bold rounded-xl px-8 py-3.5 text-base hover:bg-white hover:text-navy transition-all inline-block">Browse the Shop</a>
-        </div>
-        <div data-id="53" class="flex flex-wrap justify-center lg:justify-start gap-4 text-white/85 text-sm">
-          <span data-id="54">✓ Certified Notary</span>
-          <span data-id="55">✓ Instant Download Templates</span>
-          <span data-id="56">✓ Spencer, Oklahoma Based</span>
-        </div>
-      </div>
-      <!-- RIGHT — Visual Card -->
-      <div data-id="57" class="flex-1 max-w-md w-full card-float">
-        <div data-id="58" class="bg-white rounded-2xl overflow-hidden border-2 border-gold" style="box-shadow: 0 24px 80px rgba(0,0,0,0.35);">
-          <div data-id="59" class="w-full" style="height:260px; overflow:hidden;">
-            <img data-id="60" src="https://ts2.mm.bing.net/th?id=OIP.FQirKTfc0xDy3YUW_c_C4QHaF7&pid=15.1&o=7&rm=3" alt="Solutions by P Maria Digital Products Showcase" class="w-full h-full object-cover" loading="lazy" />
-          </div>
-          <div data-id="61" class="bg-navy p-6">
-            <p data-id="62" class="font-display text-gold text-lg mb-1">Solutions by P Maria</p>
-            <p data-id="63" class="text-white/80 text-sm mb-4">Your trusted professional partner.</p>
-            <div data-id="64" class="flex flex-wrap gap-2">
-              <span data-id="65" class="text-xs text-white border border-white/30 rounded-full px-3 py-1">⭐ 5-Star Rated</span>
-              <span data-id="66" class="text-xs text-white border border-white/30 rounded-full px-3 py-1">📦 20+ Templates</span>
-              <span data-id="67" class="text-xs text-white border border-white/30 rounded-full px-3 py-1">🖊️ Certified Notary</span>
-            </div>
-          </div>
-        </div>
-      </div>
+    <div class="service-card">
+      <h3>Administrative Support</h3>
+      <p>Inbox management, scheduling, document preparation, workflow organization, and dependable day‑to‑day support.</p>
+      <a href="#contact">Request Service</a>
     </div>
-  </div>
-  <!-- Scroll Indicator -->
-  <div data-id="68" class="absolute bottom-8 left-1/2 -translate-x-1/2 scroll-bounce">
-    <span data-id="69" class="text-gold text-2xl">↓</span>
+
+    <div class="service-card">
+      <h3>Notary Services</h3>
+      <p>Certified Oklahoma Notary available for acknowledgments, jurats, oaths, affirmations, and document verification.</p>
+      <a href="#contact">Schedule Notary</a>
+    </div>
+
+    <div class="service-card">
+      <h3>Digital Organization</h3>
+      <p>File structuring, naming conventions, digital cleanup, and system setup for professionals who need clarity.</p>
+      <a href="#contact">Get Organized</a>
+    </div>
+
   </div>
 </section>
 
-
-<!-- ═══════════════════════════════════════════ -->
-<!-- SECTION 3 — MARQUEE STATS BAR              -->
-<!-- ═══════════════════════════════════════════ -->
-<div data-id="70" id="marquee-bar-g6h2" class="bg-navy overflow-hidden" style="border-top:1px solid var(--gold);border-bottom:1px solid var(--gold);">
-  <div data-id="71" class="marquee-track flex items-center whitespace-nowrap py-3" style="width: max-content;">
-    <span data-id="72" class="text-white font-semibold text-sm mx-4">🖊️ Certified Notary Public</span><span data-id="73" class="text-gold mx-2">·</span>
-    <span data-id="74" class="text-white font-semibold text-sm mx-4">📱 Mobile Notary Services</span><span data-id="75" class="text-gold mx-2">·</span>
-    <span data-id="76" class="text-white font-semibold text-sm mx-4">📝 Loan Signing Agent</span><span data-id="77" class="text-gold mx-2">·</span>
-    <span data-id="78" class="text-white font-semibold text-sm mx-4">📋 Document Preparation</span><span data-id="79" class="text-gold mx-2">·</span>
-    <span data-id="80" class="text-white font-semibold text-sm mx-4">🗂️ Administrative Support</span><span data-id="81" class="text-gold mx-2">·</span>
-    <span data-id="82" class="text-white font-semibold text-sm mx-4">🛍️ 20+ Digital Templates</span><span data-id="83" class="text-gold mx-2">·</span>
-    <span data-id="84" class="text-white font-semibold text-sm mx-4">⭐ 5-Star Client Reviews</span><span data-id="85" class="text-gold mx-2">·</span>
-    <span data-id="86" class="text-white font-semibold text-sm mx-4">📍 Spencer, Oklahoma</span><span data-id="87" class="text-gold mx-2">·</span>
-    <!-- Duplicate for seamless loop -->
-    <span data-id="88" class="text-white font-semibold text-sm mx-4">🖊️ Certified Notary Public</span><span data-id="89" class="text-gold mx-2">·</span>
-    <span data-id="90" class="text-white font-semibold text-sm mx-4">📱 Mobile Notary Services</span><span data-id="91" class="text-gold mx-2">·</span>
-    <span data-id="92" class="text-white font-semibold text-sm mx-4">📝 Loan Signing Agent</span><span data-id="93" class="text-gold mx-2">·</span>
-    <span data-id="94" class="text-white font-semibold text-sm mx-4">📋 Document Preparation</span><span data-id="95" class="text-gold mx-2">·</span>
-    <span data-id="96" class="text-white font-semibold text-sm mx-4">🗂️ Administrative Support</span><span data-id="97" class="text-gold mx-2">·</span>
-    <span data-id="98" class="text-white font-semibold text-sm mx-4">🛍️ 20+ Digital Templates</span><span data-id="99" class="text-gold mx-2">·</span>
-    <span data-id="100" class="text-white font-semibold text-sm mx-4">⭐ 5-Star Client Reviews</span><span data-id="101" class="text-gold mx-2">·</span>
-    <span data-id="102" class="text-white font-semibold text-sm mx-4">📍 Spencer, Oklahoma</span><span data-id="103" class="text-gold mx-2">·</span>
-  </div>
-</div>
-
-
-<!-- ═══════════════════════════════════════════ -->
-<!-- SECTION 4 — ABOUT PREVIEW                  -->
-<!-- ═══════════════════════════════════════════ -->
-<section data-id="104" id="about" class="bg-white py-20 md:py-28">
-  <div data-id="105" class="max-w-7xl mx-auto px-4 md:px-6 lg:px-8">
-    <div data-id="106" class="flex flex-col lg:flex-row items-center gap-12 lg:gap-16">
-      <!-- LEFT — Image -->
-      <div data-id="107" class="flex-1 anim-slide-left">
-        <img data-id="108" src="https://ts4.mm.bing.net/th?id=OIP.MxzTmQN8hfKOZAMx5IIBbAHaHa&pid=15.1&o=7&rm=3" alt="Solutions by P Maria digital product templates" class="w-full max-h-[420px] object-cover rounded-2xl" style="box-shadow: 0 0 0 6px var(--gold), 0 0 0 12px var(--navy), 0 20px 60px rgba(0,0,0,0.15);" loading="lazy" />
-      </div>
-      <!-- RIGHT — Text -->
-      <div data-id="109" class="flex-1 anim-slide-right">
-        <span data-id="110" class="text-gold font-semibold text-xs tracking-widest uppercase">ABOUT PRINCESS MARIA</span>
-        <h2 data-id="111" class="font-display text-navy text-2xl md:text-3xl lg:text-4xl font-bold mt-3 mb-0">Built From Real Experience — Not a Textbook</h2>
-        <div data-id="112" class="gold-rule-left"></div>
-        <p data-id="113" class="text-body-text mt-6 leading-relaxed" style="line-height:1.8;">
-          Solutions by P Maria was built from real experience. As a certified notary, administrative professional, and document preparation specialist based in Spencer, Oklahoma, I've spent years helping individuals, businesses, and legal professionals navigate the paperwork that powers their world.
-        </p>
-        <p data-id="114" class="text-body-text mt-4 leading-relaxed" style="line-height:1.8;">
-          Every service I provide and every template I sell comes from hands-on expertise. That's my promise: no fluff, no guesswork — just practical, professional solutions built for the real world.
-        </p>
-        <div data-id="115" class="flex flex-wrap gap-3 mt-6 mb-8">
-          <span data-id="116" class="border border-gold text-navy text-xs font-bold rounded-full px-4 py-2">✅ Real Experience</span>
-          <span data-id="117" class="border border-gold text-navy text-xs font-bold rounded-full px-4 py-2">🎯 Practical & Polished</span>
-          <span data-id="118" class="border border-gold text-navy text-xs font-bold rounded-full px-4 py-2">💡 Built for Busy Pros</span>
-        </div>
-        <a data-id="119" href="#about" class="inline-block border-2 border-navy text-gold font-bold rounded-xl px-6 py-3 hover:bg-gold hover:text-navy hover:border-gold transition-all">Read My Full Story →</a>
-      </div>
-    </div>
-  </div>
+<section id="about" class="about">
+  <h2>About SolutionsByPMaria</h2>
+  <p>I specialize in quiet, structured, detail‑oriented administrative support for professionals who need reliability without chaos. My approach is calm, organized, and rooted in efficiency — helping you stay on track, reduce stress, and maintain clarity in your workflow.</p>
 </section>
 
-
-<!-- ═══════════════════════════════════════════ -->
-<!-- SECTION 5 — SERVICES OVERVIEW              -->
-<!-- ═══════════════════════════════════════════ -->
-<section data-id="120" id="services" class="bg-light-gray py-20 md:py-28">
-  <div data-id="121" class="max-w-7xl mx-auto px-4 md:px-6 lg:px-8">
-    <!-- Header -->
-    <div data-id="122" class="text-center mb-14 anim-fade-up">
-      <span data-id="123" class="inline-block bg-gold/10 text-gold text-xs font-bold tracking-widest uppercase px-4 py-2 rounded-full mb-4">WHAT WE OFFER</span>
-      <h2 data-id="124" class="font-display text-navy text-2xl md:text-3xl lg:text-4xl font-bold">Professional Services Designed Around You</h2>
-      <div data-id="125" class="gold-rule"></div>
-      <p data-id="126" class="text-body-text mt-4 max-w-xl mx-auto">From notarizations to digital templates — we have everything a busy professional needs.</p>
-    </div>
-    <!-- Grid -->
-    <div data-id="127" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-      <!-- Card 1 -->
-      <div data-id="128" class="service-card bg-white rounded-2xl p-8 shadow-sm border-t-4 border-gold anim-fade-up stagger-1">
-        <div data-id="129" class="w-12 h-12 bg-gold rounded-full flex items-center justify-center text-xl mb-5">🖊️</div>
-        <h3 data-id="130" class="font-display text-navy text-lg font-bold mb-2">Notary Services</h3>
-        <p data-id="131" class="text-body-text text-sm leading-relaxed mb-4">State-commissioned notary serving Spencer, OK — general notarizations, mobile visits, real estate documents, estate signings & apostille prep.</p>
-        <a data-id="132" href="#services" class="text-gold font-semibold text-sm hover:underline">View Services →</a>
-      </div>
-      <!-- Card 2 -->
-      <div data-id="133" class="service-card bg-white rounded-2xl p-8 shadow-sm border-t-4 border-gold anim-fade-up stagger-2">
-        <div data-id="134" class="w-12 h-12 bg-gold rounded-full flex items-center justify-center text-xl mb-5">🚗</div>
-        <h3 data-id="135" class="font-display text-navy text-lg font-bold mb-2">Mobile Notary</h3>
-        <p data-id="136" class="text-body-text text-sm leading-relaxed mb-4">We come to you — home, office, hospital, or care facility. Professional notarization at your convenience anywhere in the OKC metro area.</p>
-        <a data-id="137" href="#contact" class="text-gold font-semibold text-sm hover:underline">Book Now →</a>
-      </div>
-      <!-- Card 3 — Popular -->
-      <div data-id="138" class="service-card bg-gold-tint rounded-2xl p-8 shadow-sm border-t-4 border-gold relative anim-fade-up stagger-3">
-        <span data-id="139" class="absolute top-4 right-4 bg-gold text-navy text-xs font-bold px-3 py-1 rounded-full">⭐ Popular</span>
-        <div data-id="140" class="w-12 h-12 bg-gold rounded-full flex items-center justify-center text-xl mb-5">📝</div>
-        <h3 data-id="141" class="font-display text-navy text-lg font-bold mb-2">Loan Signing Agent</h3>
-        <p data-id="142" class="text-body-text text-sm leading-relaxed mb-4">Certified signing agent handling mortgage, refinance, and real estate loan packages with precision and professionalism.</p>
-        <a data-id="143" href="#services" class="text-gold font-semibold text-sm hover:underline">Learn More →</a>
-      </div>
-      <!-- Card 4 -->
-      <div data-id="144" class="service-card bg-white rounded-2xl p-8 shadow-sm border-t-4 border-gold anim-fade-up stagger-4">
-        <div data-id="145" class="w-12 h-12 bg-gold rounded-full flex items-center justify-center text-xl mb-5">📋</div>
-        <h3 data-id="146" class="font-display text-navy text-lg font-bold mb-2">Document Preparation</h3>
-        <p data-id="147" class="text-body-text text-sm leading-relaxed mb-4">Accurate, confidential document prep for individuals and businesses — affidavits, powers of attorney, estate organizers & more.</p>
-        <a data-id="148" href="#contact" class="text-gold font-semibold text-sm hover:underline">Get a Quote →</a>
-      </div>
-      <!-- Card 5 -->
-      <div data-id="149" class="service-card bg-white rounded-2xl p-8 shadow-sm border-t-4 border-gold anim-fade-up stagger-5">
-        <div data-id="150" class="w-12 h-12 bg-gold rounded-full flex items-center justify-center text-xl mb-5">🗂️</div>
-        <h3 data-id="151" class="font-display text-navy text-lg font-bold mb-2">Administrative Support</h3>
-        <p data-id="152" class="text-body-text text-sm leading-relaxed mb-4">Virtual and in-person admin support — document drafting, data entry, onboarding packets, email templates & monthly retainer plans.</p>
-        <a data-id="153" href="#services" class="text-gold font-semibold text-sm hover:underline">View Plans →</a>
-      </div>
-      <!-- Card 6 — Shop Now -->
-      <div data-id="154" class="service-card bg-gold-tint rounded-2xl p-8 shadow-sm border-t-4 border-gold relative anim-fade-up stagger-6">
-        <span data-id="155" class="absolute top-4 right-4 bg-gold text-navy text-xs font-bold px-3 py-1 rounded-full">✨ Shop Now</span>
-        <div data-id="156" class="w-12 h-12 bg-gold rounded-full flex items-center justify-center text-xl mb-5">🛍️</div>
-        <h3 data-id="157" class="font-display text-navy text-lg font-bold mb-2">Digital Product Shop</h3>
-        <p data-id="158" class="text-body-text text-sm leading-relaxed mb-4">20+ done-for-you templates for notaries, VAs & solopreneurs. Instant download. Fully editable. Professionally designed.</p>
-        <a data-id="159" href="#products" class="text-gold font-semibold text-sm hover:underline">Browse Shop →</a>
-      </div>
-    </div>
-    <!-- CTA -->
-    <div data-id="160" class="text-center mt-12 anim-fade-up">
-      <a data-id="161" href="#services" class="inline-block bg-gold text-navy font-bold rounded-xl px-8 py-4 text-base hover:bg-gold-dark transition-colors">View All Services & Pricing →</a>
-    </div>
-  </div>
+<section id="contact" class="contact">
+  <h2>Contact</h2>
+  <p>Email: <strong>solutionsbypmaria@gmail.com</strong></p>
+  <p>Service Area: Oklahoma</p>
+  <a href="mailto:solutionsbypmaria@gmail.com">Book Services</a>
 </section>
 
-
-<!-- ═══════════════════════════════════════════ -->
-<!-- SECTION 6 — FEATURED PRODUCTS              -->
-<!-- ═══════════════════════════════════════════ -->
-<section data-id="162" id="products" class="bg-navy dot-pattern py-20 md:py-28">
-  <div data-id="163" class="max-w-7xl mx-auto px-4 md:px-6 lg:px-8">
-    <!-- Header -->
-    <div data-id="164" class="text-center mb-14 anim-fade-up">
-      <span data-id="165" class="text-gold font-semibold text-xs tracking-widest uppercase">DIGITAL PRODUCT SHOP</span>
-      <h2 data-id="166" class="font-display text-white text-2xl md:text-3xl lg:text-4xl font-bold mt-3">Done-For-You Templates That Work</h2>
-      <div data-id="167" class="gold-rule"></div>
-      <p data-id="168" class="text-white/80 mt-4 max-w-lg mx-auto">Built by a real notary — every product is something I personally needed. Instant download. Fully editable.</p>
-    </div>
-    <!-- Product Grid -->
-    <div data-id="169" class="grid grid-cols-1 md:grid-cols-2 gap-6 max-w-4xl mx-auto">
-      <!-- Product 1 -->
-      <div data-id="170" class="product-card bg-white rounded-2xl overflow-hidden shadow-lg anim-fade-up stagger-1">
-        <div data-id="171" class="h-40 bg-gradient-to-br from-navy to-navy-light flex items-center justify-center relative">
-          <div data-id="172" class="w-16 h-20 bg-white/15 rounded-lg flex items-center justify-center">
-            <span data-id="173" class="text-3xl">📦</span>
-          </div>
-          <span data-id="174" class="absolute top-3 right-3 bg-gold text-navy text-xs font-bold px-2 py-1 rounded-full">⭐ BESTSELLER</span>
-          <span data-id="175" class="absolute bottom-3 left-3 text-gold text-xs font-semibold tracking-wider">STARTER BUNDLE</span>
-        </div>
-        <div data-id="176" class="p-5">
-          <div data-id="177" class="flex gap-2 mb-2">
-            <span data-id="178" class="text-xs border border-gray-300 text-gray-500 rounded-full px-2 py-0.5">PDF</span>
-            <span data-id="179" class="text-xs border border-gray-300 text-gray-500 rounded-full px-2 py-0.5">Word</span>
-            <span data-id="180" class="text-xs border border-gray-300 text-gray-500 rounded-full px-2 py-0.5">Canva</span>
-          </div>
-          <h3 data-id="181" class="font-display text-navy font-bold text-base mb-1">Notary Business Starter Bundle</h3>
-          <div data-id="182" class="flex items-center gap-1 mb-1">
-            <span data-id="183" class="text-gold text-sm">★★★★★</span>
-            <span data-id="184" class="text-gray-400 text-xs">(47 reviews)</span>
-          </div>
-          <p data-id="185" class="font-display text-gold text-xl font-bold mb-2">$12.99</p>
-          <p data-id="186" class="text-body-text text-sm line-clamp-2 mb-4">Everything a new notary needs to launch professionally.</p>
-          <div data-id="187" class="flex gap-3">
-            <button data-id="188" class="bg-gold text-navy font-bold text-sm rounded-lg px-4 py-2 hover:bg-gold-dark transition-colors">Add to Cart</button>
-            <a data-id="189" href="#products" class="text-navy font-semibold text-sm py-2 hover:text-gold transition-colors">Buy Now →</a>
-          </div>
-        </div>
-      </div>
-      <!-- Product 2 -->
-      <div data-id="190" class="product-card bg-white rounded-2xl overflow-hidden shadow-lg anim-fade-up stagger-2">
-        <div data-id="191" class="h-40 bg-gradient-to-br from-navy to-navy-light flex items-center justify-center relative">
-          <div data-id="192" class="w-16 h-20 bg-white/15 rounded-lg flex items-center justify-center">
-            <span data-id="193" class="text-3xl">📂</span>
-          </div>
-          <span data-id="194" class="absolute top-3 right-3 bg-gold text-navy text-xs font-bold px-2 py-1 rounded-full">⭐ BESTSELLER</span>
-          <span data-id="195" class="absolute bottom-3 left-3 text-gold text-xs font-semibold tracking-wider">VA PACKET</span>
-        </div>
-        <div data-id="196" class="p-5">
-          <div data-id="197" class="flex gap-2 mb-2">
-            <span data-id="198" class="text-xs border border-gray-300 text-gray-500 rounded-full px-2 py-0.5">PDF</span>
-            <span data-id="199" class="text-xs border border-gray-300 text-gray-500 rounded-full px-2 py-0.5">Word</span>
-            <span data-id="200" class="text-xs border border-gray-300 text-gray-500 rounded-full px-2 py-0.5">Canva</span>
-          </div>
-          <h3 data-id="201" class="font-display text-navy font-bold text-base mb-1">Virtual Assistant Onboarding Packet</h3>
-          <div data-id="202" class="flex items-center gap-1 mb-1">
-            <span data-id="203" class="text-gold text-sm">★★★★★</span>
-            <span data-id="204" class="text-gray-400 text-xs">(33 reviews)</span>
-          </div>
-          <p data-id="205" class="font-display text-gold text-xl font-bold mb-2">$9.99</p>
-          <p data-id="206" class="text-body-text text-sm line-clamp-2 mb-4">Onboard clients like a seasoned pro with this polished packet.</p>
-          <div data-id="207" class="flex gap-3">
-            <button data-id="208" class="bg-gold text-navy font-bold text-sm rounded-lg px-4 py-2 hover:bg-gold-dark transition-colors">Add to Cart</button>
-            <a data-id="209" href="#products" class="text-navy font-semibold text-sm py-2 hover:text-gold transition-colors">Buy Now →</a>
-          </div>
-        </div>
-      </div>
-      <!-- Product 3 -->
-      <div data-id="210" class="product-card bg-white rounded-2xl overflow-hidden shadow-lg anim-fade-up stagger-3">
-        <div data-id="211" class="h-40 bg-gradient-to-br from-navy to-navy-light flex items-center justify-center relative">
-          <div data-id="212" class="w-16 h-20 bg-white/15 rounded-lg flex items-center justify-center">
-            <span data-id="213" class="text-3xl">📱</span>
-          </div>
-          <span data-id="214" class="absolute top-3 right-3 bg-orange-500 text-white text-xs font-bold px-2 py-1 rounded-full">🔥 HOT</span>
-          <span data-id="215" class="absolute bottom-3 left-3 text-gold text-xs font-semibold tracking-wider">SOCIAL MEDIA</span>
-        </div>
-        <div data-id="216" class="p-5">
-          <div data-id="217" class="flex gap-2 mb-2">
-            <span data-id="218" class="text-xs border border-gray-300 text-gray-500 rounded-full px-2 py-0.5">Canva</span>
-          </div>
-          <h3 data-id="219" class="font-display text-navy font-bold text-base mb-1">Notary Social Media Pack — 30 Templates</h3>
-          <div data-id="220" class="flex items-center gap-1 mb-1">
-            <span data-id="221" class="text-gold text-sm">★★★★★</span>
-            <span data-id="222" class="text-gray-400 text-xs">(31 reviews)</span>
-          </div>
-          <p data-id="223" class="font-display text-gold text-xl font-bold mb-2">$9.99</p>
-          <p data-id="224" class="text-body-text text-sm line-clamp-2 mb-4">30 branded Canva templates ready for Instagram & Facebook.</p>
-          <div data-id="225" class="flex gap-3">
-            <button data-id="226" class="bg-gold text-navy font-bold text-sm rounded-lg px-4 py-2 hover:bg-gold-dark transition-colors">Add to Cart</button>
-            <a data-id="227" href="#products" class="text-navy font-semibold text-sm py-2 hover:text-gold transition-colors">Buy Now →</a>
-          </div>
-        </div>
-      </div>
-      <!-- Product 4 -->
-      <div data-id="228" class="product-card bg-white rounded-2xl overflow-hidden shadow-lg anim-fade-up stagger-4">
-        <div data-id="229" class="h-40 bg-gradient-to-br from-navy to-navy-light flex items-center justify-center relative">
-          <div data-id="230" class="w-16 h-20 bg-white/15 rounded-lg flex items-center justify-center">
-            <span data-id="231" class="text-3xl">🎁</span>
-          </div>
-          <span data-id="232" class="absolute top-3 right-3 bg-purple-600 text-white text-xs font-bold px-2 py-1 rounded-full">🎁 BUNDLE</span>
-          <span data-id="233" class="absolute bottom-3 left-3 text-gold text-xs font-semibold tracking-wider">LAUNCH KIT</span>
-        </div>
-        <div data-id="234" class="p-5">
-          <div data-id="235" class="flex gap-2 mb-2">
-            <span data-id="236" class="text-xs border border-gray-300 text-gray-500 rounded-full px-2 py-0.5">PDF</span>
-            <span data-id="237" class="text-xs border border-gray-300 text-gray-500 rounded-full px-2 py-0.5">Word</span>
-            <span data-id="238" class="text-xs border border-gray-300 text-gray-500 rounded-full px-2 py-0.5">Canva</span>
-          </div>
-          <h3 data-id="239" class="font-display text-navy font-bold text-base mb-1">New Notary Launch Bundle</h3>
-          <div data-id="240" class="flex items-center gap-1 mb-1">
-            <span data-id="241" class="text-gold text-sm">★★★★★</span>
-            <span data-id="242" class="text-gray-400 text-xs">(18 reviews)</span>
-          </div>
-          <p data-id="243" class="mb-2"><span data-id="244" class="text-gray-400 line-through text-sm font-display">$55</span> <span data-id="245" class="font-display text-gold text-xl font-bold">$39.00</span></p>
-          <p data-id="246" class="text-body-text text-sm line-clamp-2 mb-4">Complete launch kit — intake forms, scripts, checklists & more.</p>
-          <div data-id="247" class="flex gap-3">
-            <button data-id="248" class="bg-gold text-navy font-bold text-sm rounded-lg px-4 py-2 hover:bg-gold-dark transition-colors">Add to Cart</button>
-            <a data-id="249" href="#products" class="text-navy font-semibold text-sm py-2 hover:text-gold transition-colors">Buy Now →</a>
-          </div>
-        </div>
-      </div>
-    </div>
-    <!-- CTAs -->
-    <div data-id="250" class="flex flex-wrap justify-center gap-4 mt-12 anim-fade-up">
-      <a data-id="251" href="#products" class="inline-block bg-gold text-navy font-bold rounded-xl px-8 py-4 hover:bg-gold-dark transition-colors">Browse All 20+ Products →</a>
-      <a data-id="252" href="#products" class="inline-block border-2 border-white text-white font-bold rounded-xl px-8 py-4 hover:bg-white hover:text-navy transition-all">View Bundles & Save</a>
-    </div>
-  </div>
-</section>
-
-
-<!-- ═══════════════════════════════════════════ -->
-<!-- SECTION 7 — HOW IT WORKS                   -->
-<!-- ═══════════════════════════════════════════ -->
-<section data-id="253" id="how-it-works" class="bg-white py-20 md:py-28">
-  <div data-id="254" class="max-w-7xl mx-auto px-4 md:px-6 lg:px-8">
-    <!-- Header -->
-    <div data-id="255" class="text-center mb-14 anim-fade-up">
-      <span data-id="256" class="inline-block bg-gold/10 text-gold text-xs font-bold tracking-widest uppercase px-4 py-2 rounded-full mb-4">THE PROCESS</span>
-      <h2 data-id="257" class="font-display text-navy text-2xl md:text-3xl lg:text-4xl font-bold">Working With Us Is Simple</h2>
-      <div data-id="258" class="gold-rule"></div>
-      <p data-id="259" class="text-body-text mt-4 max-w-lg mx-auto">Whether you're booking a notary or downloading a template — we make every step smooth.</p>
-    </div>
-    <!-- Two Tracks -->
-    <div data-id="260" class="flex flex-col lg:flex-row gap-6 lg:gap-0 items-stretch max-w-5xl mx-auto relative">
-      <!-- Track A — Booking a Service -->
-      <div data-id="261" class="flex-1 bg-navy rounded-2xl p-8 md:p-10 anim-slide-left">
-        <h3 data-id="262" class="font-display text-gold text-xl font-bold mb-8">Booking a Service</h3>
-        <div data-id="263" class="space-y-6">
-          <div data-id="264" class="flex gap-4">
-            <div data-id="265" class="step-num bg-gold text-navy">1</div>
-            <div data-id="266">
-              <p data-id="267" class="text-white font-bold mb-1">Reach Out</p>
-              <p data-id="268" class="text-white/80 text-sm leading-relaxed">Contact us via the booking form or email with your document type and preferred date.</p>
-            </div>
-          </div>
-          <div data-id="269" class="flex gap-4">
-            <div data-id="270" class="step-num bg-gold text-navy">2</div>
-            <div data-id="271">
-              <p data-id="272" class="text-white font-bold mb-1">Get Confirmed</p>
-              <p data-id="273" class="text-white/80 text-sm leading-relaxed">We review your request and confirm availability, travel fees (if any), and pricing within 24 hours.</p>
-            </div>
-          </div>
-          <div data-id="274" class="flex gap-4">
-            <div data-id="275" class="step-num bg-gold text-navy">3</div>
-            <div data-id="276">
-              <p data-id="277" class="text-white font-bold mb-1">Your Appointment</p>
-              <p data-id="278" class="text-white/80 text-sm leading-relaxed">We arrive prepared, verify your ID, witness your signing, and apply our official seal.</p>
-            </div>
-          </div>
-          <div data-id="279" class="flex gap-4">
-            <div data-id="280" class="step-num bg-gold text-navy">4</div>
-            <div data-id="281">
-              <p data-id="282" class="text-white font-bold mb-1">You're Done!</p>
-              <p data-id="283" class="text-white/80 text-sm leading-relaxed">Walk away with a fully notarized document ready for submission — fast, accurate, professional.</p>
-            </div>
-          </div>
-        </div>
-        <a data-id="284" href="#contact" class="inline-block bg-gold text-navy font-bold rounded-xl px-6 py-3 mt-8 hover:bg-gold-dark transition-colors">Book an Appointment →</a>
-      </div>
-      <!-- Center divider -->
-      <div data-id="285" class="hidden lg:flex flex-col items-center justify-center px-6 relative">
-        <div data-id="286" class="w-px h-full bg-gold/40"></div>
-        <div data-id="287" class="absolute top-1/2 -translate-y-1/2 w-5 h-5 bg-gold rotate-45 rounded-sm"></div>
-      </div>
-      <!-- Track B — Buying a Template -->
-      <div data-id="288" class="flex-1 bg-gold rounded-2xl p-8 md:p-10 anim-slide-right">
-        <h3 data-id="289" class="font-display text-navy text-xl font-bold mb-8">Getting a Template</h3>
-        <div data-id="290" class="space-y-6">
-          <div data-id="291" class="flex gap-4">
-            <div data-id="292" class="step-num bg-navy text-gold">1</div>
-            <div data-id="293">
-              <p data-id="294" class="text-navy font-bold mb-1">Browse the Shop</p>
-              <p data-id="295" class="text-navy/80 text-sm leading-relaxed">Visit our Payhip or Gumroad shop and find the template that fits your needs.</p>
-            </div>
-          </div>
-          <div data-id="296" class="flex gap-4">
-            <div data-id="297" class="step-num bg-navy text-gold">2</div>
-            <div data-id="298">
-              <p data-id="299" class="text-navy font-bold mb-1">Secure Checkout</p>
-              <p data-id="300" class="text-navy/80 text-sm leading-relaxed">Complete your purchase safely — Payhip and Gumroad accept all major cards and PayPal.</p>
-            </div>
-          </div>
-          <div data-id="301" class="flex gap-4">
-            <div data-id="302" class="step-num bg-navy text-gold">3</div>
-            <div data-id="303">
-              <p data-id="304" class="text-navy font-bold mb-1">Instant Download</p>
-              <p data-id="305" class="text-navy/80 text-sm leading-relaxed">Your download link arrives immediately in your email inbox — no waiting.</p>
-            </div>
-          </div>
-          <div data-id="306" class="flex gap-4">
-            <div data-id="307" class="step-num bg-navy text-gold">4</div>
-            <div data-id="308">
-              <p data-id="309" class="text-navy font-bold mb-1">Customize & Use</p>
-              <p data-id="310" class="text-navy/80 text-sm leading-relaxed">Open in Word, Canva, or Excel, add your branding, and start using it right away.</p>
-            </div>
-          </div>
-        </div>
-        <a data-id="311" href="#products" class="inline-block bg-navy text-white font-bold rounded-xl px-6 py-3 mt-8 hover:bg-navy-dark transition-colors">Shop Templates →</a>
-      </div>
-    </div>
-  </div>
-</section>
-
-
-<!-- ═══════════════════════════════════════════ -->
-<!-- SECTION 8 — SOCIAL PROOF / STATS BAR       -->
-<!-- ═══════════════════════════════════════════ -->
-<section data-id="312" id="stats" class="bg-light-gray py-16 md:py-20">
-  <div data-id="313" class="max-w-6xl mx-auto px-4 md:px-6 lg:px-8">
-    <div data-id="314" class="grid grid-cols-2 md:grid-cols-4 gap-8 text-center">
-      <div data-id="315" class="anim-fade-up stagger-1">
-        <p data-id="316" class="font-display text-gold text-4xl md:text-5xl font-bold">20+</p>
-        <p data-id="317" class="text-navy font-bold mt-2">Digital Products</p>
-        <p data-id="318" class="text-body-text text-sm mt-1">Done-for-you templates ready to download</p>
-      </div>
-      <div data-id="319" class="anim-fade-up stagger-2">
-        <p data-id="320" class="font-display text-gold text-4xl md:text-5xl font-bold">⭐ 5.0</p>
-        <p data-id="321" class="text-navy font-bold mt-2">Average Rating</p>
-        <p data-id="322" class="text-body-text text-sm mt-1">Consistently 5-star reviewed by clients</p>
-      </div>
-      <div data-id="323" class="anim-fade-up stagger-3">
-        <p data-id="324" class="font-display text-gold text-4xl md:text-5xl font-bold">100%</p>
-        <p data-id="325" class="text-navy font-bold mt-2">Confidential</p>
-        <p data-id="326" class="text-body-text text-sm mt-1">All client info kept strictly private</p>
-      </div>
-      <div data-id="327" class="anim-fade-up stagger-4">
-        <p data-id="328" class="font-display text-gold text-4xl md:text-5xl font-bold">24hr</p>
-        <p data-id="329" class="text-navy font-bold mt-2">Response Time</p>
-        <p data-id="330" class="text-body-text text-sm mt-1">We reply to all inquiries within 24 business hours</p>
-      </div>
-    </div>
-    <div data-id="331" class="w-full max-w-xs mx-auto mt-12" style="height:1px;background:var(--gold);"></div>
-  </div>
-</section>
-
-
-<!-- ═══════════════════════════════════════════ -->
-<!-- SECTION 9 — TESTIMONIALS                   -->
-<!-- ═══════════════════════════════════════════ -->
-<section data-id="332" id="testimonials" class="bg-white py-20 md:py-28">
-  <div data-id="333" class="max-w-7xl mx-auto px-4 md:px-6 lg:px-8">
-    <!-- Header -->
-    <div data-id="334" class="text-center mb-14 anim-fade-up">
-      <h2 data-id="335" class="font-display text-navy text-2xl md:text-3xl lg:text-4xl font-bold">What Our Clients Are Saying</h2>
-      <div data-id="336" class="gold-rule"></div>
-      <p data-id="337" class="text-body-text mt-4 max-w-lg mx-auto">Real reviews from real professionals who trust Solutions by P Maria.</p>
-    </div>
-    <!-- Grid -->
-    <div data-id="338" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-      <!-- Testimonial 1 -->
-      <div data-id="339" class="testimonial-card bg-white rounded-2xl p-8 shadow-sm border-l-4 border-gold anim-fade-up stagger-1">
-        <div data-id="340" class="quote-mark">❝</div>
-        <p data-id="341" class="text-body-text italic leading-relaxed text-sm mt-6 mb-5">"Princess Maria was professional, prompt, and made the entire notarization process completely stress-free. I couldn't recommend her more highly!"</p>
-        <div data-id="342" class="text-gold text-sm mb-2">★★★★★</div>
-        <p data-id="343" class="text-navy font-bold text-sm">Sarah T.</p>
-        <p data-id="344" class="text-gray-400 text-xs">Real Estate Client, Midwest City OK</p>
-      </div>
-      <!-- Testimonial 2 -->
-      <div data-id="345" class="testimonial-card bg-white rounded-2xl p-8 shadow-sm border-l-4 border-gold anim-fade-up stagger-2">
-        <div data-id="346" class="quote-mark">❝</div>
-        <p data-id="347" class="text-body-text italic leading-relaxed text-sm mt-6 mb-5">"The Notary Business Starter Bundle was everything I needed. I launched my business looking completely professional from day one."</p>
-        <div data-id="348" class="text-gold text-sm mb-2">★★★★★</div>
-        <p data-id="349" class="text-navy font-bold text-sm">Jasmine R.</p>
-        <p data-id="350" class="text-gray-400 text-xs">New Notary, Oklahoma City OK</p>
-      </div>
-      <!-- Testimonial 3 -->
-      <div data-id="351" class="testimonial-card bg-white rounded-2xl p-8 shadow-sm border-l-4 border-gold anim-fade-up stagger-3">
-        <div data-id="352" class="quote-mark">❝</div>
-        <p data-id="353" class="text-body-text italic leading-relaxed text-sm mt-6 mb-5">"She came to my mother's hospital room with such care and professionalism. We are so grateful for her service."</p>
-        <div data-id="354" class="text-gold text-sm mb-2">★★★★★</div>
-        <p data-id="355" class="text-navy font-bold text-sm">Marcus L.</p>
-        <p data-id="356" class="text-gray-400 text-xs">Family Client, OKC Metro</p>
-      </div>
-      <!-- Testimonial 4 -->
-      <div data-id="357" class="testimonial-card bg-white rounded-2xl p-8 shadow-sm border-l-4 border-gold anim-fade-up stagger-4">
-        <div data-id="358" class="quote-mark">❝</div>
-        <p data-id="359" class="text-body-text italic leading-relaxed text-sm mt-6 mb-5">"The VA Onboarding Packet made me look so polished to my very first client. An absolute game changer for my business."</p>
-        <div data-id="360" class="text-gold text-sm mb-2">★★★★★</div>
-        <p data-id="361" class="text-navy font-bold text-sm">Tiffany M.</p>
-        <p data-id="362" class="text-gray-400 text-xs">Virtual Assistant, Atlanta GA</p>
-      </div>
-      <!-- Testimonial 5 -->
-      <div data-id="363" class="testimonial-card bg-white rounded-2xl p-8 shadow-sm border-l-4 border-gold anim-fade-up stagger-5">
-        <div data-id="364" class="quote-mark">❝</div>
-        <p data-id="365" class="text-body-text italic leading-relaxed text-sm mt-6 mb-5">"Quick response, transparent pricing, and flawless loan signing execution. She's our go-to for all closings."</p>
-        <div data-id="366" class="text-gold text-sm mb-2">★★★★★</div>
-        <p data-id="367" class="text-navy font-bold text-sm">Premier Title Group</p>
-        <p data-id="368" class="text-gray-400 text-xs">Oklahoma City OK</p>
-      </div>
-      <!-- Testimonial 6 -->
-      <div data-id="369" class="testimonial-card bg-white rounded-2xl p-8 shadow-sm border-l-4 border-gold anim-fade-up stagger-6">
-        <div data-id="370" class="quote-mark">❝</div>
-        <p data-id="371" class="text-body-text italic leading-relaxed text-sm mt-6 mb-5">"The social media pack saved me hours of design work. Beautiful templates that actually match my brand."</p>
-        <div data-id="372" class="text-gold text-sm mb-2">★★★★★</div>
-        <p data-id="373" class="text-navy font-bold text-sm">Denise K.</p>
-        <p data-id="374" class="text-gray-400 text-xs">Signing Agent, Tulsa OK</p>
-      </div>
-    </div>
-  </div>
-</section>
-
-
-<!-- ═══════════════════════════════════════════ -->
-<!-- SECTION 10 — SITE NAVIGATION HUB           -->
-<!-- ═══════════════════════════════════════════ -->
-<section data-id="375" id="pages" class="bg-navy dot-pattern py-20 md:py-28">
-  <div data-id="376" class="max-w-7xl mx-auto px-4 md:px-6 lg:px-8">
-    <!-- Header -->
-    <div data-id="377" class="text-center mb-14 anim-fade-up">
-      <span data-id="378" class="text-gold font-semibold text-xs tracking-widest uppercase">EXPLORE THE FULL WEBSITE</span>
-      <h2 data-id="379" class="font-display text-white text-2xl md:text-3xl lg:text-4xl font-bold mt-3">Everything You Need, All in One Place</h2>
-      <div data-id="380" class="gold-rule"></div>
-      <p data-id="381" class="text-white/75 mt-4 max-w-lg mx-auto">Navigate to any section of the Solutions by P Maria website.</p>
-    </div>
-    <!-- Grid -->
-    <div data-id="382" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5">
-      <!-- Card 1 -->
-      <a data-id="383" href="#about" class="nav-card bg-white rounded-2xl p-7 text-center block anim-fade-up stagger-1">
-        <div data-id="384" class="text-3xl mb-3">👤</div>
-        <h3 data-id="385" class="font-display text-navy font-bold text-base mb-2">About Me</h3>
-        <p data-id="386" class="text-body-text text-sm leading-relaxed mb-3">Learn about Princess Maria and the story behind Solutions by P Maria.</p>
-        <span data-id="387" class="text-gold font-semibold text-sm">Read More →</span>
-      </a>
-      <!-- Card 2 -->
-      <a data-id="388" href="#" class="nav-card bg-white rounded-2xl p-7 text-center block anim-fade-up stagger-2">
-        <div data-id="389" class="text-3xl mb-3">🖊️</div>
-        <h3 data-id="390" class="font-display text-navy font-bold text-base mb-2">Notary Services FAQ</h3>
-        <p data-id="391" class="text-body-text text-sm leading-relaxed mb-3">Answers to all 6 notary services — mobile, loan signing, estate docs & more.</p>
-        <span data-id="392" class="text-gold font-semibold text-sm">View FAQ →</span>
-      </a>
-      <!-- Card 3 -->
-      <a data-id="393" href="#" class="nav-card bg-white rounded-2xl p-7 text-center block anim-fade-up stagger-3">
-        <div data-id="394" class="text-3xl mb-3">🛍️</div>
-        <h3 data-id="395" class="font-display text-navy font-bold text-base mb-2">Digital Products FAQ</h3>
-        <p data-id="396" class="text-body-text text-sm leading-relaxed mb-3">How to download, customize, refunds, and licensing — all explained.</p>
-        <span data-id="397" class="text-gold font-semibold text-sm">View FAQ →</span>
-      </a>
-      <!-- Card 4 -->
-      <a data-id="398" href="#" class="nav-card bg-white rounded-2xl p-7 text-center block anim-fade-up stagger-4">
-        <div data-id="399" class="text-3xl mb-3">📋</div>
-        <h3 data-id="400" class="font-display text-navy font-bold text-base mb-2">Document Prep & Admin FAQ</h3>
-        <p data-id="401" class="text-body-text text-sm leading-relaxed mb-3">Turnaround times, confidentiality, pricing, virtual services & availability.</p>
-        <span data-id="402" class="text-gold font-semibold text-sm">View FAQ →</span>
-      </a>
-      <!-- Card 5 -->
-      <a data-id="403" href="#services" class="nav-card bg-white rounded-2xl p-7 text-center block anim-fade-up stagger-1">
-        <div data-id="404" class="text-3xl mb-3">💼</div>
-        <h3 data-id="405" class="font-display text-navy font-bold text-base mb-2">Services & Pricing</h3>
-        <p data-id="406" class="text-body-text text-sm leading-relaxed mb-3">Transparent pricing for all services — notary, document prep, admin & shop.</p>
-        <span data-id="407" class="text-gold font-semibold text-sm">View Pricing →</span>
-      </a>
-      <!-- Card 6 -->
-      <a data-id="408" href="#products" class="nav-card bg-white rounded-2xl p-7 text-center block anim-fade-up stagger-2">
-        <div data-id="409" class="text-3xl mb-3">🛒</div>
-        <h3 data-id="410" class="font-display text-navy font-bold text-base mb-2">Shop Page</h3>
-        <p data-id="411" class="text-body-text text-sm leading-relaxed mb-3">Browse 20+ done-for-you templates with search, filters, and instant checkout.</p>
-        <span data-id="412" class="text-gold font-semibold text-sm">Shop Now →</span>
-      </a>
-      <!-- Card 7 -->
-      <a data-id="413" href="#" class="nav-card bg-white rounded-2xl p-7 text-center block anim-fade-up stagger-3">
-        <div data-id="414" class="text-3xl mb-3">❓</div>
-        <h3 data-id="415" class="font-display text-navy font-bold text-base mb-2">General FAQ</h3>
-        <p data-id="416" class="text-body-text text-sm leading-relaxed mb-3">All frequently asked questions in one place — covering every service we offer.</p>
-        <span data-id="417" class="text-gold font-semibold text-sm">View FAQ →</span>
-      </a>
-      <!-- Card 8 -->
-      <a data-id="418" href="#contact" class="nav-card bg-white rounded-2xl p-7 text-center block anim-fade-up stagger-4">
-        <div data-id="419" class="text-3xl mb-3">📬</div>
-        <h3 data-id="420" class="font-display text-navy font-bold text-base mb-2">Contact Us</h3>
-        <p data-id="421" class="text-body-text text-sm leading-relaxed mb-3">Book an appointment, send a message, or request a consultation today.</p>
-        <span data-id="422" class="text-gold font-semibold text-sm">Get in Touch →</span>
-      </a>
-    </div>
-  </div>
-</section>
-
-
-<!-- ═══════════════════════════════════════════ -->
-<!-- SECTION 11 — EMAIL SIGNUP / NEWSLETTER      -->
-<!-- ═══════════════════════════════════════════ -->
-<section data-id="423" id="newsletter" class="bg-gold py-16 md:py-20">
-  <div data-id="424" class="max-w-3xl mx-auto px-4 md:px-6 text-center anim-fade-up">
-    <span data-id="425" class="text-navy font-semibold text-xs tracking-widest uppercase">JOIN THE COMMUNITY</span>
-    <h2 data-id="426" class="font-display text-navy text-2xl md:text-3xl font-bold mt-3 mb-3">Get Exclusive Discounts & Free Resources</h2>
-    <p data-id="427" class="text-navy/90 max-w-lg mx-auto mb-8">Subscribe for new product launches, notary tips, free templates, and exclusive subscriber-only discounts.</p>
-    <!-- Form -->
-    <div data-id="428" id="newsletter-form-container-f7g3">
-      <div data-id="429" class="flex flex-col sm:flex-row gap-3 justify-center max-w-lg mx-auto">
-        <input data-id="430" id="newsletter-email-j4r2" type="email" placeholder="Enter your email address" class="flex-1 rounded-xl px-5 py-3.5 border-none text-base font-body outline-none focus:ring-2 focus:ring-navy" />
-        <button data-id="431" id="newsletter-submit-m8v6" class="bg-navy text-white font-bold rounded-xl px-7 py-3.5 hover:bg-navy-dark transition-colors whitespace-nowrap">Subscribe →</button>
-      </div>
-      <p data-id="432" class="text-navy/60 text-xs mt-3">No spam. Unsubscribe anytime. 100% free.</p>
-    </div>
-    <!-- Success State (hidden) -->
-    <div data-id="433" id="newsletter-success-a3k7" class="hidden">
-      <p data-id="434" class="text-navy font-bold text-lg">✅ You're subscribed! Check your inbox for a welcome gift.</p>
-    </div>
-  </div>
-</section>
-
-
-<!-- ═══════════════════════════════════════════ -->
-<!-- SECTION 12 — FINAL CTA                     -->
-<!-- ═══════════════════════════════════════════ -->
-<section data-id="435" id="contact" class="bg-white py-20 md:py-28">
-  <div data-id="436" class="max-w-4xl mx-auto px-4 md:px-6 lg:px-8 anim-fade-up">
-    <div data-id="437" class="bg-navy rounded-3xl p-10 md:p-16 text-center relative overflow-hidden border-2 border-gold">
-      <div data-id="438" class="shimmer-overlay"></div>
-      <span data-id="439" class="text-gold font-semibold text-xs tracking-widest uppercase relative z-10">READY TO GET STARTED?</span>
-      <h2 data-id="440" class="font-display text-white text-2xl md:text-3xl lg:text-4xl font-bold mt-4 mb-4 relative z-10">Let's Work Together</h2>
-      <p data-id="441" class="text-white/85 max-w-lg mx-auto mb-8 relative z-10">Whether you need a notarization, document help, admin support, or a done-for-you template — we're here for you every step of the way.</p>
-      <div data-id="442" class="flex flex-wrap justify-center gap-4 mb-8 relative z-10">
-        <a data-id="443" href="#contact" class="bg-gold text-navy font-bold rounded-xl px-8 py-3.5 hover:bg-gold-dark transition-colors">Book a Service</a>
-        <a data-id="444" href="#products" class="border-2 border-white text-white font-bold rounded-xl px-8 py-3.5 hover:bg-white hover:text-navy transition-all">Shop Templates</a>
-        <a data-id="445" href="#contact" class="text-gold font-bold py-3.5 px-4 hover:underline transition-colors">Contact Us</a>
-      </div>
-      <div data-id="446" class="flex flex-wrap justify-center gap-4 text-white/80 text-sm relative z-10">
-        <span data-id="447">📍 Spencer, Oklahoma</span>
-        <span data-id="448">📧 solutions@pbymaria.com</span>
-        <span data-id="449">⏱️ 24hr Response</span>
-        <span data-id="450">💻 Virtual & In-Person</span>
-      </div>
-    </div>
-  </div>
-</section>
-
-
-<!-- ═══════════════════════════════════════════ -->
-<!-- SECTION 13 — FOOTER                         -->
-<!-- ═══════════════════════════════════════════ -->
-<footer data-id="451" class="bg-navy" style="border-top: 2px solid var(--gold);">
-  <div data-id="452" class="max-w-7xl mx-auto px-4 md:px-6 lg:px-8 py-14">
-    <div data-id="453" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-10">
-      <!-- Col 1 — Brand -->
-      <div data-id="454">
-        <img data-id="455" src="https://ts2.mm.bing.net/th?id=OIP.FQirKTfc0xDy3YUW_c_C4QHaF7&pid=15.1&o=7&rm=3" alt="Solutions by P Maria Logo" class="h-12 w-auto mb-4" loading="lazy" />
-        <p data-id="456" class="font-display text-gold italic text-sm mb-5">"Empowering Professionals. One Document at a Time."</p>
-        <div data-id="457" class="flex gap-3">
-          <a data-id="458" href="#" class="social-icon" aria-label="Facebook">📘</a>
-          <a data-id="459" href="#" class="social-icon" aria-label="Instagram">📸</a>
-          <a data-id="460" href="#" class="social-icon" aria-label="Pinterest">📌</a>
-          <a data-id="461" href="#" class="social-icon" aria-label="Shop">🛍️</a>
-        </div>
-      </div>
-      <!-- Col 2 — Services -->
-      <div data-id="462">
-        <h4 data-id="463" class="font-display text-gold font-bold text-base mb-4">Services</h4>
-        <a data-id="464" href="#services" class="footer-link">General Notarization</a>
-        <a data-id="465" href="#services" class="footer-link">Mobile Notary</a>
-        <a data-id="466" href="#services" class="footer-link">Loan Signing</a>
-        <a data-id="467" href="#services" class="footer-link">Document Preparation</a>
-        <a data-id="468" href="#services" class="footer-link">Administrative Support</a>
-        <a data-id="469" href="#services" class="footer-link">Apostille Assistance</a>
-      </div>
-      <!-- Col 3 — Quick Links -->
-      <div data-id="470">
-        <h4 data-id="471" class="font-display text-gold font-bold text-base mb-4">Quick Links</h4>
-        <a data-id="472" href="#home" class="footer-link">Home</a>
-        <a data-id="473" href="#about" class="footer-link">About</a>
-        <a data-id="474" href="#products" class="footer-link">Shop</a>
-        <a data-id="475" href="#testimonials" class="footer-link">FAQ</a>
-        <a data-id="476" href="#services" class="footer-link">Services & Pricing</a>
-        <a data-id="477" href="#contact" class="footer-link">Contact</a>
-      </div>
-      <!-- Col 4 — Contact -->
-      <div data-id="478">
-        <h4 data-id="479" class="font-display text-gold font-bold text-base mb-4">Contact</h4>
-        <p data-id="480" class="text-white/80 text-sm mb-2">📍 Spencer, Oklahoma</p>
-        <p data-id="481" class="text-white/80 text-sm mb-2">📧 solutions@pbymaria.com</p>
-        <p data-id="482" class="text-white/80 text-sm mb-4">⏱️ Mon–Fri, 9AM–6PM CT</p>
-        <a data-id="483" href="#contact" class="inline-block border border-gold text-gold font-bold text-sm rounded-lg px-5 py-2.5 hover:bg-gold hover:text-navy transition-all">Book an Appointment</a>
-      </div>
-    </div>
-  </div>
-  <!-- Bottom Bar -->
-  <div data-id="484" class="border-t border-gold/40">
-    <div data-id="485" class="max-w-7xl mx-auto px-4 md:px-6 lg:px-8 py-5 flex flex-col sm:flex-row items-center justify-between gap-2">
-      <p data-id="486" class="text-white/60 text-xs text-center sm:text-left">© 2026 Solutions by P Maria. All Rights Reserved.</p>
-      <p data-id="487" class="text-gold/70 text-xs text-center sm:text-right">Designed with ♥ for professionals · Made by Copilot</p>
-    </div>
-  </div>
+<footer>
+  © 2026 SolutionsByPMaria • Administrative Support & Notary Services • Spencer, OK
 </footer>
-
-
-<!-- ═══════════════════════════════════════════ -->
-<!-- SCRIPTS                                     -->
-<!-- ═══════════════════════════════════════════ -->
-<script>
-  // ── Lucide Icons (progressive enhancement) ──
-  if (typeof lucide !== "undefined" && typeof lucide.createIcons === "function") {
-    lucide.createIcons();
-  }
-
-  // ── Mobile Menu Toggle ──
-  (function() {
-    var menuBtn = document.getElementById('mobile-menu-btn-r7p3');
-    var closeBtn = document.getElementById('mobile-menu-close-w2j4');
-    var menu = document.getElementById('mobile-menu-q5k8');
-    var overlay = document.getElementById('mobile-overlay-u9e1');
-    var navLinks = document.querySelectorAll('.mobile-nav-link');
-
-    function openMenu() {
-      menu.classList.add('open');
-      overlay.classList.remove('hidden');
-      document.body.style.overflow = 'hidden';
-    }
-    function closeMenu() {
-      menu.classList.remove('open');
-      overlay.classList.add('hidden');
-      document.body.style.overflow = '';
-    }
-
-    if (menuBtn) menuBtn.addEventListener('click', openMenu);
-    if (closeBtn) closeBtn.addEventListener('click', closeMenu);
-    if (overlay) overlay.addEventListener('click', closeMenu);
-    navLinks.forEach(function(link) {
-      link.addEventListener('click', closeMenu);
-    });
-  })();
-
-  // ── Sticky Navbar Shadow ──
-  (function() {
-    var navbar = document.getElementById('navbar-header-k3m9');
-    if (!navbar) return;
-    window.addEventListener('scroll', function() {
-      if (window.scrollY > 80) {
-        navbar.style.boxShadow = '0 4px 20px rgba(0,0,0,0.15)';
-      } else {
-        navbar.style.boxShadow = 'none';
-      }
-    });
-  })();
-
-  // ── Intersection Observer for Scroll Animations ──
-  (function() {
-    var animEls = document.querySelectorAll('.anim-fade-up, .anim-slide-left, .anim-slide-right');
-    if (!animEls.length) return;
-
-    var observer = new IntersectionObserver(function(entries, obs) {
-      entries.forEach(function(entry) {
-        if (entry.isIntersecting) {
-          entry.target.classList.add('visible');
-          obs.unobserve(entry.target);
-        }
-      });
-    }, { threshold: 0.12, rootMargin: '0px 0px -40px 0px' });
-
-    animEls.forEach(function(el) {
-      observer.observe(el);
-    });
-  })();
-
-  // ── Newsletter Form ──
-  (function() {
-    var submitBtn = document.getElementById('newsletter-submit-m8v6');
-    var emailInput = document.getElementById('newsletter-email-j4r2');
-    var formContainer = document.getElementById('newsletter-form-container-f7g3');
-    var successContainer = document.getElementById('newsletter-success-a3k7');
-
-    if (!submitBtn || !emailInput || !formContainer || !successContainer) return;
-
-    submitBtn.addEventListener('click', function() {
-      var email = emailInput.value.trim();
-      var emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-      if (!emailRegex.test(email)) {
-        emailInput.style.outline = '2px solid #e53e3e';
-        emailInput.setAttribute('placeholder', 'Please enter a valid email');
-        return;
-      }
-      formContainer.classList.add('hidden');
-      successContainer.classList.remove('hidden');
-    });
-
-    emailInput.addEventListener('input', function() {
-      emailInput.style.outline = '';
-    });
-  })();
-</script>
 
 </body>
 </html>
